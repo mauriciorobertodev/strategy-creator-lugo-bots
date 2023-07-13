@@ -14,3 +14,12 @@ export function getDistanceBetweenVectors(a: Vector2D, b: Vector2D): number {
     const deltaY = a.getY() - b.getY();
     return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 }
+
+export function getDirectionToVector(a: Vector2D, b: Vector2D): Vector2D {
+    const angle = angleInRadians(a, b);
+
+    const cos = Math.abs(Math.cos(angle)) < Number.EPSILON ? 0 : Math.cos(angle);
+    const sin = Math.abs(Math.sin(angle)) < Number.EPSILON ? 0 : Math.sin(angle);
+
+    return new Vector2D(cos, sin);
+}
