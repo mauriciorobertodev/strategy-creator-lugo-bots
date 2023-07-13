@@ -47,3 +47,39 @@ export function drawRegions(paint: Paint): void {
         }
     }
 }
+
+export function drawPlayers(paint: Paint): void {
+    // CORES
+    const COLOR_GREEN = paint.getTailwindColor("Green");
+    const COLOR_RED = paint.getTailwindColor("Red");
+    const COLOR_YELLOW = paint.getTailwindColor("Yellow");
+
+    // DESENHANDO OS JOGADORES
+    global.getPlayers().forEach((player) => {
+        // SE É O JOGADOR ABAIXO DO MOUSE VAMOS DESENHAR UM CÍRCULO EM VOLTA PARA O USUÁRIO POSSA SABER MAIS FACILMENTE QUAL ELE IRÁ MOVER
+        if (global.hasPlayerUnderMouse() && global.getPlayerUnderMouse() === player) {
+            paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: player.hasColAndRow() ? COLOR_GREEN : COLOR_YELLOW });
+        }
+
+        // SE FOR O JOGADOR SEGURADO VAMOS APENAS DESENHAR UM CÍRCULO NELE
+        if (global.hasHoldedPlayer() && global.getHoldedPlayer().player === player) {
+            const region = global.getHoldedPlayer().region;
+            if (region) {
+                // O CÍRCULO COM COR PRA O USUÁRIO ENTENDER A SITUAÇÃO
+                paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: COLOR_GREEN });
+                // A COLUNA E LINHA QUE O USUÁRIO TERÁ CASO SEJA DROPADO NESSE PONTO
+                paint.text({ point: player.getPosition().clone().add({ x: 0, y: 500 }), text: `${region.getCol()}x${region.getRow()}`, textSize: 300, textColor: COLOR_GREEN });
+                // UM RETÂNGULO MARCANDO A REGIÃO PARA O USUÁRIO SABER
+                paint.rect({ point: { x: region.getStart().getX(), y: region.getEnd().getY() }, width: region.getWidth(), height: region.getHeight(), lineWidth: 20, strokeColor: COLOR_GREEN });
+            }
+
+            // SE NÃO TIVER UMA ENCONTRADO UMA REGIÃO SIGNIFICA QUE ESTÁ FORA DO CAMPO E TERÁ SUA POSIÇÃO RESETADA, MOSTRE ISSO COMM UM CÍRCULO VERMELHO
+            if (!region) paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: COLOR_RED });
+        }
+
+        player.draw(paint);
+    });
+
+    // DESENHANDO O GOLEIRO
+    global.getGoalkeeper().draw(paint);
+}
