@@ -1,7 +1,6 @@
-import { PaintContract, Vector2D } from "@mauricioroberto/math-world";
+import { Vector2D } from "@mauricioroberto/math-world";
 import { PlayerNumber } from "../types";
 import PlayerContract from "../contracts/player-contract";
-import { angleInRadians, radiansToDegrees } from "../helpers/math";
 import { getPlayerInitialPosition } from "../helpers/players";
 import { getRegionFromColAndRow } from "../helpers/field";
 
