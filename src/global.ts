@@ -12,6 +12,7 @@ export type State = {
     region_height: number;
     goalkeeper: PlayerContract;
     players: PlayerContract[];
+    holded_player: PlayerContract | undefined;
 };
 
 export class GlobalState {
@@ -23,15 +24,20 @@ export class GlobalState {
         region_height: FIELD_HEIGHT / 12,
         goalkeeper: getGoalkeeper(),
         players: getPlayers(),
+        holded_player: undefined,
     });
 
-    // IS
+    // IS e HAS
     isHomeSide(): boolean {
         return this.state.side === "HOME";
     }
 
     isAwaySide(): boolean {
         return this.state.side === "AWAY";
+    }
+
+    hasHoldedPlayer(): boolean {
+        return this.state.holded_player ? true : false;
     }
 
     // GETTERS
@@ -63,6 +69,11 @@ export class GlobalState {
         return this.state.goalkeeper;
     }
 
+    getHoldedPlayer(): PlayerContract {
+        if (!this.state.holded_player) throw new Error("Não nenhum jogador sendo segurado");
+        return this.state.holded_player;
+    }
+
     // SETTERS
     setCols(cols: number): void {
         this.state.cols = cols;
@@ -76,6 +87,10 @@ export class GlobalState {
 
     setSide(side: Side): void {
         this.state.side = side;
+    }
+
+    setHoldedPlayer(player: PlayerContract): void {
+        this.state.holded_player = player;
     }
 
     // FUNÇÕES PARA COLUNAS E LINHAS
@@ -95,6 +110,10 @@ export class GlobalState {
     decrementRow(): void {
         if (this.state.rows <= 0) return;
         this.setRows(this.getRows() - 1);
+    }
+
+    resetHoldedPlayer(): void {
+        this.state.holded_player = undefined;
     }
 }
 

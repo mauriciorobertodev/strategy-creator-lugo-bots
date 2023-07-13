@@ -6,7 +6,6 @@ import { getDistanceBetweenVectors } from "./helpers/math";
 const loop = (world: MathWorld) => {
     // VARIÁVEIS
     const paint = world.getPaint();
-    let move_player: number | null = null;
 
     // SETUP
     world.onLeftCLick(onLeftClick);
@@ -28,12 +27,7 @@ const loop = (world: MathWorld) => {
         global.getGoalkeeper().draw(paint);
 
         // ATUALIZA POSIÇÃO DO JOGADOR QUE O USUÁRIO ESTÁ SEGURANDO
-        if (move_player) {
-            global
-                .getPlayers()
-                .find((player) => player.getNumber() === move_player)
-                ?.setPosition(MOUSE);
-        }
+        if (global.hasHoldedPlayer()) global.getHoldedPlayer().setPosition(MOUSE);
     };
 
     // VERIFICANDO SE O CLIQUE É UM JOGADOR PARA MUDAR SUA POSIÇÃO
@@ -44,17 +38,15 @@ const loop = (world: MathWorld) => {
         global.getPlayers().find((player) => {
             const distance = getDistanceBetweenVectors(MOUSE, player.getPosition());
             if (distance <= player.getRadius() + 15) {
-                move_player = player.getNumber();
+                global.setHoldedPlayer(player);
                 return player;
             }
         });
     }
 
     function onMouseUp() {
-        // SE NÃO TIVER JOGADOR SENDO SEGURADO SÓ RETORNA
-        if (!move_player) return;
-
-        move_player = null;
+        // SE NÃO TIVER JOGADOR SENDO SEGURADO O LIBERTE
+        if (global.hasHoldedPlayer()) global.resetHoldedPlayer();
     }
 };
 
