@@ -1,20 +1,30 @@
 {
-  "name": "strategy-creator-lugo-bots",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.2.47"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.1.0",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.2",
-    "vue-tsc": "^1.4.2"
-  }
+    "name": "strategy-creator-lugo-bots",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vue-tsc && vite build",
+        "preview": "vite preview",
+        "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts",
+        "lint:fix": "eslint --ignore-path .eslintignore --ext .js,.ts --fix",
+        "style:check": "prettier --check 'src/**/*.ts', 'src/**/*.vue'",
+        "style:fix": "prettier --write 'src/**/*.ts', 'src/**/*.vue'"
+    },
+    "dependencies": {
+        "vue": "^3.2.47"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "@vitejs/plugin-vue": "^4.1.0",
+        "@vue/eslint-config-prettier": "^7.1.0",
+        "autoprefixer": "^10.4.14",
+        "eslint": "^8.44.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.2",
+        "vite": "^4.3.2",
+        "vue-tsc": "^1.4.2"
+    }
 }
