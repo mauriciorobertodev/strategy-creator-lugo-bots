@@ -1,5 +1,6 @@
 import { MathWorld } from "@mauricioroberto/math-world";
 import { drawField, drawRegions } from "./helpers/draw";
+import global from "./global";
 
 const loop = (world: MathWorld) => {
     // VARIÁVEIS
@@ -13,6 +14,9 @@ const loop = (world: MathWorld) => {
 
         // DESENHANDO AS REGIÕES
         drawRegions(paint);
+
+        // DESENHANDO OS JOGADORES
+        global.getPlayers().forEach((player) => player.draw(paint));
     };
 };
 
