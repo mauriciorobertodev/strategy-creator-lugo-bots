@@ -1,7 +1,7 @@
 import { PaintContract, Vector2D } from "@mauricioroberto/math-world";
 import { PlayerNumber } from "../types";
 
-export interface PlayerContract {
+export default interface PlayerContract {
     draw(paint: PaintContract): void;
     getNumber(): PlayerNumber;
     getRadius(): number;
