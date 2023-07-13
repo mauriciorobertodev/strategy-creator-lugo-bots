@@ -69,6 +69,15 @@ defineEmits(["toggle"]);
                             <button v-on:click="global.setSide('AWAY')" v-bind:class="{ button: global.isAwaySide(), 'button-secondary': global.isHomeSide() }" class="uppercase rounded-none rounded-r">AWAY</button>
                         </div>
                     </div>
+
+                    <!-- exibir colunas e linhas -->
+                    <div>
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Exibir colunas e linhas</p>
+                        <div class="flex">
+                            <button v-on:click="global.setShowColsAndRows(true)" v-bind:class="{ button: global.showColsAndRows(), 'button-secondary': !global.showColsAndRows() }" class="uppercase rounded-none rounded-l">SIM</button>
+                            <button v-on:click="global.setShowColsAndRows(false)" v-bind:class="{ button: !global.showColsAndRows(), 'button-secondary': global.showColsAndRows() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Transition>

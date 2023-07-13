@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { FIELD_HEIGHT, FIELD_WIDTH } from "./helpers/constants";
+import { AWAY_GOAL_CENTER, FIELD_HEIGHT, FIELD_WIDTH, HOME_GOAL_CENTER } from "./helpers/constants";
 import { HoldedPlayer, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
@@ -10,6 +10,7 @@ export type State = {
     side: Side;
     region_width: number;
     region_height: number;
+    show_col_and_rows: boolean;
     goalkeeper: PlayerContract;
     players: PlayerContract[];
     holded_player: HoldedPlayer | undefined;
@@ -23,13 +24,14 @@ export class GlobalState {
         side: "HOME",
         region_width: FIELD_WIDTH / 16,
         region_height: FIELD_HEIGHT / 12,
+        show_col_and_rows: false,
         goalkeeper: getGoalkeeper(),
         players: getPlayers(),
         holded_player: undefined,
         player_under_mouse: undefined,
     });
 
-    // IS e HAS
+    // IS e HAS e SHOW
     isHomeSide(): boolean {
         return this.state.side === "HOME";
     }
@@ -44,6 +46,10 @@ export class GlobalState {
 
     hasPlayerUnderMouse(): boolean {
         return this.state.player_under_mouse ? true : false;
+    }
+
+    showColsAndRows(): boolean {
+        return this.state.show_col_and_rows;
     }
 
     // GETTERS
@@ -111,6 +117,10 @@ export class GlobalState {
         this.state.player_under_mouse = player;
     }
 
+    setShowColsAndRows(show: boolean) {
+        this.state.show_col_and_rows = show;
+    }
+
     // FUNÇÕES PARA COLUNAS E LINHAS
     incrementCol(): void {
         this.setCols(this.getCols() + 1);
@@ -140,7 +150,7 @@ export class GlobalState {
 
     updatePlayersPositionByColAndRow(): void {
         this.getPlayers().forEach((player) => player.updatePositionByColAndRow());
-        this.getGoalkeeper().updatePositionByColAndRow();
+        this.getGoalkeeper().setPosition(this.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
     }
 }
 
