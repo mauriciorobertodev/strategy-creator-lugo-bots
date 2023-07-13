@@ -1,6 +1,8 @@
 import { Paint } from "@mauricioroberto/math-world";
 import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP } from "./constants";
 import global from "../global";
+import { angleInRadians, radiansToDegrees } from "./math";
+import PlayerContract from "../contracts/player-contract";
 
 export function drawField(paint: Paint): void {
     // LINHAS LATERAIS
@@ -77,9 +79,19 @@ export function drawPlayers(paint: Paint): void {
             if (!region) paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: COLOR_RED });
         }
 
-        player.draw(paint);
+        // DESENHANDO O JOGADOR DE FATO
+        drawPlayer(player, paint);
     });
 
     // DESENHANDO O GOLEIRO
-    global.getGoalkeeper().draw(paint);
+    drawPlayer(global.getGoalkeeper(), paint);
+}
+
+function drawPlayer(player: PlayerContract, paint: Paint): void {
+    const ANGLE = radiansToDegrees(angleInRadians(player.getDirection()));
+
+    paint.circle({ point: player.getPosition(), radius: player.getRadius(), fillColor: player.getColor(), strokeColor: "white", lineWidth: 30 });
+    paint.circle({ point: player.getPosition(), radius: player.getRadius(), fillColor: "white", startAngleForHumans: ANGLE - 30, endAngleForHumans: ANGLE + 30, lineToCenter: true });
+    paint.circle({ point: player.getPosition(), radius: player.getRadius() * 0.6, fillColor: "white", strokeColor: player.getColor(), lineWidth: 30 });
+    paint.text({ point: player.getPosition().clone().sub({ x: 0, y: 20 }), text: player.getNumber().toString(), textColor: player.getColor(), textSize: 250, textAlign: "center" });
 }
