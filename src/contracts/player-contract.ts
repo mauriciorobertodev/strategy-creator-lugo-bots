@@ -1,10 +1,11 @@
-import { PaintContract, Vector2D } from "@mauricioroberto/math-world";
+import { Vector2D } from "@mauricioroberto/math-world";
 import { PlayerNumber } from "../types";
 
 export default interface PlayerContract {
-    draw(paint: PaintContract): void;
     getNumber(): PlayerNumber;
     getRadius(): number;
+    getColor(): string | CanvasGradient | CanvasPattern;
+    getDirection(): Vector2D;
     getPosition(): Vector2D;
     setPosition(position: Vector2D): void;
     setDirection(direction: Vector2D): void;

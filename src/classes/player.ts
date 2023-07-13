@@ -26,13 +26,8 @@ export default class Player implements PlayerContract {
         this.radius = radius ?? 250;
     }
 
-    public draw(paint: PaintContract): void {
-        const ANGLE = radiansToDegrees(angleInRadians(this.direction));
-
-        paint.circle({ point: this.position, radius: this.radius, fillColor: this.color, strokeColor: "white", lineWidth: 30 });
-        paint.circle({ point: this.position, radius: this.radius, fillColor: "white", startAngleForHumans: ANGLE - 30, endAngleForHumans: ANGLE + 30, lineToCenter: true });
-        paint.circle({ point: this.position, radius: this.radius * 0.6, fillColor: "white", strokeColor: this.color, lineWidth: 30 });
-        paint.text({ point: this.position.clone().sub({ x: 0, y: 20 }), text: this.number.toString(), textColor: this.color, textSize: 250, textAlign: "center" });
+    public getColor(): string | CanvasGradient | CanvasPattern {
+        return this.color;
     }
 
     public getNumber(): PlayerNumber {
