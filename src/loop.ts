@@ -1,5 +1,5 @@
 import { MathWorld } from "@mauricioroberto/math-world";
-import { drawField } from "./helpers/draw";
+import { drawField, drawRegions } from "./helpers/draw";
 
 const loop = (world: MathWorld) => {
     // VARIÁVEIS
@@ -10,6 +10,9 @@ const loop = (world: MathWorld) => {
     return (): void => {
         // DESENHANDO O CAMPO
         drawField(paint);
+
+        // DESENHANDO AS REGIÕES
+        drawRegions(paint);
     };
 };
 
