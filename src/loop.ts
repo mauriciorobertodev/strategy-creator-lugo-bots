@@ -23,8 +23,9 @@ const loop = (world: MathWorld) => {
         // DESENHANDO AS REGIÕES
         drawRegions(paint);
 
-        // DESENHANDO OS JOGADORES
+        // DESENHANDO OS JOGADORES E O GOLEIRO
         global.getPlayers().forEach((player) => player.draw(paint));
+        global.getGoalkeeper().draw(paint);
 
         // ATUALIZA POSIÇÃO DO JOGADOR QUE O USUÁRIO ESTÁ SEGURANDO
         if (move_player) {
