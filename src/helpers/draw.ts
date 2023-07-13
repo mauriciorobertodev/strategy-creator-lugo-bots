@@ -1,5 +1,6 @@
 import { Paint } from "@mauricioroberto/math-world";
 import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP } from "./constants";
+import global from "../global";
 
 export function drawField(paint: Paint): void {
     // LINHAS LATERAIS
@@ -33,4 +34,16 @@ export function drawField(paint: Paint): void {
     paint.line({ startPoint: { x: FIELD_WIDTH - 1400, y: AWAY_GOAL_TOP.getY() }, endPoint: { x: FIELD_WIDTH - 1400, y: AWAY_GOAL_BOTTOM.getY() }, lineWidth: 20 });
     paint.circle({ point: AWAY_GOAL_TOP, radius: GOAL_RADIUS, startAngleForHumans: 90, endAngleForHumans: 180, lineWidth: 20 });
     paint.circle({ point: AWAY_GOAL_BOTTOM, radius: GOAL_RADIUS, startAngleForHumans: 180, endAngleForHumans: 270, lineWidth: 20 });
+}
+
+export function drawRegions(paint: Paint): void {
+    for (let col = 0; col < global.getCols(); col++) {
+        for (let row = 0; row < global.getRows(); row++) {
+            const x = global.isHomeSide() ? col * global.getRegionWidth() : FIELD_WIDTH - (col + 1) * global.getRegionWidth();
+            const y = global.isHomeSide() ? row * global.getRegionHeight() : FIELD_HEIGHT - (row + 1) * global.getRegionHeight();
+
+            paint.rect({ point: { x: x, y: y + global.getRegionHeight() }, width: global.getRegionWidth(), height: global.getRegionHeight(), strokeColor: "rgba(255, 255, 255, 0.2)" });
+            paint.text({ point: { x: x + global.getRegionWidth() / 2, y: y + global.getRegionHeight() / 2 }, textSize: 175, text: `${col}x${row}`, textColor: "rgba(255, 255, 255, 0.2)" });
+        }
+    }
 }
