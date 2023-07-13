@@ -1,7 +1,7 @@
 import { Paint } from "@mauricioroberto/math-world";
 import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP } from "./constants";
 import global from "../global";
-import { angleInRadians, radiansToDegrees } from "./math";
+import { angleInRadians, getDirectionToVector, radiansToDegrees } from "./math";
 import PlayerContract from "../contracts/player-contract";
 
 export function drawField(paint: Paint): void {
@@ -58,6 +58,9 @@ export function drawPlayers(paint: Paint): void {
 
     // DESENHANDO OS JOGADORES
     global.getPlayers().forEach((player) => {
+        // ATUALIZANDO A DIREÇÃO DO JOGADOR PARA DESENHAR CORRETAMENTE
+        player.setDirection(getDirectionToVector(player.getPosition(), global.isHomeSide() ? AWAY_GOAL_CENTER : HOME_GOAL_CENTER));
+
         // SE É O JOGADOR ABAIXO DO MOUSE VAMOS DESENHAR UM CÍRCULO EM VOLTA PARA O USUÁRIO POSSA SABER MAIS FACILMENTE QUAL ELE IRÁ MOVER
         if (global.hasPlayerUnderMouse() && global.getPlayerUnderMouse() === player) {
             paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: player.hasColAndRow() ? COLOR_GREEN : COLOR_YELLOW });
@@ -79,9 +82,17 @@ export function drawPlayers(paint: Paint): void {
             if (!region) paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: COLOR_RED });
         }
 
+        // SE TIVER ATIVO A OPÇÃO DE MOSTRAR AS COLUNAS E LINHAS E O JOGADOR NÃO ESTÁ SENDO SEGURADO... MOSTRE AS COLUNAS E LINHAS
+        if (player.hasColAndRow() && global.showColsAndRows() && (!global.hasHoldedPlayer() || (global.hasHoldedPlayer() && global.getHoldedPlayer().player != player))) {
+            paint.text({ point: player.getPosition().clone().add({ x: 0, y: 500 }), text: `${player.getCol()}x${player.getRow()}`, textSize: 300, textColor: player.getColor() });
+        }
+
         // DESENHANDO O JOGADOR DE FATO
         drawPlayer(player, paint);
     });
+
+    // ATUALIZANDO A DIREÇÃO DO GOLEIRO PARA DESENHAR CORRETAMENTE
+    global.getGoalkeeper().setDirection(getDirectionToVector(global.getGoalkeeper().getPosition(), global.isHomeSide() ? AWAY_GOAL_CENTER : HOME_GOAL_CENTER));
 
     // DESENHANDO O GOLEIRO
     drawPlayer(global.getGoalkeeper(), paint);
