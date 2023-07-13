@@ -6,6 +6,8 @@ export default interface RegionContract {
     getCenter(): Vector2D;
     getWidth(): number;
     getHeight(): number;
+    getStart(): Vector2D;
+    getEnd(): Vector2D;
     getTopLeft(): Vector2D;
     getTopRight(): Vector2D;
     getBottomLeft(): Vector2D;
