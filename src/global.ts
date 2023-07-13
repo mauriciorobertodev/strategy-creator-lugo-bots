@@ -1,6 +1,8 @@
 import { reactive } from "vue";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "./helpers/constants";
 import { Side } from "./types";
+import PlayerContract from "./contracts/player-contract";
+import { getGoalkeeper, getPlayers } from "./helpers/players";
 
 export type State = {
     cols: number;
@@ -8,6 +10,8 @@ export type State = {
     side: Side;
     region_width: number;
     region_height: number;
+    goalkeeper: PlayerContract;
+    players: PlayerContract[];
 };
 
 export class GlobalState {
@@ -17,6 +21,8 @@ export class GlobalState {
         side: "HOME",
         region_width: FIELD_WIDTH / 16,
         region_height: FIELD_HEIGHT / 12,
+        goalkeeper: getGoalkeeper(),
+        players: getPlayers(),
     });
 
     // IS
@@ -47,6 +53,14 @@ export class GlobalState {
 
     getRegionHeight(): number {
         return this.state.region_height;
+    }
+
+    getPlayers(): PlayerContract[] {
+        return this.state.players;
+    }
+
+    getGoalkeeper(): PlayerContract {
+        return this.state.goalkeeper;
     }
 
     // SETTERS
