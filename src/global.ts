@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "./helpers/constants";
-import { Side } from "./types";
+import { HoldedPlayer, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
 
@@ -12,7 +12,8 @@ export type State = {
     region_height: number;
     goalkeeper: PlayerContract;
     players: PlayerContract[];
-    holded_player: PlayerContract | undefined;
+    holded_player: HoldedPlayer | undefined;
+    player_under_mouse: PlayerContract | undefined;
 };
 
 export class GlobalState {
@@ -25,6 +26,7 @@ export class GlobalState {
         goalkeeper: getGoalkeeper(),
         players: getPlayers(),
         holded_player: undefined,
+        player_under_mouse: undefined,
     });
 
     // IS e HAS
@@ -38,6 +40,10 @@ export class GlobalState {
 
     hasHoldedPlayer(): boolean {
         return this.state.holded_player ? true : false;
+    }
+
+    hasPlayerUnderMouse(): boolean {
+        return this.state.player_under_mouse ? true : false;
     }
 
     // GETTERS
@@ -69,28 +75,40 @@ export class GlobalState {
         return this.state.goalkeeper;
     }
 
-    getHoldedPlayer(): PlayerContract {
+    getHoldedPlayer(): HoldedPlayer {
         if (!this.state.holded_player) throw new Error("Não nenhum jogador sendo segurado");
         return this.state.holded_player;
+    }
+
+    getPlayerUnderMouse(): PlayerContract {
+        if (!this.state.player_under_mouse) throw new Error("O mouse não está acima de nenhum jogador");
+        return this.state.player_under_mouse;
     }
 
     // SETTERS
     setCols(cols: number): void {
         this.state.cols = cols;
         this.state.region_width = FIELD_WIDTH / cols;
+        this.updatePlayersPositionByColAndRow();
     }
 
     setRows(rows: number): void {
         this.state.rows = rows;
         this.state.region_height = FIELD_HEIGHT / rows;
+        this.updatePlayersPositionByColAndRow();
     }
 
     setSide(side: Side): void {
         this.state.side = side;
+        this.updatePlayersPositionByColAndRow();
     }
 
-    setHoldedPlayer(player: PlayerContract): void {
-        this.state.holded_player = player;
+    setHoldedPlayer(holderPlayer: HoldedPlayer): void {
+        this.state.holded_player = holderPlayer;
+    }
+
+    setPlayerUnderMouse(player: PlayerContract): void {
+        this.state.player_under_mouse = player;
     }
 
     // FUNÇÕES PARA COLUNAS E LINHAS
@@ -114,6 +132,15 @@ export class GlobalState {
 
     resetHoldedPlayer(): void {
         this.state.holded_player = undefined;
+    }
+
+    resetPlayerUnderMouse(): void {
+        this.state.player_under_mouse = undefined;
+    }
+
+    updatePlayersPositionByColAndRow(): void {
+        this.getPlayers().forEach((player) => player.updatePositionByColAndRow());
+        this.getGoalkeeper().updatePositionByColAndRow();
     }
 }
 
