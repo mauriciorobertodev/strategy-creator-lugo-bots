@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { AWAY_GOAL_CENTER, FIELD_HEIGHT, FIELD_WIDTH, HOME_GOAL_CENTER } from "./helpers/constants";
-import { HoldedPlayer, Side } from "./types";
+import { FormationType, HoldedPlayer, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
 
@@ -15,6 +15,7 @@ export type State = {
     players: PlayerContract[];
     holded_player: HoldedPlayer | undefined;
     player_under_mouse: PlayerContract | undefined;
+    current_formation_type: FormationType;
 };
 
 export class GlobalState {
@@ -29,6 +30,7 @@ export class GlobalState {
         players: getPlayers(),
         holded_player: undefined,
         player_under_mouse: undefined,
+        current_formation_type: "FREE",
     });
 
     // IS e HAS e SHOW
@@ -50,6 +52,10 @@ export class GlobalState {
 
     showColsAndRows(): boolean {
         return this.state.show_col_and_rows;
+    }
+
+    currentFormationTypeIs(type: FormationType): boolean {
+        return this.state.current_formation_type === type;
     }
 
     // GETTERS
@@ -91,6 +97,10 @@ export class GlobalState {
         return this.state.player_under_mouse;
     }
 
+    getCurrentFormationType(): FormationType {
+        return this.state.current_formation_type;
+    }
+
     // SETTERS
     setCols(cols: number): void {
         this.state.cols = cols;
@@ -119,6 +129,10 @@ export class GlobalState {
 
     setShowColsAndRows(show: boolean) {
         this.state.show_col_and_rows = show;
+    }
+
+    setCurrentFormationType(type: FormationType): void {
+        this.state.current_formation_type = type;
     }
 
     // FUNÇÕES PARA COLUNAS E LINHAS
