@@ -109,12 +109,14 @@ export class GlobalState {
 
     // SETTERS
     setCols(cols: number): void {
+        if (cols < 2) return;
         this.state.cols = cols;
         this.state.region_width = FIELD_WIDTH / cols;
         this.updatePlayersPositionByColAndRow();
     }
 
     setRows(rows: number): void {
+        if (rows < 1) return;
         this.state.rows = rows;
         this.state.region_height = FIELD_HEIGHT / rows;
         this.updatePlayersPositionByColAndRow();
