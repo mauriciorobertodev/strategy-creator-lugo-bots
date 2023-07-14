@@ -72,10 +72,21 @@ defineEmits(["toggle"]);
 
                     <!-- exibir colunas e linhas -->
                     <div>
-                        <p class="mb-2 text-sm text-gray-500 uppercase">Exibir colunas e linhas</p>
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Exibir colunas e linhas dos jogadores</p>
                         <div class="flex">
                             <button v-on:click="global.setShowColsAndRows(true)" v-bind:class="{ button: global.showColsAndRows(), 'button-secondary': !global.showColsAndRows() }" class="uppercase rounded-none rounded-l">SIM</button>
                             <button v-on:click="global.setShowColsAndRows(false)" v-bind:class="{ button: !global.showColsAndRows(), 'button-secondary': global.showColsAndRows() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                        </div>
+                    </div>
+
+                    <!-- tipo de formação -->
+                    <div>
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Tipo de formação</p>
+                        <div class="flex">
+                            <button v-on:click="global.setCurrentFormationType('FREE')" v-bind:class="{ button: global.currentFormationTypeIs('FREE'), 'button-secondary': !global.currentFormationTypeIs('FREE') }" class="uppercase rounded-none rounded-l">LIVRE</button>
+                            <button v-on:click="global.setCurrentFormationType('INITIAL_POSITIONS')" v-bind:class="{ button: global.currentFormationTypeIs('INITIAL_POSITIONS'), 'button-secondary': !global.currentFormationTypeIs('INITIAL_POSITIONS') }" class="uppercase rounded-none rounded-r">
+                                INICIAL
+                            </button>
                         </div>
                     </div>
                 </div>
