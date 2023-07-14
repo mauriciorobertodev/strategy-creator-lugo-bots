@@ -9,7 +9,9 @@ export function updatePlayersByJsonFile(jsonFile: File) {
         global.getPlayers().forEach((player) => {
             if (player.getNumber() == 1 || !json[player.getNumber()]) return;
             const position = json[player.getNumber()];
-            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            if (position.col != null && position.col >= 0 && position.row != null && position.row >= 0) {
+                player.setColAndRow(position.col, position.row);
+            }
         });
     };
     reader.readAsText(jsonFile);
