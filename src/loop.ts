@@ -2,7 +2,7 @@ import { MathWorld } from "@mauricioroberto/math-world";
 import { drawField, drawPlayers, drawRegions } from "./helpers/draw";
 import global from "./global";
 import { getDistanceBetweenVectors } from "./helpers/math";
-import { getRegionFromPoint } from "./helpers/field";
+import isPermittedRegion, { getRegionFromPoint } from "./helpers/field";
 
 const loop = (world: MathWorld) => {
     // VARIÁVEIS
@@ -35,7 +35,7 @@ const loop = (world: MathWorld) => {
         // SE TIVER UM JOGADOR ABAIXO DO MOUSE, SETAMOS ELE COMO JOGADOR QUE ESTÁ SENDO SEGURADO PELO USUÁRIO
         if (global.hasPlayerUnderMouse()) {
             const region = getRegionFromPoint(global.getPlayerUnderMouse().getPosition());
-            global.setHoldedPlayer({ player: global.getPlayerUnderMouse(), region });
+            global.setHoldedPlayer({ player: global.getPlayerUnderMouse(), region, is_permitted_region: region ? isPermittedRegion(region) : false });
             global.resetPlayerUnderMouse();
         }
     }
@@ -46,15 +46,16 @@ const loop = (world: MathWorld) => {
 
         const player = global.getHoldedPlayer().player;
         const region = global.getHoldedPlayer().region;
+        const allowedRegion = global.getHoldedPlayer().is_permitted_region;
 
         // O PLAYER SEGURA ESTÁ EMCIMA DE UMA REGIÃO ENTÃO ELE DEVE FICA NO CENTRO DELA, E HERDAR SUA COLUNA E LINHA
-        if (region) {
+        if (region && allowedRegion) {
             player.setColAndRow(region.getCol(), region.getRow());
             player.setPosition(region.getCenter());
         }
 
         // SE NÃO TIVER SÓ RESETAMOS A POSIÇÃO DELE PARA IR PARA A LINHA DE JOGADORES
-        if (!region) player.resetPosition();
+        if (!region || !allowedRegion) player.resetPosition();
 
         // POR FIM REMOVEMOS O PLAYER SENDO SEGURADO POIS O JOGADOR QUE ANTES ESTAVA AGORA JÁ NÃO ESTÁ MAIS SENDO SEGURADO
         global.resetHoldedPlayer();
@@ -67,6 +68,7 @@ const loop = (world: MathWorld) => {
         if (global.hasHoldedPlayer()) {
             const region = getRegionFromPoint(global.getHoldedPlayer().player.getPosition());
             global.getHoldedPlayer().region = region;
+            global.getHoldedPlayer().is_permitted_region = region ? isPermittedRegion(region) : false;
             global.resetPlayerUnderMouse();
             return;
         }
