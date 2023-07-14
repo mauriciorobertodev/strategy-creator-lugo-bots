@@ -16,9 +16,11 @@
     },
     "dependencies": {
         "@mauricioroberto/math-world": "^0.0.15",
+        "downloadjs": "^1.4.7",
         "vue": "^3.2.47"
     },
     "devDependencies": {
+        "@types/downloadjs": "^1.4.3",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
         "@vitejs/plugin-vue": "^4.1.0",
