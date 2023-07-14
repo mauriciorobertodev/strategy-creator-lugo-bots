@@ -72,6 +72,7 @@ export default class Player implements PlayerContract {
     public setColAndRow(col: number, row: number): void {
         this.col = col;
         this.row = row;
+        this.updatePositionByColAndRow();
     }
 
     public resetColAndRow(): void {
