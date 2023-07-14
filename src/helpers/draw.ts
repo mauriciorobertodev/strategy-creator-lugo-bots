@@ -1,5 +1,5 @@
 import { Paint, Vector2D } from "@mauricioroberto/math-world";
-import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP } from "./constants";
+import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP, CENTER_FIELD_RADIUS } from "./constants";
 import global from "../global";
 import { angleInRadians, getDirectionToVector, radiansToDegrees } from "./math";
 import PlayerContract from "../contracts/player-contract";
@@ -15,7 +15,7 @@ export function drawField(paint: Paint): void {
     paint.circle({ point: FIELD_POINT_CENTER, radius: 50, lineWidth: 10, fillColor: "white" });
 
     // CÍRCULO DO CENTRO
-    paint.circle({ point: FIELD_POINT_CENTER, radius: 1000, lineWidth: 10 });
+    paint.circle({ point: FIELD_POINT_CENTER, radius: CENTER_FIELD_RADIUS, lineWidth: 10 });
 
     // GOL HOME
     paint
@@ -74,13 +74,17 @@ export function drawPlayers(paint: Paint): void {
         // SE FOR O JOGADOR SEGURADO VAMOS APENAS DESENHAR UM CÍRCULO NELE
         if (global.hasHoldedPlayer() && global.getHoldedPlayer().player === player) {
             const region = global.getHoldedPlayer().region;
+            const allowedRegion = global.getHoldedPlayer().is_permitted_region;
+
+            const color = allowedRegion ? COLOR_GREEN : COLOR_RED;
+
             if (region) {
                 // O CÍRCULO COM COR PRA O USUÁRIO ENTENDER A SITUAÇÃO
-                paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: COLOR_GREEN });
+                paint.circle({ point: player.getPosition(), radius: player.getRadius() + 20, lineWidth: 150, strokeColor: color });
                 // A COLUNA E LINHA QUE O USUÁRIO TERÁ CASO SEJA DROPADO NESSE PONTO
-                paint.text({ point: player.getPosition().clone().add({ x: 0, y: 500 }), text: `${region.getCol()}x${region.getRow()}`, textSize: 300, textColor: COLOR_GREEN });
+                paint.text({ point: player.getPosition().clone().add({ x: 0, y: 500 }), text: `${region.getCol()}x${region.getRow()}`, textSize: 300, textColor: color });
                 // UM RETÂNGULO MARCANDO A REGIÃO PARA O USUÁRIO SABER
-                paint.rect({ point: { x: region.getStart().getX(), y: region.getEnd().getY() }, width: region.getWidth(), height: region.getHeight(), lineWidth: 20, strokeColor: COLOR_GREEN });
+                paint.rect({ point: { x: region.getStart().getX(), y: region.getEnd().getY() }, width: region.getWidth(), height: region.getHeight(), lineWidth: 20, strokeColor: color });
             }
 
             // SE NÃO TIVER UMA ENCONTRADO UMA REGIÃO SIGNIFICA QUE ESTÁ FORA DO CAMPO E TERÁ SUA POSIÇÃO RESETADA, MOSTRE ISSO COMM UM CÍRCULO VERMELHO
