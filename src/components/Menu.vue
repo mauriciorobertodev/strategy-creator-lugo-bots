@@ -89,6 +89,15 @@ defineEmits(["toggle"]);
                             </button>
                         </div>
                     </div>
+
+                    <!-- bloquar área do gol -->
+                    <div v-if="global.getCurrentFormationType() != 'INITIAL_POSITIONS'">
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Bloquear área do gol</p>
+                        <div class="flex">
+                            <button v-on:click="global.setBlockGoalArea(true)" v-bind:class="{ button: global.getBlockGoalArea(), 'button-secondary': !global.getBlockGoalArea() }" class="uppercase rounded-none rounded-l">SIM</button>
+                            <button v-on:click="global.setBlockGoalArea(false)" v-bind:class="{ button: !global.getBlockGoalArea(), 'button-secondary': global.getBlockGoalArea() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Transition>
