@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import global from "../global";
+import download from "downloadjs";
+import { exportFullFormation, exportCommonFormation } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle"]);
+
+const exportCurrentPositions = () => {
+    const players = global.getPlayers();
+    const playersToExport = global.currentFormationTypeIs("INITIAL_POSITIONS") ? exportFullFormation(players) : exportCommonFormation(players);
+    download(JSON.stringify(playersToExport), "positions.json", "text/plain");
+};
 </script>
 
 <template>
@@ -97,6 +105,11 @@ defineEmits(["toggle"]);
                             <button v-on:click="global.setBlockGoalArea(true)" v-bind:class="{ button: global.getBlockGoalArea(), 'button-secondary': !global.getBlockGoalArea() }" class="uppercase rounded-none rounded-l">SIM</button>
                             <button v-on:click="global.setBlockGoalArea(false)" v-bind:class="{ button: !global.getBlockGoalArea(), 'button-secondary': global.getBlockGoalArea() }" class="uppercase rounded-none rounded-r">NÃO</button>
                         </div>
+                    </div>
+                    <!-- ações -->
+                    <div class="space-y-4">
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Ações</p>
+                        <button v-on:click="exportCurrentPositions()" class="uppercase button-secondary">exportar posições atuais</button>
                     </div>
                 </div>
             </div>
