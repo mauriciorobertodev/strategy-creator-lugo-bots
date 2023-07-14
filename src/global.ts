@@ -122,6 +122,16 @@ export class GlobalState {
         this.updatePlayersPositionByColAndRow();
     }
 
+    setColsAndRows(cols: number, rows: number): void {
+        if (cols < 2) return;
+        this.state.cols = cols;
+        this.state.region_width = FIELD_WIDTH / cols;
+        if (rows < 1) return;
+        this.state.rows = rows;
+        this.state.region_height = FIELD_HEIGHT / rows;
+        this.updatePlayersPositionByColAndRow();
+    }
+
     setSide(side: Side): void {
         this.state.side = side;
         this.updatePlayersPositionByColAndRow();
