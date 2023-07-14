@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import global from "../global";
 import download from "downloadjs";
+import { updatePlayersByJsonFile } from "../helpers/json";
+
 import { exportFullFormation, exportCommonFormation } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
@@ -10,6 +12,17 @@ const exportCurrentPositions = () => {
     const players = global.getPlayers();
     const playersToExport = global.currentFormationTypeIs("INITIAL_POSITIONS") ? exportFullFormation(players) : exportCommonFormation(players);
     download(JSON.stringify(playersToExport), "positions.json", "text/plain");
+};
+
+const onFileChange = (e: any) => {
+    const jsonFile = e.target.files[0] as File;
+
+    if (jsonFile.type.toLowerCase() != "application/json") {
+        alert("Somente JSON");
+        return;
+    }
+
+    updatePlayersByJsonFile(jsonFile);
 };
 </script>
 
@@ -106,10 +119,23 @@ const exportCurrentPositions = () => {
                             <button v-on:click="global.setBlockGoalArea(false)" v-bind:class="{ button: !global.getBlockGoalArea(), 'button-secondary': global.getBlockGoalArea() }" class="uppercase rounded-none rounded-r">NÃO</button>
                         </div>
                     </div>
+
                     <!-- ações -->
                     <div class="space-y-4">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Ações</p>
-                        <button v-on:click="exportCurrentPositions()" class="uppercase button-secondary">exportar posições atuais</button>
+                        <button v-on:click="exportCurrentPositions()" class="gap-2 uppercase button-secondary">
+                            exportar posições atuais
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                        <label for="upload_positions" class="gap-2 uppercase cursor-pointer button-secondary">
+                            <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="onFileChange" />
+                            importar posições
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                            </svg>
+                        </label>
                     </div>
                 </div>
             </div>
