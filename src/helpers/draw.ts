@@ -5,6 +5,9 @@ import { angleInRadians, getDirectionToVector, radiansToDegrees } from "./math";
 import PlayerContract from "../contracts/player-contract";
 
 export function drawField(paint: Paint): void {
+    const COLOR_RED = paint.getTailwindColor("Red");
+    const COLOR_RED_WITH_OPACITY = paint.getTailwindColor("Red", "500", 10);
+
     // LINHAS LATERAIS
     paint.rect({ point: FIELD_POINT_1, width: FIELD_WIDTH, height: -FIELD_HEIGHT, lineWidth: 20 });
 
@@ -39,7 +42,36 @@ export function drawField(paint: Paint): void {
 
     // SE O TIPO DA FORMAÇÃO FOR INICIAL TODO O LADO DO ADVERSÁRIO É BLOQUEADO, EXIBIMOS ISSO PINTANDO DE VERMELHO
     if (global.currentFormationTypeIs("INITIAL_POSITIONS")) {
-        paint.rect({ point: new Vector2D(global.isHomeSide() ? FIELD_POINT_CENTER.x : 0, FIELD_HEIGHT), width: FIELD_WIDTH / 2, height: FIELD_HEIGHT, strokeColor: paint.getTailwindColor("Red"), lineWidth: 20, fillColor: paint.getTailwindColor("Red", "500", 10) });
+        paint.rect({ point: new Vector2D(global.isHomeSide() ? FIELD_POINT_CENTER.x : 0, FIELD_HEIGHT), width: FIELD_WIDTH / 2, height: FIELD_HEIGHT, strokeColor: COLOR_RED, lineWidth: 20, fillColor: COLOR_RED_WITH_OPACITY });
+
+        // BORDA VERMELHA DO CÍRCULO CENTRAL
+        paint.circle({ point: FIELD_POINT_CENTER, radius: CENTER_FIELD_RADIUS, lineWidth: 20, strokeColor: COLOR_RED, fillColor: "transparent" });
+
+        // BLOQUEIO DO CÍRCULO CENTRAL LADO HOME
+        if (global.isHomeSide()) paint.circle({ point: FIELD_POINT_CENTER, radius: CENTER_FIELD_RADIUS, startAngle: Math.PI * 2.5, endAngle: Math.PI * 1.5, fillColor: COLOR_RED_WITH_OPACITY, lineToCenter: true });
+
+        // BLOQUEIO DO CÍRCULO CENTRAL LADO AWAY
+        if (global.isAwaySide()) paint.circle({ point: FIELD_POINT_CENTER, radius: CENTER_FIELD_RADIUS, startAngle: -Math.PI * 2.5, endAngle: -Math.PI * 1.5, fillColor: COLOR_RED_WITH_OPACITY, lineToCenter: true });
+    }
+
+    if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getBlockGoalArea()) {
+        let fillColor = COLOR_RED_WITH_OPACITY;
+
+        // BLOQUEIO DO GOL HOME
+        if (global.currentFormationTypeIs("INITIAL_POSITIONS")) if (global.isAwaySide()) fillColor = "transparent";
+        paint.circle({ point: HOME_GOAL_TOP, radius: GOAL_RADIUS, startAngle: 0, endAngle: Math.PI * 1.5, lineWidth: 20, strokeColor: COLOR_RED, fillColor: fillColor, lineToCenter: true, clockwise: true });
+        paint.circle({ point: HOME_GOAL_BOTTOM, radius: GOAL_RADIUS, startAngle: 0, endAngle: Math.PI / 2, lineWidth: 20, strokeColor: COLOR_RED, fillColor: fillColor, lineToCenter: true });
+        paint.line({ startPoint: HOME_GOAL_TOP, endPoint: HOME_GOAL_BOTTOM, lineWidth: 20, strokeColor: COLOR_RED });
+        paint.line({ startPoint: HOME_GOAL_TOP.clone().add({ x: GOAL_RADIUS, y: 0 }), endPoint: HOME_GOAL_BOTTOM.clone().add({ x: GOAL_RADIUS, y: 0 }), lineWidth: 20, strokeColor: COLOR_RED });
+        paint.rect({ point: HOME_GOAL_TOP, width: GOAL_RADIUS, height: 3000, fillColor: fillColor, strokeColor: "transparent" });
+
+        // BLOQUEIO DO GOL AWAY
+        if (global.currentFormationTypeIs("INITIAL_POSITIONS")) if (global.isHomeSide()) fillColor = "transparent";
+        paint.circle({ point: AWAY_GOAL_TOP, radius: GOAL_RADIUS, startAngle: Math.PI, endAngle: Math.PI * 1.5, lineWidth: 20, strokeColor: COLOR_RED, fillColor: fillColor, lineToCenter: true });
+        paint.circle({ point: AWAY_GOAL_BOTTOM, radius: GOAL_RADIUS, startAngle: Math.PI, endAngle: Math.PI / 2, lineWidth: 20, strokeColor: COLOR_RED, fillColor: fillColor, lineToCenter: true, clockwise: true });
+        paint.line({ startPoint: AWAY_GOAL_TOP, endPoint: AWAY_GOAL_BOTTOM, lineWidth: 20, strokeColor: COLOR_RED });
+        paint.line({ startPoint: AWAY_GOAL_TOP.clone().sub({ x: GOAL_RADIUS, y: 0 }), endPoint: AWAY_GOAL_BOTTOM.clone().sub({ x: GOAL_RADIUS, y: 0 }), lineWidth: 20, strokeColor: COLOR_RED });
+        paint.rect({ point: AWAY_GOAL_TOP.clone().sub({ x: GOAL_RADIUS, y: 0 }), width: GOAL_RADIUS, height: 3000, fillColor: fillColor, strokeColor: "transparent" });
     }
 }
 
