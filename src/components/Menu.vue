@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import global from "../global";
 import download from "downloadjs";
-import { updatePlayersByJsonFile } from "../helpers/json";
+import { updatePlayersByJsonFile, updateFreeModeByJsonFile } from "../helpers/json";
 
-import { exportFullFormation, exportCommonFormation } from "../helpers/export";
+import { exportCommonFormation, exportFreeModeConfig } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle"]);
 
 const exportCurrentPositions = () => {
-    const players = global.getPlayers();
-    const playersToExport = global.currentFormationTypeIs("INITIAL_POSITIONS") ? exportFullFormation(players) : exportCommonFormation(players);
+    const playersToExport = exportCommonFormation();
     download(JSON.stringify(playersToExport), "positions.json", "text/plain");
 };
 
-const onFileChange = (e: any) => {
+const exportCurrentFreeModeConfig = () => {
+    const configToExport = exportFreeModeConfig();
+    download(JSON.stringify(configToExport), "config.json", "text/plain");
+};
+
+const uploadFormation = (e: any) => {
     const jsonFile = e.target.files[0] as File;
 
     if (jsonFile.type.toLowerCase() != "application/json") {
@@ -23,6 +27,17 @@ const onFileChange = (e: any) => {
     }
 
     updatePlayersByJsonFile(jsonFile);
+};
+
+const uploadFreeModeConfig = (e: any) => {
+    const jsonFile = e.target.files[0] as File;
+
+    if (jsonFile.type.toLowerCase() != "application/json") {
+        alert("Somente JSON");
+        return;
+    }
+
+    updateFreeModeByJsonFile(jsonFile);
 };
 </script>
 
@@ -121,17 +136,31 @@ const onFileChange = (e: any) => {
                     </div>
 
                     <!-- ações -->
-                    <div class="space-y-4">
+                    <div class="space-y-4 text-sm uppercase">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Ações</p>
                         <button v-on:click="exportCurrentPositions()" class="gap-2 uppercase button-secondary">
-                            exportar posições atuais
+                            Exportar formação atual
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
                         </button>
-                        <label for="upload_positions" class="gap-2 uppercase cursor-pointer button-secondary">
-                            <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="onFileChange" />
-                            importar posições
+                        <label for="upload_positions" class="gap-2 cursor-pointer button-secondary">
+                            <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="uploadFormation" />
+                            Importar formação
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                            </svg>
+                        </label>
+                        <hr />
+                        <button v-on:click="exportCurrentFreeModeConfig()" class="gap-2 uppercase button-secondary">
+                            Exportar conifiguração atual
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                        <label for="upload_free_mode_config" class="gap-2 cursor-pointer button-secondary">
+                            <input id="upload_free_mode_config" type="file" class="hidden" accept="application/json" v-on:change="uploadFreeModeConfig" />
+                            Importar configuração
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>
