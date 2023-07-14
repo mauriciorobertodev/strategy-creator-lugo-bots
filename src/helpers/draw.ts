@@ -1,4 +1,4 @@
-import { Paint } from "@mauricioroberto/math-world";
+import { Paint, Vector2D } from "@mauricioroberto/math-world";
 import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_CENTER, HOME_GOAL_TOP, AWAY_GOAL_BOTTOM, AWAY_GOAL_CENTER, AWAY_GOAL_TOP } from "./constants";
 import global from "../global";
 import { angleInRadians, getDirectionToVector, radiansToDegrees } from "./math";
@@ -36,6 +36,11 @@ export function drawField(paint: Paint): void {
     paint.line({ startPoint: { x: FIELD_WIDTH - 1400, y: AWAY_GOAL_TOP.getY() }, endPoint: { x: FIELD_WIDTH - 1400, y: AWAY_GOAL_BOTTOM.getY() }, lineWidth: 20 });
     paint.circle({ point: AWAY_GOAL_TOP, radius: GOAL_RADIUS, startAngleForHumans: 90, endAngleForHumans: 180, lineWidth: 20 });
     paint.circle({ point: AWAY_GOAL_BOTTOM, radius: GOAL_RADIUS, startAngleForHumans: 180, endAngleForHumans: 270, lineWidth: 20 });
+
+    // SE O TIPO DA FORMAÇÃO FOR INICIAL TODO O LADO DO ADVERSÁRIO É BLOQUEADO, EXIBIMOS ISSO PINTANDO DE VERMELHO
+    if (global.currentFormationTypeIs("INITIAL_POSITIONS")) {
+        paint.rect({ point: new Vector2D(global.isHomeSide() ? FIELD_POINT_CENTER.x : 0, FIELD_HEIGHT), width: FIELD_WIDTH / 2, height: FIELD_HEIGHT, strokeColor: paint.getTailwindColor("Red"), lineWidth: 20, fillColor: paint.getTailwindColor("Red", "500", 10) });
+    }
 }
 
 export function drawRegions(paint: Paint): void {
