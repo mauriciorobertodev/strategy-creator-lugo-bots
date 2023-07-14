@@ -89,7 +89,7 @@ export default class Player implements PlayerContract {
     }
 
     public updatePositionByColAndRow(): void {
-        if (!this.col || !this.row) return;
+        if ((!this.col && this.col != 0) || (!this.row && this.row != 0)) return;
         const region = getRegionFromColAndRow(this.col, this.row);
         if (region) this.setPosition(region.getCenter());
         if (!region) this.resetPosition();
