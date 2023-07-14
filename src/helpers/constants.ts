@@ -4,6 +4,7 @@ export const FIELD_WIDTH = 20000;
 export const FIELD_HEIGHT = 10000;
 
 export const GOAL_RADIUS = 1400;
+export const CENTER_FIELD_RADIUS = 1000;
 
 export const HOME_GOAL_TOP = new Vector2D(0, 6500);
 export const HOME_GOAL_CENTER = new Vector2D(0, 5000);
