@@ -16,6 +16,7 @@ export type State = {
     holded_player: HoldedPlayer | undefined;
     player_under_mouse: PlayerContract | undefined;
     current_formation_type: FormationType;
+    block_goal_area: boolean;
 };
 
 export class GlobalState {
@@ -31,6 +32,7 @@ export class GlobalState {
         holded_player: undefined,
         player_under_mouse: undefined,
         current_formation_type: "FREE",
+        block_goal_area: false,
     });
 
     // IS e HAS e SHOW
@@ -101,6 +103,10 @@ export class GlobalState {
         return this.state.current_formation_type;
     }
 
+    getBlockGoalArea(): boolean {
+        return this.state.block_goal_area;
+    }
+
     // SETTERS
     setCols(cols: number): void {
         this.state.cols = cols;
@@ -133,6 +139,10 @@ export class GlobalState {
 
     setCurrentFormationType(type: FormationType): void {
         this.state.current_formation_type = type;
+    }
+
+    setBlockGoalArea(block: boolean): void {
+        this.state.block_goal_area = block;
     }
 
     // FUNÇÕES PARA COLUNAS E LINHAS
