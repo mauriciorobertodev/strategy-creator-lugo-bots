@@ -18,3 +18,7 @@ export type FormationFullExport = { [key in PlayerNumber]: PlayerPosition };
 export type FormationCommonExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
 export type FreeModeConfig = { cols: number; rows: number; side: Side; show_cols_and_rows: boolean; formation_type: FormationType; block_goal_area: boolean; formation: FormationFullExport };
+
+export type Color = { r: number; g: number; b: number };
+
+export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
