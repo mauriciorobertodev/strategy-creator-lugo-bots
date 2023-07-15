@@ -2,24 +2,26 @@ import FieldZoneContract from "../contracts/field-zone-contract";
 import FormationContract from "../contracts/formation-contract";
 import StrategyContract from "../contracts/strategy-contract";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "../helpers/constants";
+import { StrategyCreator } from "../types";
 import Formation from "./formation";
 
 export default class Strategy implements StrategyContract {
-    private formations: FormationContract[] = [];
-    private current_formation: FormationContract;
+    private name: string;
+    private cols: number;
+    private rows: number;
+    private formations: FormationContract[];
+    private current_formation_name: string;
     private region_width: number;
     private region_height: number;
 
-    constructor(
-        private cols: number,
-        private rows: number,
-        private name: string,
-        formation?: FormationContract,
-    ) {
-        this.current_formation = formation ?? new Formation("Posições iniciais", "INITIAL_POSITIONS");
-        this.formations.push(this.current_formation);
+    constructor({ name, cols, rows, current_formation_name, formations }: StrategyCreator) {
+        this.name = name;
+        this.cols = cols;
+        this.rows = rows;
         this.region_width = FIELD_WIDTH / cols;
         this.region_height = FIELD_HEIGHT / rows;
+        this.current_formation_name = current_formation_name ?? "";
+        this.formations = formations ? formations.map((creator) => new Formation(creator)) : [];
     }
 
     getCols(): number {
@@ -43,7 +45,9 @@ export default class Strategy implements StrategyContract {
     }
 
     getCurrentFormation(): FormationContract {
-        return this.current_formation;
+        const formation = this.formations.find((formation) => formation.getName() === this.current_formation_name);
+        if (!formation) throw new Error("Não há nenhuma formação com o nome desejado");
+        return formation;
     }
 
     getRegionWidth(): number {
@@ -73,5 +77,19 @@ export default class Strategy implements StrategyContract {
         if (rows < 1) return;
         this.rows = rows;
         this.region_height = FIELD_HEIGHT / rows;
+    }
+
+    public toJson(): string {
+        return JSON.stringify(this.getCreatorData());
+    }
+
+    public getCreatorData(): StrategyCreator {
+        return {
+            name: this.getName(),
+            cols: this.getCols(),
+            rows: this.getRows(),
+            current_formation_name: this.current_formation_name,
+            formations: this.formations.map((formation) => formation.getCreatorData()),
+        };
     }
 }

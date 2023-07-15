@@ -1,19 +1,21 @@
 import FieldZoneContract from "../contracts/field-zone-contract";
 import FormationContract from "../contracts/formation-contract";
 import { getDefaultInitialPositions } from "../helpers/players";
-import { FormationType, TeamPositions } from "../types";
+import { FormationCreator, FormationType, PlayerNumber, PlayerPosition, TeamPositions } from "../types";
+import FieldZone from "./field-zone";
 
 export default class Formation implements FormationContract {
-    private type: FormationType = "FREE";
     private selecting_zone = false;
-    private field_zone: FieldZoneContract | undefined = undefined;
-    private team_positions: TeamPositions = getDefaultInitialPositions();
+    private name: string;
+    private type: FormationType;
+    private field_zone?: FieldZoneContract;
+    private team_positions: TeamPositions;
 
-    constructor(
-        private name: string,
-        type?: FormationType,
-    ) {
+    constructor({ name, type, team_positions, field_zone }: FormationCreator) {
         this.type = type ?? "FREE";
+        this.name = name;
+        this.team_positions = team_positions ?? getDefaultInitialPositions();
+        this.field_zone = typeof field_zone == "object" ? new FieldZone(field_zone) : undefined;
     }
 
     getType(): FormationType {
@@ -55,5 +57,22 @@ export default class Formation implements FormationContract {
 
     getTeamPositions(): TeamPositions {
         return this.team_positions;
+    }
+
+    setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void {
+        this.team_positions[number] = position;
+    }
+
+    public toJson(): string {
+        return JSON.stringify(this.getCreatorData());
+    }
+
+    public getCreatorData(): FormationCreator {
+        return {
+            name: this.getName(),
+            type: this.getType(),
+            field_zone: this.hasFieldZone() ? this.getFieldZone().getCreatorData() : undefined,
+            team_positions: this.getTeamPositions(),
+        };
     }
 }
