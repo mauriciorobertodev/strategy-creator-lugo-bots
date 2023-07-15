@@ -1,11 +1,10 @@
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { AWAY_GOAL_CENTER, HOME_GOAL_CENTER } from "./helpers/constants";
-import { FormationType, HoldedPlayer, Side } from "./types";
+import { FormationType, GlobalStateLocalStorage, HoldedPlayer, PlayerNumber, PlayerPosition, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
 import StrategyContract from "./contracts/strategy-contract";
 import Strategy from "./classes/strategy";
-import Formation from "./classes/formation";
 
 export type State = {
     free_mode_strategy: StrategyContract;
@@ -29,8 +28,12 @@ export class GlobalState {
         player_under_mouse: undefined,
         block_goal_area: false,
         current_strategy: undefined,
-        free_mode_strategy: new Strategy(16, 12, "Modo Livre", new Formation("", "FREE")),
+        free_mode_strategy: new Strategy({ cols: 16, rows: 12, name: "Modo Livre", current_formation_name: "batata", formations: [{ name: "batata", type: "FREE" }] }),
     });
+
+    constructor() {
+        watch(this.state, () => this.saveInLocalStorage());
+    }
 
     // IS e HAS e SHOW
     isHomeSide(): boolean {
@@ -109,6 +112,16 @@ export class GlobalState {
         return this.state.free_mode_strategy;
     }
 
+    getPlayer(number: PlayerNumber): PlayerContract | null {
+        const player = this.getPlayers().find((player) => player.getNumber() === number);
+        if (player) return player;
+        return null;
+    }
+
+    getFreeModeStrategy(): StrategyContract {
+        return this.state.free_mode_strategy;
+    }
+
     // SETTERS
     setCols(cols: number): void {
         this.getCurrentStrategy().setCols(cols);
@@ -150,6 +163,10 @@ export class GlobalState {
         this.state.block_goal_area = block;
     }
 
+    setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void {
+        this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, position);
+    }
+
     // FUNÇÕES PARA COLUNAS E LINHAS
     incrementCol(): void {
         this.setCols(this.getCols() + 1);
@@ -181,8 +198,45 @@ export class GlobalState {
         this.getPlayers().forEach((player) => player.updatePositionByColAndRow());
         this.getGoalkeeper().setPosition(this.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
     }
+
+    saveInLocalStorage() {
+        const data = JSON.stringify(this.getLocalStorageData());
+        localStorage.removeItem("strategy-creator-lugo-bots");
+        localStorage.setItem("strategy-creator-lugo-bots", data);
+    }
+
+    loadFromLocalStorage() {
+        const json = localStorage.getItem("strategy-creator-lugo-bots");
+        if (!json) return;
+        const data = JSON.parse(json) as GlobalStateLocalStorage;
+
+        this.state.side = data.side;
+        this.state.show_col_and_rows = data.show_col_and_rows;
+        this.state.block_goal_area = data.block_goal_area;
+        this.state.free_mode_strategy = new Strategy(data.free_mode_strategy);
+        this.state.current_strategy = data.current_strategy ? new Strategy(data.current_strategy) : undefined;
+
+        global.getPlayers().forEach((player) => {
+            const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
+            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            else player.resetPosition();
+        });
+        global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
+    }
+
+    getLocalStorageData(): GlobalStateLocalStorage {
+        return {
+            free_mode_strategy: this.getFreeModeStrategy().getCreatorData(),
+            current_strategy: this.state.current_strategy ? this.state.current_strategy.getCreatorData() : undefined,
+            side: this.getSide(),
+            show_col_and_rows: this.showColsAndRows(),
+            block_goal_area: this.getBlockGoalArea(),
+        };
+    }
 }
 
 const global: GlobalState = new GlobalState();
 
 export default global;
+
+global.loadFromLocalStorage();
