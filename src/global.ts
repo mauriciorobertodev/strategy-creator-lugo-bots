@@ -1,38 +1,35 @@
 import { reactive } from "vue";
-import { AWAY_GOAL_CENTER, FIELD_HEIGHT, FIELD_WIDTH, HOME_GOAL_CENTER } from "./helpers/constants";
+import { AWAY_GOAL_CENTER, HOME_GOAL_CENTER } from "./helpers/constants";
 import { FormationType, HoldedPlayer, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
+import StrategyContract from "./contracts/strategy-contract";
+import Strategy from "./classes/strategy";
+import Formation from "./classes/formation";
 
 export type State = {
-    cols: number;
-    rows: number;
+    free_mode_strategy: StrategyContract;
+    current_strategy?: StrategyContract;
     side: Side;
-    region_width: number;
-    region_height: number;
     show_col_and_rows: boolean;
     goalkeeper: PlayerContract;
     players: PlayerContract[];
     holded_player: HoldedPlayer | undefined;
     player_under_mouse: PlayerContract | undefined;
-    current_formation_type: FormationType;
     block_goal_area: boolean;
 };
 
 export class GlobalState {
     private state: State = reactive({
-        cols: 16,
-        rows: 12,
         side: "HOME",
-        region_width: FIELD_WIDTH / 16,
-        region_height: FIELD_HEIGHT / 12,
         show_col_and_rows: false,
         goalkeeper: getGoalkeeper(),
         players: getPlayers(),
         holded_player: undefined,
         player_under_mouse: undefined,
-        current_formation_type: "FREE",
         block_goal_area: false,
+        current_strategy: undefined,
+        free_mode_strategy: new Strategy(16, 12, "Modo Livre", new Formation("", "FREE")),
     });
 
     // IS e HAS e SHOW
@@ -57,16 +54,16 @@ export class GlobalState {
     }
 
     currentFormationTypeIs(type: FormationType): boolean {
-        return this.state.current_formation_type === type;
+        return this.getCurrentStrategy().getCurrentFormation().getType() === type;
     }
 
     // GETTERS
     getCols(): number {
-        return this.state.cols;
+        return this.getCurrentStrategy().getCols();
     }
 
     getRows(): number {
-        return this.state.rows;
+        return this.getCurrentStrategy().getRows();
     }
 
     getSide(): Side {
@@ -74,11 +71,11 @@ export class GlobalState {
     }
 
     getRegionWidth(): number {
-        return this.state.region_width;
+        return this.getCurrentStrategy().getRegionWidth();
     }
 
     getRegionHeight(): number {
-        return this.state.region_height;
+        return this.getCurrentStrategy().getRegionHeight();
     }
 
     getPlayers(): PlayerContract[] {
@@ -100,35 +97,31 @@ export class GlobalState {
     }
 
     getCurrentFormationType(): FormationType {
-        return this.state.current_formation_type;
+        return this.getCurrentStrategy().getCurrentFormation().getType();
     }
 
     getBlockGoalArea(): boolean {
         return this.state.block_goal_area;
     }
 
+    getCurrentStrategy(): StrategyContract {
+        if (this.state.current_strategy) return this.state.current_strategy;
+        return this.state.free_mode_strategy;
+    }
+
     // SETTERS
     setCols(cols: number): void {
-        if (cols < 2) return;
-        this.state.cols = cols;
-        this.state.region_width = FIELD_WIDTH / cols;
+        this.getCurrentStrategy().setCols(cols);
         this.updatePlayersPositionByColAndRow();
     }
 
     setRows(rows: number): void {
-        if (rows < 1) return;
-        this.state.rows = rows;
-        this.state.region_height = FIELD_HEIGHT / rows;
+        this.getCurrentStrategy().setRows(rows);
         this.updatePlayersPositionByColAndRow();
     }
 
     setColsAndRows(cols: number, rows: number): void {
-        if (cols < 2) return;
-        this.state.cols = cols;
-        this.state.region_width = FIELD_WIDTH / cols;
-        if (rows < 1) return;
-        this.state.rows = rows;
-        this.state.region_height = FIELD_HEIGHT / rows;
+        this.getCurrentStrategy().setColsAndRows(cols, rows);
         this.updatePlayersPositionByColAndRow();
     }
 
@@ -150,7 +143,7 @@ export class GlobalState {
     }
 
     setCurrentFormationType(type: FormationType): void {
-        this.state.current_formation_type = type;
+        this.getCurrentStrategy().getCurrentFormation().setType(type);
     }
 
     setBlockGoalArea(block: boolean): void {
@@ -163,7 +156,7 @@ export class GlobalState {
     }
 
     decrementCol(): void {
-        if (this.state.cols <= 0) return;
+        if (this.getCols() <= 0) return;
         this.setCols(this.getCols() - 1);
     }
 
@@ -172,7 +165,7 @@ export class GlobalState {
     }
 
     decrementRow(): void {
-        if (this.state.rows <= 0) return;
+        if (this.getRows() <= 0) return;
         this.setRows(this.getRows() - 1);
     }
 
