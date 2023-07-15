@@ -1,5 +1,5 @@
 import { Vector2D } from "@mauricioroberto/math-world";
-import { Color } from "../types";
+import { Color, FieldZoneCreator } from "../types";
 
 export default interface FieldZoneContract {
     getName(): string;
@@ -15,4 +15,6 @@ export default interface FieldZoneContract {
     getTopRight(): Vector2D;
     getBottomLeft(): Vector2D;
     getBottomRight(): Vector2D;
+    getCreatorData(): FieldZoneCreator;
+    toJson(): string;
 }
