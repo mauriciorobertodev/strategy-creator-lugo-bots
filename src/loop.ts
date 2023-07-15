@@ -51,6 +51,7 @@ const loop = (world: MathWorld) => {
         // O PLAYER SEGURA ESTÁ EMCIMA DE UMA REGIÃO ENTÃO ELE DEVE FICA NO CENTRO DELA, E HERDAR SUA COLUNA E LINHA
         if (region && allowedRegion) {
             player.setColAndRow(region.getCol(), region.getRow());
+            global.setPlayerPosition(player.getNumber(), { col: region.getCol(), row: region.getRow() });
             player.setPosition(region.getCenter());
         }
 

@@ -1,5 +1,6 @@
 import global from "../global";
 import { FormationFullExport, FreeModeConfig } from "../types";
+import { AWAY_GOAL_CENTER, HOME_GOAL_CENTER } from "./constants";
 
 export function updatePlayersByJsonFile(jsonFile: File) {
     const reader = new FileReader();
@@ -50,6 +51,9 @@ function updatePlayerByFormationExport(formation: FormationFullExport) {
         const position = formation[player.getNumber()];
         if (position.col != null && position.col >= 0 && position.row != null && position.row >= 0) {
             player.setColAndRow(position.col, position.row);
+            global.setPlayerPosition(player.getNumber(), { col: position.col, row: position.row });
         }
     });
+
+    global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
 }
