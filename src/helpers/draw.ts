@@ -65,6 +65,8 @@ export function drawField(paint: Paint): void {
         paint.line({ startPoint: HOME_GOAL_TOP.clone().add({ x: GOAL_RADIUS, y: 0 }), endPoint: HOME_GOAL_BOTTOM.clone().add({ x: GOAL_RADIUS, y: 0 }), lineWidth: 20, strokeColor: COLOR_RED });
         paint.rect({ point: HOME_GOAL_TOP, width: GOAL_RADIUS, height: 3000, fillColor: fillColor, strokeColor: "transparent" });
 
+        fillColor = COLOR_RED_WITH_OPACITY;
+
         // BLOQUEIO DO GOL AWAY
         if (global.currentFormationTypeIs("INITIAL_POSITIONS")) if (global.isHomeSide()) fillColor = "transparent";
         paint.circle({ point: AWAY_GOAL_TOP, radius: GOAL_RADIUS, startAngle: Math.PI, endAngle: Math.PI * 1.5, lineWidth: 20, strokeColor: COLOR_RED, fillColor: fillColor, lineToCenter: true });
