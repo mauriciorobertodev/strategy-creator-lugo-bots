@@ -22,3 +22,35 @@ export type FreeModeConfig = { cols: number; rows: number; side: Side; show_cols
 export type Color = { r: number; g: number; b: number };
 
 export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
+
+export type FieldZoneCreator = {
+    name: string;
+    color: Color;
+    start_col: number;
+    end_col: number;
+    start_row: number;
+    end_row: number;
+};
+
+export type FormationCreator = {
+    name: string;
+    type?: FormationType;
+    field_zone?: FieldZoneCreator;
+    team_positions?: TeamPositions;
+};
+
+export type StrategyCreator = {
+    name: string;
+    cols: number;
+    rows: number;
+    current_formation_name?: string;
+    formations?: FormationCreator[];
+};
+
+export type GlobalStateLocalStorage = {
+    free_mode_strategy: StrategyCreator;
+    current_strategy?: StrategyCreator;
+    side: Side;
+    show_col_and_rows: boolean;
+    block_goal_area: boolean;
+};
