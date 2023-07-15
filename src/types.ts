@@ -24,6 +24,7 @@ export type Color = { r: number; g: number; b: number };
 export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
 
 export type FieldZoneCreator = {
+    uuid?: string;
     name: string;
     color: Color;
     start_col: number;
@@ -33,6 +34,7 @@ export type FieldZoneCreator = {
 };
 
 export type FormationCreator = {
+    uuid?: string;
     name: string;
     type?: FormationType;
     field_zone?: FieldZoneCreator;
@@ -40,10 +42,11 @@ export type FormationCreator = {
 };
 
 export type StrategyCreator = {
+    uuid?: string;
     name: string;
     cols: number;
     rows: number;
-    current_formation_name?: string;
+    current_formation_uuid?: string;
     formations?: FormationCreator[];
 };
 

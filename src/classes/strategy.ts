@@ -4,24 +4,27 @@ import StrategyContract from "../contracts/strategy-contract";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "../helpers/constants";
 import { StrategyCreator } from "../types";
 import Formation from "./formation";
+import { v4 } from "uuid";
 
 export default class Strategy implements StrategyContract {
+    private uuid: string;
     private name: string;
     private cols: number;
     private rows: number;
     private formations: FormationContract[];
-    private current_formation_name: string;
+    private current_formation_uuid: string;
     private region_width: number;
     private region_height: number;
 
-    constructor({ name, cols, rows, current_formation_name, formations }: StrategyCreator) {
+    constructor({ uuid, name, cols, rows, current_formation_uuid, formations }: StrategyCreator) {
         this.name = name;
         this.cols = cols;
         this.rows = rows;
         this.region_width = FIELD_WIDTH / cols;
         this.region_height = FIELD_HEIGHT / rows;
-        this.current_formation_name = current_formation_name ?? "";
+        this.current_formation_uuid = current_formation_uuid ?? "";
         this.formations = formations ? formations.map((creator) => new Formation(creator)) : [];
+        this.uuid = uuid ?? v4();
     }
 
     getCols(): number {
@@ -45,9 +48,14 @@ export default class Strategy implements StrategyContract {
     }
 
     getCurrentFormation(): FormationContract {
-        const formation = this.formations.find((formation) => formation.getName() === this.current_formation_name);
-        if (!formation) throw new Error("Não há nenhuma formação com o nome desejado");
+        if (!this.getFormationsUuid().includes(this.current_formation_uuid)) this.current_formation_uuid = this.getFormationsUuid()[0];
+        const formation = this.formations.find((formation) => formation.getUuid() === this.current_formation_uuid);
+        if (!formation) throw new Error("Não há nenhuma formação com o uuid passado");
         return formation;
+    }
+
+    getFormationsUuid(): string[] {
+        return this.formations.map((formation) => formation.getUuid());
     }
 
     getRegionWidth(): number {
@@ -62,6 +70,10 @@ export default class Strategy implements StrategyContract {
         if (cols < 2) return;
         this.cols = cols;
         this.region_width = FIELD_WIDTH / cols;
+    }
+
+    getUuid(): string {
+        return this.uuid;
     }
 
     setRows(rows: number): void {
@@ -85,10 +97,11 @@ export default class Strategy implements StrategyContract {
 
     public getCreatorData(): StrategyCreator {
         return {
+            uuid: this.getUuid(),
             name: this.getName(),
             cols: this.getCols(),
             rows: this.getRows(),
-            current_formation_name: this.current_formation_name,
+            current_formation_uuid: this.current_formation_uuid,
             formations: this.formations.map((formation) => formation.getCreatorData()),
         };
     }

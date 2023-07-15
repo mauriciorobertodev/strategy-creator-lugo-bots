@@ -16,4 +16,5 @@ export default interface StrategyContract {
     setColsAndRows(cols: number, rows: number): void;
     toJson(): string;
     getCreatorData(): StrategyCreator;
+    getUuid(): string;
 }

@@ -4,8 +4,10 @@ import { Color, FieldZoneCreator } from "../types";
 import { getRegionFromColAndRow } from "../helpers/field";
 import global from "../global";
 import FieldZoneContract from "../contracts/field-zone-contract";
+import { v4 } from "uuid";
 
 export default class FieldZone implements FieldZoneContract {
+    private uuid: string;
     private name: string;
     private color: Color;
     private start_col: number;
@@ -13,7 +15,8 @@ export default class FieldZone implements FieldZoneContract {
     private start_row: number;
     private end_row: number;
 
-    constructor({ name, color, start_col, end_col, start_row, end_row }: FieldZoneCreator) {
+    constructor({ uuid, name, color, start_col, end_col, start_row, end_row }: FieldZoneCreator) {
+        this.uuid = uuid ?? v4();
         this.name = name;
         this.color = color;
         this.start_col = Math.min(start_col, end_col);
@@ -52,6 +55,9 @@ export default class FieldZone implements FieldZoneContract {
 
     public getHeight(): number {
         return global.getRegionHeight() * (this.end_row - this.start_row + 1);
+    }
+    public getUuid(): string {
+        return this.uuid;
     }
 
     public getCenter(): Vector2D {
@@ -93,6 +99,7 @@ export default class FieldZone implements FieldZoneContract {
 
     public getCreatorData(): FieldZoneCreator {
         return {
+            uuid: this.getUuid(),
             name: this.getName(),
             color: this.getColor(),
             start_col: this.getStartCol(),

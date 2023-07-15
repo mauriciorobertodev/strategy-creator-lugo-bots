@@ -13,8 +13,8 @@ export type State = {
     show_col_and_rows: boolean;
     goalkeeper: PlayerContract;
     players: PlayerContract[];
-    holded_player: HoldedPlayer | undefined;
-    player_under_mouse: PlayerContract | undefined;
+    holded_player?: HoldedPlayer;
+    player_under_mouse?: PlayerContract;
     block_goal_area: boolean;
 };
 
@@ -28,7 +28,7 @@ export class GlobalState {
         player_under_mouse: undefined,
         block_goal_area: false,
         current_strategy: undefined,
-        free_mode_strategy: new Strategy({ cols: 16, rows: 12, name: "Modo Livre", current_formation_name: "batata", formations: [{ name: "batata", type: "FREE" }] }),
+        free_mode_strategy: new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] }),
     });
 
     constructor() {
@@ -201,7 +201,7 @@ export class GlobalState {
 
     saveInLocalStorage() {
         const data = JSON.stringify(this.getLocalStorageData());
-        localStorage.removeItem("strategy-creator-lugo-bots");
+
         localStorage.setItem("strategy-creator-lugo-bots", data);
     }
 

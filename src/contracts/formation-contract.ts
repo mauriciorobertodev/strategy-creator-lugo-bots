@@ -15,4 +15,5 @@ export default interface FormationContract {
     toJson(): string;
     getCreatorData(): FormationCreator;
     setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void;
+    getUuid(): string;
 }

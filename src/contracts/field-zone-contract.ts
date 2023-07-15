@@ -17,4 +17,5 @@ export default interface FieldZoneContract {
     getBottomRight(): Vector2D;
     getCreatorData(): FieldZoneCreator;
     toJson(): string;
+    getUuid(): string;
 }
