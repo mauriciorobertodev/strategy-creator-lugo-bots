@@ -259,17 +259,23 @@ export class GlobalState {
         this.getPlayers().map((p) => p.resetPosition());
     }
 
+    newFormation(name: string, type: FormationType): void {
+        const formation = new Formation({ name, type });
+        this.getCurrentStrategy().addFormation(formation);
+        this.getCurrentStrategy().setCurrentFormation(formation.getUuid());
+        this.updatePlayerPositionByCurrentFormation();
+    }
+
     setCurrentStrategy(uuid: string): void {
         const strategy = this.getStrategies().find((strategy) => strategy.getUuid() === uuid);
         if (!strategy) throw new Error("Essa estratégia não existe");
         this.state.current_strategy_uuid = uuid;
+        this.updatePlayerPositionByCurrentFormation();
+    }
 
-        global.getPlayers().forEach((player) => {
-            const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
-            if (position.col && position.row) player.setColAndRow(position.col, position.row);
-            else player.resetPosition();
-        });
-        global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
+    setCurrentFormation(uuid: string): void {
+        this.getCurrentStrategy().setCurrentFormation(uuid);
+        this.updatePlayerPositionByCurrentFormation();
     }
 
     deleteCurrentStrategy() {
@@ -278,6 +284,30 @@ export class GlobalState {
         if (!strategy) throw new Error("Essa estratégia não existe");
         global.setCurrentStrategy("free_mode");
         this.state.strategies = this.state.strategies.filter((strategy) => strategy.getUuid() != uuid);
+        this.updatePlayerPositionByCurrentFormation();
+    }
+
+    deleteCurrentFormation() {
+        const uuid = global.getCurrentStrategy().getCurrentFormation().getUuid();
+        this.deleteFormation(uuid);
+    }
+
+    deleteFormation(uuid: string) {
+        const formation = this.getCurrentStrategy()
+            .getFormations()
+            .find((formation) => formation.getUuid() === uuid);
+        if (!formation) throw new Error("Essa formação não existe");
+        this.getCurrentStrategy().deleteFormation(uuid);
+        this.updatePlayerPositionByCurrentFormation();
+    }
+
+    updatePlayerPositionByCurrentFormation(): void {
+        global.getPlayers().forEach((player) => {
+            const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
+            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            else player.resetPosition();
+        });
+        global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
     }
 }
 
