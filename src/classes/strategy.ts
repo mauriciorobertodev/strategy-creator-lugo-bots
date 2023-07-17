@@ -2,7 +2,7 @@ import FieldZoneContract from "../contracts/field-zone-contract";
 import FormationContract from "../contracts/formation-contract";
 import StrategyContract from "../contracts/strategy-contract";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "../helpers/constants";
-import { StrategyCreator } from "../types";
+import { StrategyCreator, FormationType } from "../types";
 import Formation from "./formation";
 import { v4 } from "uuid";
 
@@ -110,9 +110,23 @@ export default class Strategy implements StrategyContract {
         this.formations.push(formation);
     }
 
-    setCurrentFormation(uuid: string) {
+    setCurrentFormation(uuid: string): void {
         const formation = this.formations.find((formation) => formation.getUuid() === uuid);
         if (!formation) throw new Error("Essa formação não existe");
         this.current_formation_uuid = uuid;
+    }
+
+    newFormation(name: string, type: FormationType): void {
+        const formation = new Formation({ name, type });
+        this.formations.push(formation);
+        this.current_formation_uuid = formation.getUuid();
+    }
+
+    deleteFormation(uuid: string): void {
+        if (this.formations.length == 1) return;
+        const newFormations = this.formations.filter((formation) => formation.getUuid() != uuid);
+        const newCurrentFormationUuid = this.current_formation_uuid === uuid ? newFormations[0].getUuid() : this.current_formation_uuid;
+        this.current_formation_uuid = newCurrentFormationUuid;
+        this.formations = newFormations;
     }
 }

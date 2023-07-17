@@ -1,4 +1,4 @@
-import { StrategyCreator } from "../types";
+import { FormationType, StrategyCreator } from "../types";
 import FieldZoneContract from "./field-zone-contract";
 import FormationContract from "./formation-contract";
 
@@ -17,4 +17,8 @@ export default interface StrategyContract {
     toJson(): string;
     getCreatorData(): StrategyCreator;
     getUuid(): string;
+    newFormation(name: string, type: FormationType): void;
+    addFormation(formation: FormationContract): void;
+    setCurrentFormation(uuid: string): void;
+    deleteFormation(uuid: string): void;
 }
