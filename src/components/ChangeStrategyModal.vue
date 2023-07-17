@@ -27,7 +27,7 @@ function changeStrategyTo(uuid: string) {
                     <!-- body -->
                     <div class="p-4 space-y-4">
                         <template v-for="strategy in global.getStrategies()" v-bind:key="strategy.getUuid()">
-                            <button v-on:click="changeStrategyTo(strategy.getUuid())" type="button" class="w-full p-4 text-left transition duration-300 border rounded-md hover:bg-blue-500 hover:text-white">
+                            <button v-on:click="changeStrategyTo(strategy.getUuid())" type="button" class="w-full p-4 text-left truncate transition duration-300 border rounded-md hover:bg-blue-500 hover:text-white">
                                 {{ strategy.getName() }}
                             </button>
                         </template>
