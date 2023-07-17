@@ -105,4 +105,14 @@ export default class Strategy implements StrategyContract {
             formations: this.formations.map((formation) => formation.getCreatorData()),
         };
     }
+
+    addFormation(formation: FormationContract) {
+        this.formations.push(formation);
+    }
+
+    setCurrentFormation(uuid: string) {
+        const formation = this.formations.find((formation) => formation.getUuid() === uuid);
+        if (!formation) throw new Error("Essa formação não existe");
+        this.current_formation_uuid = uuid;
+    }
 }
