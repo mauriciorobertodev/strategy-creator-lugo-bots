@@ -7,11 +7,17 @@ import Menu from "./Menu.vue";
 import NewStrategyModal from "./NewStrategyModal.vue";
 import ChangeStrategyModal from "./ChangeStrategyModal.vue";
 import DeleteStrategyModal from "./DeleteStrategyModal.vue";
+import NewFormationModal from "./NewFormationModal.vue";
+import DeleteFormationModal from "./DeleteFormationModal.vue";
 
 const isVisibleMenu = ref(false);
 const isVisibleNewStrategyModal = ref(false);
 const isVisibleChangeStrategyModal = ref(false);
 const isVisibleDeleteStrategyModal = ref(false);
+const isVisibleNewFormationModal = ref(false);
+const isVisibleDeleteFormationModal = ref(false);
+
+let delete_formation_uuid = "";
 
 onMounted(() => {
     const WORLD = new MathWorld("world");
@@ -34,6 +40,15 @@ const openNewStrategyModal = () => {
     isVisibleNewStrategyModal.value = true;
     isVisibleMenu.value = false;
 };
+const openDeleteFormationModal = (uuid: string) => {
+    isVisibleDeleteFormationModal.value = true;
+    isVisibleMenu.value = false;
+    delete_formation_uuid = uuid;
+};
+const openNewFormationModal = () => {
+    isVisibleNewFormationModal.value = true;
+    isVisibleMenu.value = false;
+};
 const openChangeStrategyModal = () => {
     isVisibleChangeStrategyModal.value = true;
     isVisibleMenu.value = false;
@@ -46,14 +61,26 @@ const toggleMenu = () => (isVisibleMenu.value = !isVisibleMenu.value);
 const closeNewStrategyModal = () => (isVisibleNewStrategyModal.value = false);
 const closeChangeStrategyModal = () => (isVisibleChangeStrategyModal.value = false);
 const closeDeleteStrategyModal = () => (isVisibleDeleteStrategyModal.value = false);
+const closeNewFormationModal = () => (isVisibleNewFormationModal.value = false);
+const closeDeleteFormationModal = () => (isVisibleDeleteFormationModal.value = false);
 </script>
 
 <template>
     <canvas id="world" class="overflow-hidden"></canvas>
-    <Menu v-bind:show-menu="isVisibleMenu" v-on:toggle="toggleMenu()" v-on:open-new-strategy-modal="openNewStrategyModal()" v-on:open-change-strategy-modal="openChangeStrategyModal()" v-on:open-delete-strategy-modal="openDeleteStrategyModal()" />
+    <Menu
+        v-on:toggle="toggleMenu()"
+        v-bind:show-menu="isVisibleMenu"
+        v-on:open-new-strategy-modal="openNewStrategyModal()"
+        v-on:open-new-formation-modal="openNewFormationModal()"
+        v-on:open-change-strategy-modal="openChangeStrategyModal()"
+        v-on:open-delete-strategy-modal="openDeleteStrategyModal()"
+        v-on:open-delete-formation-modal="openDeleteFormationModal"
+    />
     <NewStrategyModal v-bind:showModal="isVisibleNewStrategyModal" v-on:close="closeNewStrategyModal()" />
     <ChangeStrategyModal v-bind:showModal="isVisibleChangeStrategyModal" v-on:close="closeChangeStrategyModal()" />
     <DeleteStrategyModal v-bind:showModal="isVisibleDeleteStrategyModal" v-on:close="closeDeleteStrategyModal()" />
+    <NewFormationModal v-bind:showModal="isVisibleNewFormationModal" v-on:close="closeNewFormationModal()" />
+    <DeleteFormationModal v-bind:showModal="isVisibleDeleteFormationModal" v-bind:formation_uuid="delete_formation_uuid" v-on:close="closeDeleteFormationModal()" />
 </template>
 
 <style scoped></style>
