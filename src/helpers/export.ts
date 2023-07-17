@@ -1,5 +1,5 @@
 import global from "../global";
-import { FormationCommonExport, FormationFullExport, FreeModeConfig } from "../types";
+import { FormationCommonExport, FormationFullExport, FreeModeConfig, StrategyCreator } from "../types";
 
 export function exportFullFormation(): FormationFullExport {
     const players = global.getPlayers();
@@ -44,4 +44,11 @@ export function exportFreeModeConfig(): FreeModeConfig {
         block_goal_area: global.getBlockGoalArea(),
         formation: exportFullFormation(),
     };
+}
+
+export function exportCurrentStrategy(): StrategyCreator {
+    const data = global.getCurrentStrategy().getCreatorData();
+    data.uuid = undefined;
+    data.current_formation_uuid = undefined;
+    return data;
 }
