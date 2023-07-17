@@ -6,10 +6,28 @@
     .button {
         @apply px-4 h-10 uppercase flex items-center justify-center w-full text-white bg-blue-500 rounded-md hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed;
     }
+    .button-red {
+        @apply px-4 h-10 uppercase flex items-center justify-center w-full text-white bg-red-500 rounded-md hover:bg-red-700 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed;
+    }
     .button-secondary {
         @apply px-4 flex items-center justify-center w-full h-10 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200;
     }
+    .button-ghost {
+        @apply px-4 flex items-center justify-center w-full h-10 border border-gray-200 text-gray-700 rounded-md hover:bg-gray-100;
+    }
     .input {
         @apply w-full h-10 px-2 text-gray-700 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+    }
+    .modal-wraper {
+        @apply absolute top-0 left-0 flex items-center justify-center w-full h-full bg-white/5 z-50;
+    }
+    .modal {
+        @apply w-full max-w-lg bg-white rounded-md;
+    }
+    .modal-header {
+        @apply flex justify-between w-full p-4 border-b;
+    }
+    .modal-footer {
+        @apply flex justify-between w-full p-4;
     }
 }
