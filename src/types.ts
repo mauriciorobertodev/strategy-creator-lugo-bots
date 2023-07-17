@@ -51,8 +51,8 @@ export type StrategyCreator = {
 };
 
 export type GlobalStateLocalStorage = {
-    free_mode_strategy: StrategyCreator;
-    current_strategy?: StrategyCreator;
+    current_strategy_uuid: string;
+    strategies: StrategyCreator[];
     side: Side;
     show_col_and_rows: boolean;
     block_goal_area: boolean;

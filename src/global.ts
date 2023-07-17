@@ -5,10 +5,11 @@ import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
 import StrategyContract from "./contracts/strategy-contract";
 import Strategy from "./classes/strategy";
+import Formation from "./classes/formation";
 
 export type State = {
-    free_mode_strategy: StrategyContract;
-    current_strategy?: StrategyContract;
+    current_strategy_uuid: string;
+    strategies: StrategyContract[];
     side: Side;
     show_col_and_rows: boolean;
     goalkeeper: PlayerContract;
@@ -27,8 +28,8 @@ export class GlobalState {
         holded_player: undefined,
         player_under_mouse: undefined,
         block_goal_area: false,
-        current_strategy: undefined,
-        free_mode_strategy: new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] }),
+        current_strategy_uuid: "free_mode",
+        strategies: [new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] })],
     });
 
     constructor() {
@@ -42,6 +43,10 @@ export class GlobalState {
 
     isAwaySide(): boolean {
         return this.state.side === "AWAY";
+    }
+
+    isFreeMode(): boolean {
+        return this.state.current_strategy_uuid === "free_mode";
     }
 
     hasHoldedPlayer(): boolean {
@@ -108,8 +113,16 @@ export class GlobalState {
     }
 
     getCurrentStrategy(): StrategyContract {
-        if (this.state.current_strategy) return this.state.current_strategy;
-        return this.state.free_mode_strategy;
+        const strategy = this.getStrategy(this.state.current_strategy_uuid);
+        if (strategy) return strategy;
+        if (this.state.strategies.length == 0) throw new Error("Não existe nenhuma estratégia");
+        console.warn("Estratégia requerida não existe alterando estratégia para a primeira da lista");
+        this.state.current_strategy_uuid = this.state.strategies[0].getUuid();
+        return this.state.strategies[0];
+    }
+
+    getStrategy(uuid: string): StrategyContract | undefined {
+        return this.state.strategies.find((strategy) => strategy.getUuid() === uuid);
     }
 
     getPlayer(number: PlayerNumber): PlayerContract | null {
@@ -118,8 +131,8 @@ export class GlobalState {
         return null;
     }
 
-    getFreeModeStrategy(): StrategyContract {
-        return this.state.free_mode_strategy;
+    getStrategies(): StrategyContract[] {
+        return this.state.strategies;
     }
 
     // SETTERS
@@ -201,7 +214,7 @@ export class GlobalState {
 
     saveInLocalStorage() {
         const data = JSON.stringify(this.getLocalStorageData());
-
+        localStorage.removeItem("strategy-creator-lugo-bots");
         localStorage.setItem("strategy-creator-lugo-bots", data);
     }
 
@@ -213,8 +226,8 @@ export class GlobalState {
         this.state.side = data.side;
         this.state.show_col_and_rows = data.show_col_and_rows;
         this.state.block_goal_area = data.block_goal_area;
-        this.state.free_mode_strategy = new Strategy(data.free_mode_strategy);
-        this.state.current_strategy = data.current_strategy ? new Strategy(data.current_strategy) : undefined;
+        this.state.current_strategy_uuid = data.current_strategy_uuid;
+        this.state.strategies = data.strategies.map((strateCreatorData) => new Strategy(strateCreatorData));
 
         global.getPlayers().forEach((player) => {
             const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
@@ -226,12 +239,45 @@ export class GlobalState {
 
     getLocalStorageData(): GlobalStateLocalStorage {
         return {
-            free_mode_strategy: this.getFreeModeStrategy().getCreatorData(),
-            current_strategy: this.state.current_strategy ? this.state.current_strategy.getCreatorData() : undefined,
+            current_strategy_uuid: this.state.current_strategy_uuid,
+            strategies: this.state.strategies.map((strategy) => strategy.getCreatorData()),
             side: this.getSide(),
             show_col_and_rows: this.showColsAndRows(),
             block_goal_area: this.getBlockGoalArea(),
         };
+    }
+
+    setNewStrategy(cols: number, rows: number, name: string, formation_name: string, formation_type: FormationType): void {
+        const formation = new Formation({ name: formation_name, type: formation_type });
+        const strategy = new Strategy({ name, cols, rows });
+
+        strategy.addFormation(formation);
+        strategy.setCurrentFormation(formation.getUuid());
+
+        this.state.strategies.push(strategy);
+        this.state.current_strategy_uuid = strategy.getUuid();
+        this.getPlayers().map((p) => p.resetPosition());
+    }
+
+    setCurrentStrategy(uuid: string): void {
+        const strategy = this.getStrategies().find((strategy) => strategy.getUuid() === uuid);
+        if (!strategy) throw new Error("Essa estratégia não existe");
+        this.state.current_strategy_uuid = uuid;
+
+        global.getPlayers().forEach((player) => {
+            const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
+            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            else player.resetPosition();
+        });
+        global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
+    }
+
+    deleteCurrentStrategy() {
+        const uuid = global.getCurrentStrategy().getUuid();
+        const strategy = this.getStrategies().find((strategy) => strategy.getUuid() === uuid);
+        if (!strategy) throw new Error("Essa estratégia não existe");
+        global.setCurrentStrategy("free_mode");
+        this.state.strategies = this.state.strategies.filter((strategy) => strategy.getUuid() != uuid);
     }
 }
 
