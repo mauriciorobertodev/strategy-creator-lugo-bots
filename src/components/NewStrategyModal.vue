@@ -23,12 +23,12 @@ const decrementRow = () => {
 
 const newStrategy = () => {
     global.setNewStrategy(strategy_cols.value, strategy_rows.value, strategy_name.value, formation_name.value, formation_type.value);
+    emit("close");
     strategy_name.value = "";
     formation_name.value = "";
     formation_type.value = "INITIAL_POSITIONS";
     strategy_cols.value = 16;
     strategy_rows.value = 12;
-    emit("close");
 };
 </script>
 
