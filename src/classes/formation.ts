@@ -83,4 +83,12 @@ export default class Formation implements FormationContract {
             team_positions: this.getTeamPositions(),
         };
     }
+
+    setSelectingTheZone(selecting: boolean): void {
+        this.selecting_zone = selecting;
+    }
+
+    deleteFieldZone(): void {
+        if (this.field_zone) this.field_zone = undefined;
+    }
 }

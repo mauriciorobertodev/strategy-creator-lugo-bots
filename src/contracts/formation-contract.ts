@@ -16,4 +16,6 @@ export default interface FormationContract {
     getCreatorData(): FormationCreator;
     setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void;
     getUuid(): string;
+    setSelectingTheZone(selecting: boolean): void;
+    deleteFieldZone(): void;
 }
