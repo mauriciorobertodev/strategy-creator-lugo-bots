@@ -1,5 +1,6 @@
+import Strategy from "../classes/strategy";
 import global from "../global";
-import { FormationFullExport } from "../types";
+import { FormationFullExport, StrategyExport } from "../types";
 import { AWAY_GOAL_CENTER, HOME_GOAL_CENTER } from "./constants";
 
 export function updatePlayersByJsonFile(jsonFile: File) {
@@ -7,6 +8,18 @@ export function updatePlayersByJsonFile(jsonFile: File) {
     reader.onload = (event: any) => {
         const json = JSON.parse(event.target.result) as FormationFullExport;
         updatePlayerByFormationExport(json);
+    };
+    reader.readAsText(jsonFile);
+}
+
+export function importStrategyByJson(jsonFile: File, strategyName?: string) {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+        const json = JSON.parse(event.target.result) as StrategyExport;
+        if (strategyName) json.name = strategyName;
+        const strategy = new Strategy(json);
+        global.addStrategy(strategy);
+        global.setCurrentStrategy(strategy.getUuid());
     };
     reader.readAsText(jsonFile);
 }
