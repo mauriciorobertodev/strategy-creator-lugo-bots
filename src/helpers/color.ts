@@ -7,3 +7,11 @@ export function hexToColor(color: string): Color {
     const b = parseInt(hex_code[5] + hex_code[6], 16);
     return { r, g, b };
 }
+export function colorToHex(color: Color): string {
+    function valueToHex(c: number) {
+        var hex = c.toString(16);
+        return hex;
+    }
+
+    return "#" + valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b);
+}
