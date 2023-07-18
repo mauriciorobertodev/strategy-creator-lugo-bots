@@ -35,8 +35,7 @@ export function exportCommonFormation(): FormationCommonExport {
 }
 
 export function exportCurrentStrategy(): StrategyCreator {
-    const data = global.getCurrentStrategy().getCreatorData();
-    data.uuid = undefined;
+    const data = global.getCurrentStrategy().getCreatorData(false);
     data.current_formation_uuid = undefined;
     return data;
 }
