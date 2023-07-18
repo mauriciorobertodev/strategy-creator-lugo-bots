@@ -1,12 +1,15 @@
 import { MathWorld } from "@mauricioroberto/math-world";
-import { drawField, drawPlayers, drawRegions } from "./helpers/draw";
+import { drawField, drawFieldZones, drawPlayers, drawRegions } from "./helpers/draw";
 import global from "./global";
 import { getDistanceBetweenVectors } from "./helpers/math";
-import isPermittedRegion, { getRegionFromPoint } from "./helpers/field";
+import isPermittedRegion, { getRegionFromPoint, isPermittedFieldZone } from "./helpers/field";
+import RegionContract from "./contracts/region-contract";
 
 const loop = (world: MathWorld) => {
     // VARIÁVEIS
     const paint = world.getPaint();
+    let selecting_zone = false;
+    let initial_region: RegionContract | undefined;
 
     // SETUP
     world.onLeftCLick(onLeftClick);
@@ -24,14 +27,47 @@ const loop = (world: MathWorld) => {
         // DESENHANDO AS REGIÕES
         drawRegions(paint);
 
+        drawFieldZones(paint);
+
         // DESENHANDO OS JOGADORES
-        drawPlayers(paint);
+        if (!global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) drawPlayers(paint);
 
         // ATUALIZA POSIÇÃO DO JOGADOR QUE O USUÁRIO ESTÁ SEGURANDO
         if (global.hasHoldedPlayer()) global.getHoldedPlayer().player.setPosition(MOUSE);
+
+        if (global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+            const regionInMousePoint = getRegionFromPoint(MOUSE);
+
+            // DESENHANDO A ZONA QUE O MOUSE ESTÁ EM CIMA PARA INDICAR AO O USUÁRIO
+            if (!selecting_zone && regionInMousePoint) {
+                const temporaryFieldZone = global.getTemporaryZone();
+                const color = temporaryFieldZone.getColor();
+                const allowedRegion = isPermittedRegion(regionInMousePoint);
+
+                let borderColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
+                let fillColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`;
+
+                if (!allowedRegion) {
+                    borderColor = paint.getTailwindColor("Red", "500");
+                    fillColor = paint.getTailwindColor("Red", "500", 30);
+                }
+
+                paint.rect({ point: regionInMousePoint.getTopLeft(), width: regionInMousePoint.getWidth(), height: regionInMousePoint.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
+            }
+        }
     };
 
     function onLeftClick() {
+        const MOUSE = world.getMousePositionInCartesian();
+
+        // SE O USUÁRIO ESTIVER SELECIONANDO UMA ZONA O CLIQUE É A REGIÃO INICIAL DA ZONA
+        if (global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+            const region = getRegionFromPoint(MOUSE);
+            if (region) initial_region = region;
+            selecting_zone = true;
+            return; // RETORNANDO APENAS PARA NÃO EXECUTAR AS VERIFICAÇÕES ABAIXO, JÁ QUE NA SELEÇÃOD E ZONA NÃO HÁ JOGADORES
+        }
+
         // SE TIVER UM JOGADOR ABAIXO DO MOUSE, SETAMOS ELE COMO JOGADOR QUE ESTÁ SENDO SEGURADO PELO USUÁRIO
         if (global.hasPlayerUnderMouse()) {
             const region = getRegionFromPoint(global.getPlayerUnderMouse().getPosition());
@@ -41,6 +77,8 @@ const loop = (world: MathWorld) => {
     }
 
     function onMouseUp() {
+        if (selecting_zone) selecting_zone = false;
+
         // SE NÃO TIVER JOGADOR SENDO SEGURADO NÃO TEMOS NADA PARA FAZER AQUI
         if (!global.hasHoldedPlayer()) return;
 
@@ -64,6 +102,29 @@ const loop = (world: MathWorld) => {
 
     function onMouseMove() {
         const MOUSE = world.getMousePositionInCartesian();
+
+        if (global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+            const region = getRegionFromPoint(MOUSE);
+            if (!selecting_zone || !region || !initial_region) return;
+            const allowedRegion = isPermittedRegion(region);
+
+            if (!allowedRegion) return;
+
+            const zoneDefinition = {
+                startCol: initial_region.getCol(),
+                endCol: region.getCol(),
+                startRow: initial_region.getRow(),
+                endRow: region.getRow(),
+            };
+
+            const allowedFieldZone = isPermittedFieldZone(zoneDefinition);
+
+            if (!allowedFieldZone) return;
+
+            global.getTemporaryZone().setDefinition(zoneDefinition);
+
+            return; // RETORNANDO APENAS PARA NÃO EXECUTAR AS VERIFICAÇÕES ABAIXO, NÃO SÃO NECESSÁRIAS
+        }
 
         // SE TIVER UM JOGADOR SENDO SEGURADO NÃO FAZ SENTIDO ADICIONARMOS ELE COMO ABAIXO DO MOUSE POIS JÁ O TEMOS NO GLOBAL
         if (global.hasHoldedPlayer()) {
