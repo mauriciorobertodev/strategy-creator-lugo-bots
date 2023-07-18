@@ -6,6 +6,9 @@ import { getGoalkeeper, getPlayers } from "./helpers/players";
 import StrategyContract from "./contracts/strategy-contract";
 import Strategy from "./classes/strategy";
 import Formation from "./classes/formation";
+import FieldZoneContract from "./contracts/field-zone-contract";
+import FieldZone from "./classes/field-zone";
+import { isPermittedFieldZone } from "./helpers/field";
 
 export type State = {
     current_strategy_uuid: string;
@@ -17,6 +20,8 @@ export type State = {
     holded_player?: HoldedPlayer;
     player_under_mouse?: PlayerContract;
     block_goal_area: boolean;
+    temporary_field_zone?: FieldZoneContract;
+    show_zone_fields: boolean;
 };
 
 export class GlobalState {
@@ -30,6 +35,8 @@ export class GlobalState {
         block_goal_area: false,
         current_strategy_uuid: "free_mode",
         strategies: [new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] })],
+        temporary_field_zone: undefined,
+        show_zone_fields: false,
     });
 
     constructor() {
@@ -59,6 +66,10 @@ export class GlobalState {
 
     showColsAndRows(): boolean {
         return this.state.show_col_and_rows;
+    }
+
+    showFieldZones(): boolean {
+        return this.state.show_zone_fields;
     }
 
     currentFormationTypeIs(type: FormationType): boolean {
@@ -151,6 +162,10 @@ export class GlobalState {
         this.updatePlayersPositionByColAndRow();
     }
 
+    setShowFieldZones(show: boolean): void {
+        this.state.show_zone_fields = show;
+    }
+
     setSide(side: Side): void {
         this.state.side = side;
         this.updatePlayersPositionByColAndRow();
@@ -227,6 +242,7 @@ export class GlobalState {
         this.state.show_col_and_rows = data.show_col_and_rows;
         this.state.block_goal_area = data.block_goal_area;
         this.state.current_strategy_uuid = data.current_strategy_uuid;
+        this.state.show_zone_fields = data.show_zone_fields;
         this.state.strategies = data.strategies.map((strateCreatorData) => new Strategy(strateCreatorData));
 
         global.getPlayers().forEach((player) => {
@@ -244,6 +260,7 @@ export class GlobalState {
             side: this.getSide(),
             show_col_and_rows: this.showColsAndRows(),
             block_goal_area: this.getBlockGoalArea(),
+            show_zone_fields: this.showFieldZones(),
         };
     }
 
@@ -308,6 +325,36 @@ export class GlobalState {
             else player.resetPosition();
         });
         global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
+    }
+    getTemporaryZone(): FieldZoneContract {
+        if (!this.state.temporary_field_zone)
+            this.state.temporary_field_zone = new FieldZone({
+                name: this.getCurrentStrategy().getCurrentFormation().getName(),
+                color: { r: 255, g: 255, b: 255 },
+                start_col: -1,
+                end_col: -1,
+                start_row: -1,
+                end_row: -1,
+            });
+
+        return this.state.temporary_field_zone;
+    }
+
+    saveTemporaryFieldZone() {
+        if (isPermittedFieldZone(this.getTemporaryZone().getDefinition())) {
+            this.getCurrentStrategy().getCurrentFormation().setFieldZone(this.getTemporaryZone());
+            this.state.temporary_field_zone = undefined;
+        }
+    }
+
+    editFieldZone(): void {
+        if (!this.getCurrentStrategy().getCurrentFormation().hasFieldZone()) return;
+        this.state.temporary_field_zone = new FieldZone(this.getCurrentStrategy().getCurrentFormation().getFieldZone().getCreatorData());
+        this.getCurrentStrategy().getCurrentFormation().setSelectingTheZone(true);
+    }
+
+    deleteCurrentFieldZone() {
+        this.getCurrentStrategy().getCurrentFormation().deleteFieldZone();
     }
 }
 
