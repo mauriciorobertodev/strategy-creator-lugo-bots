@@ -3,6 +3,7 @@ import { FIELD_HEIGHT, FIELD_POINT_1, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADI
 import global from "../global";
 import { angleInRadians, getDirectionToVector, radiansToDegrees } from "./math";
 import PlayerContract from "../contracts/player-contract";
+import { isPermittedFieldZone } from "./field";
 
 export function drawField(paint: Paint): void {
     const COLOR_RED = paint.getTailwindColor("Red");
@@ -148,4 +149,43 @@ function drawPlayer(player: PlayerContract, paint: Paint): void {
     paint.circle({ point: player.getPosition(), radius: player.getRadius(), fillColor: "white", startAngleForHumans: ANGLE - 30, endAngleForHumans: ANGLE + 30, lineToCenter: true });
     paint.circle({ point: player.getPosition(), radius: player.getRadius() * 0.6, fillColor: "white", strokeColor: player.getColor(), lineWidth: 30 });
     paint.text({ point: player.getPosition().clone().sub({ x: 0, y: 20 }), text: player.getNumber().toString(), textColor: player.getColor(), textSize: 250, textAlign: "center" });
+}
+
+export function drawFieldZones(paint: Paint): void {
+    if (global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+        const zone = global.getTemporaryZone();
+
+        if (isPermittedFieldZone(zone.getDefinition())) {
+            const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
+            const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
+            paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
+            paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+        }
+    }
+
+    if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone() && !global.showFieldZones() && !global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+        const zone = global.getCurrentStrategy().getCurrentFormation().getFieldZone();
+        const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
+        const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
+        paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
+        paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+    }
+
+    if (global.showFieldZones() || global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+        global
+            .getCurrentStrategy()
+            .getFieldZones()
+            .filter((zone) => {
+                if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone()) {
+                    if (zone.getUuid() === global.getCurrentStrategy().getCurrentFormation().getFieldZone().getUuid()) return false;
+                }
+                return true;
+            })
+            .forEach((zone) => {
+                const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
+                const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
+                paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
+                paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+            });
+    }
 }
