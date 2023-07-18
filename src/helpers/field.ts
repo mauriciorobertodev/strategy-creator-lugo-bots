@@ -4,6 +4,8 @@ import Region from "../classes/region";
 import { Vector2D } from "@mauricioroberto/math-world";
 import { AWAY_GOAL_BOTTOM, AWAY_GOAL_TOP, CENTER_FIELD_RADIUS, FIELD_HEIGHT, FIELD_POINT_CENTER, FIELD_WIDTH, GOAL_RADIUS, HOME_GOAL_BOTTOM, HOME_GOAL_TOP } from "./constants";
 import { getDistanceBetweenVectors, getShortPointBetweenLineAndPoint } from "./math";
+import FieldZoneContract from "../contracts/field-zone-contract";
+import { FieldZoneDefinition } from "../types";
 
 export function getRegionFromColAndRow(col: number, row: number): RegionContract | null {
     if (col > global.getCols() - 1 || col < 0) return null;
@@ -26,6 +28,21 @@ export function getRegionFromPoint(point: Vector2D): Region | null {
 }
 
 export default function isPermittedRegion(region: RegionContract) {
+    // SE O USUÁRIO ESTÁ SELECIONANDO UMA ZONA A REGIÃO SÓ NÃO É PERMITIDA CASO ESTEJA EM CONFLITO COM OUTRA ZONA
+    if (global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+        const fieldZone = getFieldZoneByColAndRow(region.getCol(), region.getRow());
+
+        if (fieldZone) {
+            if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone()) {
+                const zone = global.getCurrentStrategy().getCurrentFormation().getFieldZone();
+                if (zone.getUuid() === fieldZone?.getUuid()) return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
     // SE O PONTO CENTRAL DA REGIÃO FOR NA ÀREA DO GOL NÃO É PERMITIDO
     if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getBlockGoalArea()) {
         const distanceToHomeGoal = getShortPointBetweenLineAndPoint(HOME_GOAL_TOP, HOME_GOAL_BOTTOM, region.getCenter()).distance;
@@ -45,4 +62,46 @@ export default function isPermittedRegion(region: RegionContract) {
     }
 
     return true;
+}
+
+export function getFieldZoneByColAndRow(col: number, row: number): FieldZoneContract | undefined {
+    if (global.isFreeMode()) return undefined;
+    return global
+        .getCurrentStrategy()
+        .getFieldZones()
+        .find((zone) => col >= zone.getStartCol() && col <= zone.getEndCol() && row >= zone.getStartRow() && row <= zone.getEndRow());
+}
+
+export function isPermittedFieldZone(definition: FieldZoneDefinition): boolean {
+    if (global.isFreeMode()) return false;
+
+    const start_col = Math.min(definition.startCol, definition.endCol);
+    const end_col = Math.max(definition.startCol, definition.endCol);
+    const start_row = Math.min(definition.startRow, definition.endRow);
+    const end_row = Math.max(definition.startRow, definition.endRow);
+
+    if (start_col < 0 || start_row < 0 || end_col < 0 || end_row < 0) return false;
+    if (start_col > global.getCols() || start_row > global.getRows() || end_col > global.getCols() || end_row > global.getRows()) return false;
+
+    const result = global
+        .getCurrentStrategy()
+        .getFieldZones()
+        .filter((zone) => {
+            if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone()) {
+                if (zone.getUuid() === global.getCurrentStrategy().getCurrentFormation().getFieldZone().getUuid()) return false;
+            }
+            return true;
+        })
+        .find((zone) => {
+            if (
+                end_col >= zone.getStartCol() && // r1 right edge past r2 left
+                start_col <= zone.getEndCol() && // r1 left edge past r2 right
+                end_row >= zone.getStartRow() && // r1 top edge past r2 bottom
+                start_row <= zone.getEndRow()
+            ) {
+                // r1 bottom edge past r2 top
+                return zone;
+            }
+        });
+    return result ? false : true;
 }
