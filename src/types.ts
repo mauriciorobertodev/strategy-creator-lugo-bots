@@ -11,13 +11,11 @@ export type PlayerPosition = { col: number | null; row: number | null };
 
 export type HoldedPlayer = { player: PlayerContract; region: RegionContract | null; is_permitted_region: boolean };
 
-export type FormationType = "FREE" | "INITIAL_POSITIONS" | "ZONE";
+export type FormationType = "FREE" | "INITIAL_POSITIONS";
 
 export type FormationFullExport = { [key in PlayerNumber]: PlayerPosition };
 
 export type FormationCommonExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
-
-export type FreeModeConfig = { cols: number; rows: number; side: Side; show_cols_and_rows: boolean; formation_type: FormationType; formation: FormationFullExport };
 
 export type Color = { r: number; g: number; b: number };
 

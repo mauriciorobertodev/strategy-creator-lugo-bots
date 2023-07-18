@@ -1,5 +1,5 @@
 import { reactive, watch } from "vue";
-import { AWAY_GOAL_CENTER, HOME_GOAL_CENTER } from "./helpers/constants";
+import { AWAY_GOAL_CENTER, FREE_MODE_UUID, HOME_GOAL_CENTER } from "./helpers/constants";
 import { FormationType, GlobalStateLocalStorage, HoldedPlayer, PlayerNumber, PlayerPosition, Side } from "./types";
 import PlayerContract from "./contracts/player-contract";
 import { getGoalkeeper, getPlayers } from "./helpers/players";
@@ -32,8 +32,8 @@ export class GlobalState {
         players: getPlayers(),
         holded_player: undefined,
         player_under_mouse: undefined,
-        current_strategy_uuid: "free_mode",
-        strategies: [new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] })],
+        current_strategy_uuid: FREE_MODE_UUID,
+        strategies: [new Strategy({ cols: 16, rows: 12, uuid: FREE_MODE_UUID, name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] })],
         temporary_field_zone: undefined,
         show_zone_fields: false,
     });
@@ -52,7 +52,7 @@ export class GlobalState {
     }
 
     isFreeMode(): boolean {
-        return this.state.current_strategy_uuid === "free_mode";
+        return this.state.current_strategy_uuid === FREE_MODE_UUID;
     }
 
     hasHoldedPlayer(): boolean {
@@ -288,7 +288,7 @@ export class GlobalState {
         const uuid = global.getCurrentStrategy().getUuid();
         const strategy = this.getStrategies().find((strategy) => strategy.getUuid() === uuid);
         if (!strategy) throw new Error("Essa estratégia não existe");
-        global.setCurrentStrategy("free_mode");
+        global.setCurrentStrategy(FREE_MODE_UUID);
         this.state.strategies = this.state.strategies.filter((strategy) => strategy.getUuid() != uuid);
         this.updatePlayerPositionByCurrentFormation();
     }

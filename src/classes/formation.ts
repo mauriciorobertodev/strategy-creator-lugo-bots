@@ -91,6 +91,7 @@ export default class Formation implements FormationContract {
             type: this.getType(),
             field_zone: this.hasFieldZone() ? this.getFieldZone().getCreatorData() : undefined,
             team_positions: this.getTeamPositions(),
+            block_goal_area: this.getBlockGoalArea(),
         };
     }
 

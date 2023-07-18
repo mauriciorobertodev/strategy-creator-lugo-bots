@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import global from "../global";
 import download from "downloadjs";
-import { updatePlayersByJsonFile, updateFreeModeByJsonFile } from "../helpers/json";
+import { updatePlayersByJsonFile } from "../helpers/json";
+import { FREE_MODE_UUID } from "../helpers/constants";
 
-import { exportCommonFormation, exportFreeModeConfig, exportCurrentStrategy } from "../helpers/export";
+import { exportCommonFormation, exportCurrentStrategy } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -13,10 +14,6 @@ const exportCurrentPositions = () => {
     download(JSON.stringify(playersToExport), "positions.json", "text/plain");
 };
 
-const exportCurrentFreeModeConfig = () => {
-    const configToExport = exportFreeModeConfig();
-    download(JSON.stringify(configToExport), "config.json", "text/plain");
-};
 const exportStrategy = () => {
     const strategyToExport = exportCurrentStrategy();
     download(JSON.stringify(strategyToExport), "strategy.json", "text/plain");
@@ -31,17 +28,6 @@ const uploadFormation = (e: any) => {
     }
 
     updatePlayersByJsonFile(jsonFile);
-};
-
-const uploadFreeModeConfig = (e: any) => {
-    const jsonFile = e.target.files[0] as File;
-
-    if (jsonFile.type.toLowerCase() != "application/json") {
-        alert("Somente JSON");
-        return;
-    }
-
-    updateFreeModeByJsonFile(jsonFile);
 };
 </script>
 
@@ -206,7 +192,7 @@ const uploadFreeModeConfig = (e: any) => {
                     </div>
 
                     <!-- zona de campo -->
-                    <div v-if="global.getCurrentFormationType() === 'FREE' && global.getCurrentStrategy().getUuid() != 'free_mode'">
+                    <div v-if="global.getCurrentFormationType() === 'FREE' && global.getCurrentStrategy().getUuid() != FREE_MODE_UUID">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Zona de campo</p>
                         <div class="space-y-2">
                             <!-- editar ou excluir zona de campo -->
@@ -253,23 +239,6 @@ const uploadFreeModeConfig = (e: any) => {
                         <label for="upload_positions" class="gap-2 cursor-pointer button-secondary">
                             <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="uploadFormation" />
                             Importar posições
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                            </svg>
-                        </label>
-
-                        <hr v-if="global.isFreeMode()" />
-
-                        <!-- importar e exportar configuração -->
-                        <button v-if="global.isFreeMode()" v-on:click="exportCurrentFreeModeConfig()" class="gap-2 uppercase button-secondary">
-                            Exportar conifiguração
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                            </svg>
-                        </button>
-                        <label v-if="global.isFreeMode()" for="upload_free_mode_config" class="gap-2 cursor-pointer button-secondary">
-                            <input id="upload_free_mode_config" type="file" class="hidden" accept="application/json" v-on:change="uploadFreeModeConfig" />
-                            Importar configuração
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>

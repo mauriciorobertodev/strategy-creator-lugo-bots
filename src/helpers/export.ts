@@ -1,5 +1,5 @@
 import global from "../global";
-import { FormationCommonExport, FormationFullExport, FreeModeConfig, StrategyCreator } from "../types";
+import { FormationCommonExport, FormationFullExport, StrategyCreator } from "../types";
 
 export function exportFullFormation(): FormationFullExport {
     const players = global.getPlayers();
@@ -31,17 +31,6 @@ export function exportCommonFormation(): FormationCommonExport {
         9: { col: players[7].getCol(), row: players[7].getRow() },
         10: { col: players[8].getCol(), row: players[8].getRow() },
         11: { col: players[9].getCol(), row: players[9].getRow() },
-    };
-}
-
-export function exportFreeModeConfig(): FreeModeConfig {
-    return {
-        cols: global.getCols(),
-        rows: global.getRows(),
-        side: global.getSide(),
-        show_cols_and_rows: global.showColsAndRows(),
-        formation_type: global.getCurrentFormationType(),
-        formation: exportFullFormation(),
     };
 }
 
