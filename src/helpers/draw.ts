@@ -163,7 +163,7 @@ export function drawFieldZones(paint: Paint): void {
         }
     }
 
-    if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone() && !global.showFieldZones() && !global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
+    if ((global.getCurrentStrategy().getCurrentFormation().hasFieldZone() && !global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) || (global.getCurrentStrategy().getCurrentFormation().hasFieldZone() && global.showFieldZones())) {
         const zone = global.getCurrentStrategy().getCurrentFormation().getFieldZone();
         const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
         const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
