@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import global from "../global";
 import { FormationType } from "../types";
+import { importStrategyByJson } from "../helpers/json";
 
 const emit = defineEmits(["close"]);
 defineProps({ showModal: Boolean });
@@ -29,6 +30,18 @@ const newStrategy = () => {
     formation_type.value = "INITIAL_POSITIONS";
     strategy_cols.value = 16;
     strategy_rows.value = 12;
+};
+
+const uploadStrategy = (e: any) => {
+    const jsonFile = e.target.files[0] as File;
+
+    if (jsonFile.type.toLowerCase() != "application/json") {
+        alert("Somente JSON");
+        return;
+    }
+
+    importStrategyByJson(jsonFile, strategy_name.value);
+    emit("close");
 };
 </script>
 
@@ -93,7 +106,7 @@ const newStrategy = () => {
                             <p class="mb-2 text-sm text-gray-500 uppercase">Nome da primeira formação</p>
                             <input required type="text" v-model="formation_name" placeholder="ex. Posições iniciais" class="input" v-on:input="formation_name = formation_name.trimStart()" />
                         </div>
-                        <!-- tipo da primeir formação -->
+                        <!-- tipo da primeira formação -->
                         <div>
                             <p class="mb-2 text-sm text-gray-500 uppercase">Tipo da primeira formação</p>
                             <div class="flex">
@@ -101,6 +114,14 @@ const newStrategy = () => {
                                 <button type="button" v-on:click="formation_type = 'FREE'" v-bind:class="{ button: formation_type == 'FREE', 'button-secondary': formation_type != 'FREE' }" class="uppercase rounded-none rounded-r">LIVRE</button>
                             </div>
                         </div>
+                        <!-- importar -->
+                        <label for="upload_strategy" class="h-20 gap-2 uppercase button-secondary">
+                            <input id="upload_strategy" type="file" class="hidden" accept="application/json" v-on:change="uploadStrategy" />
+                            importar estratégia
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                            </svg>
+                        </label>
                     </div>
                     <!-- footer -->
                     <div class="gap-4 modal-footer">
