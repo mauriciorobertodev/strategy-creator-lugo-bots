@@ -7,13 +7,13 @@ const emit = defineEmits(["close"]);
 defineProps({ showModal: Boolean });
 
 const formation_name = ref("");
-const formation_type = ref<FormationType>("INITIAL_POSITIONS");
+const formation_type = ref<FormationType>("FREE");
 
 const newFormation = () => {
     global.getCurrentStrategy().newFormation(formation_name.value, formation_type.value);
     emit("close");
     formation_name.value = "";
-    formation_type.value = "INITIAL_POSITIONS";
+    formation_type.value = "FREE";
 };
 </script>
 
@@ -35,7 +35,7 @@ const newFormation = () => {
                     <div class="p-4 space-y-4">
                         <!-- nome da formação -->
                         <div>
-                            <p class="mb-2 text-sm text-gray-500 uppercase">Nome da primeira formação</p>
+                            <p class="mb-2 text-sm text-gray-500 uppercase">Nome da formação</p>
                             <input required type="text" v-model="formation_name" placeholder="ex. Posições iniciais" class="input" v-on:input="formation_name = formation_name.trimStart()" />
                         </div>
                         <!-- tipo da formação -->
