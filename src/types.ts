@@ -21,6 +21,8 @@ export type Color = { r: number; g: number; b: number };
 
 export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
 
+export type StrategyExport = StrategyCreator;
+
 export type FieldZoneCreator = {
     uuid?: string;
     name: string;
