@@ -12,13 +12,15 @@ export default class Formation implements FormationContract {
     private type: FormationType;
     private field_zone?: FieldZoneContract;
     private team_positions: TeamPositions;
+    block_goal_area: boolean;
 
-    constructor({ uuid, name, type, team_positions, field_zone }: FormationCreator) {
+    constructor({ uuid, name, type, team_positions, field_zone, block_goal_area }: FormationCreator) {
         this.type = type ?? "FREE";
         this.name = name;
         this.team_positions = team_positions ?? getDefaultInitialPositions();
         this.field_zone = typeof field_zone == "object" ? new FieldZone(field_zone) : undefined;
         this.uuid = uuid ?? v4();
+        this.block_goal_area = block_goal_area ?? false;
     }
 
     getType(): FormationType {
@@ -56,6 +58,14 @@ export default class Formation implements FormationContract {
 
     setName(name: string): void {
         this.name = name;
+    }
+
+    getBlockGoalArea(): boolean {
+        return this.block_goal_area;
+    }
+
+    setBlockGoalArea(block: boolean): void {
+        this.block_goal_area = block;
     }
 
     getTeamPositions(): TeamPositions {

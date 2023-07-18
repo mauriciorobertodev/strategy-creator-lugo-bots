@@ -19,7 +19,7 @@ export type State = {
     players: PlayerContract[];
     holded_player?: HoldedPlayer;
     player_under_mouse?: PlayerContract;
-    block_goal_area: boolean;
+
     temporary_field_zone?: FieldZoneContract;
     show_zone_fields: boolean;
 };
@@ -32,7 +32,6 @@ export class GlobalState {
         players: getPlayers(),
         holded_player: undefined,
         player_under_mouse: undefined,
-        block_goal_area: false,
         current_strategy_uuid: "free_mode",
         strategies: [new Strategy({ cols: 16, rows: 12, uuid: "free_mode", name: "Modo Livre", current_formation_uuid: "batata", formations: [{ uuid: "batata", name: "batata", type: "FREE" }] })],
         temporary_field_zone: undefined,
@@ -119,10 +118,6 @@ export class GlobalState {
         return this.getCurrentStrategy().getCurrentFormation().getType();
     }
 
-    getBlockGoalArea(): boolean {
-        return this.state.block_goal_area;
-    }
-
     getCurrentStrategy(): StrategyContract {
         const strategy = this.getStrategy(this.state.current_strategy_uuid);
         if (strategy) return strategy;
@@ -187,10 +182,6 @@ export class GlobalState {
         this.getCurrentStrategy().getCurrentFormation().setType(type);
     }
 
-    setBlockGoalArea(block: boolean): void {
-        this.state.block_goal_area = block;
-    }
-
     setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void {
         this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, position);
     }
@@ -240,7 +231,6 @@ export class GlobalState {
 
         this.state.side = data.side;
         this.state.show_col_and_rows = data.show_col_and_rows;
-        this.state.block_goal_area = data.block_goal_area;
         this.state.current_strategy_uuid = data.current_strategy_uuid;
         this.state.show_zone_fields = data.show_zone_fields;
         this.state.strategies = data.strategies.map((strateCreatorData) => new Strategy(strateCreatorData));
@@ -259,7 +249,6 @@ export class GlobalState {
             strategies: this.state.strategies.map((strategy) => strategy.getCreatorData()),
             side: this.getSide(),
             show_col_and_rows: this.showColsAndRows(),
-            block_goal_area: this.getBlockGoalArea(),
             show_zone_fields: this.showFieldZones(),
         };
     }

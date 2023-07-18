@@ -55,7 +55,7 @@ export function drawField(paint: Paint): void {
         if (global.isAwaySide()) paint.circle({ point: FIELD_POINT_CENTER, radius: CENTER_FIELD_RADIUS, startAngle: -Math.PI * 2.5, endAngle: -Math.PI * 1.5, fillColor: COLOR_RED_WITH_OPACITY, lineToCenter: true });
     }
 
-    if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getBlockGoalArea()) {
+    if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea()) {
         let fillColor = COLOR_RED_WITH_OPACITY;
 
         // BLOQUEIO DO GOL HOME

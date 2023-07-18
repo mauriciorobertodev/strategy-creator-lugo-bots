@@ -1,5 +1,7 @@
 import { Vector2D } from "@mauricioroberto/math-world";
 
+export const FREE_MODE_UUID = "free-mode-uuid";
+
 export const FIELD_WIDTH = 20000;
 export const FIELD_HEIGHT = 10000;
 

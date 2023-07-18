@@ -17,7 +17,7 @@ export type FormationFullExport = { [key in PlayerNumber]: PlayerPosition };
 
 export type FormationCommonExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
-export type FreeModeConfig = { cols: number; rows: number; side: Side; show_cols_and_rows: boolean; formation_type: FormationType; block_goal_area: boolean; formation: FormationFullExport };
+export type FreeModeConfig = { cols: number; rows: number; side: Side; show_cols_and_rows: boolean; formation_type: FormationType; formation: FormationFullExport };
 
 export type Color = { r: number; g: number; b: number };
 
@@ -39,6 +39,7 @@ export type FormationCreator = {
     type?: FormationType;
     field_zone?: FieldZoneCreator;
     team_positions?: TeamPositions;
+    block_goal_area?: boolean;
 };
 
 export type StrategyCreator = {
@@ -55,7 +56,6 @@ export type GlobalStateLocalStorage = {
     strategies: StrategyCreator[];
     side: Side;
     show_col_and_rows: boolean;
-    block_goal_area: boolean;
     show_zone_fields: boolean;
 };
 

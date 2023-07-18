@@ -18,4 +18,6 @@ export default interface FormationContract {
     getUuid(): string;
     setSelectingTheZone(selecting: boolean): void;
     deleteFieldZone(): void;
+    getBlockGoalArea(): boolean;
+    setBlockGoalArea(block: boolean): void;
 }

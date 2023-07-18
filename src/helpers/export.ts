@@ -41,7 +41,6 @@ export function exportFreeModeConfig(): FreeModeConfig {
         side: global.getSide(),
         show_cols_and_rows: global.showColsAndRows(),
         formation_type: global.getCurrentFormationType(),
-        block_goal_area: global.getBlockGoalArea(),
         formation: exportFullFormation(),
     };
 }

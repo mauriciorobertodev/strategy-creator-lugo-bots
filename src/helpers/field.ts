@@ -44,7 +44,7 @@ export default function isPermittedRegion(region: RegionContract) {
     }
 
     // SE O PONTO CENTRAL DA REGIÃO FOR NA ÀREA DO GOL NÃO É PERMITIDO
-    if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getBlockGoalArea()) {
+    if (global.currentFormationTypeIs("INITIAL_POSITIONS") || global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea()) {
         const distanceToHomeGoal = getShortPointBetweenLineAndPoint(HOME_GOAL_TOP, HOME_GOAL_BOTTOM, region.getCenter()).distance;
         const distanceToAwayGoal = getShortPointBetweenLineAndPoint(AWAY_GOAL_TOP, AWAY_GOAL_BOTTOM, region.getCenter()).distance;
 

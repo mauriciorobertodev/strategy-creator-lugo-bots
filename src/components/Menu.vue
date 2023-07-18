@@ -188,13 +188,25 @@ const uploadFreeModeConfig = (e: any) => {
                     <div v-if="global.getCurrentFormationType() != 'INITIAL_POSITIONS'">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Bloquear área do gol</p>
                         <div class="flex">
-                            <button v-on:click="global.setBlockGoalArea(true)" v-bind:class="{ button: global.getBlockGoalArea(), 'button-secondary': !global.getBlockGoalArea() }" class="uppercase rounded-none rounded-l">SIM</button>
-                            <button v-on:click="global.setBlockGoalArea(false)" v-bind:class="{ button: !global.getBlockGoalArea(), 'button-secondary': global.getBlockGoalArea() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                            <button
+                                v-on:click="global.getCurrentStrategy().getCurrentFormation().setBlockGoalArea(true)"
+                                v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea(), 'button-secondary': !global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea() }"
+                                class="uppercase rounded-none rounded-l"
+                            >
+                                SIM
+                            </button>
+                            <button
+                                v-on:click="global.getCurrentStrategy().getCurrentFormation().setBlockGoalArea(false)"
+                                v-bind:class="{ button: !global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea(), 'button-secondary': global.getCurrentStrategy().getCurrentFormation().getBlockGoalArea() }"
+                                class="uppercase rounded-none rounded-r"
+                            >
+                                NÃO
+                            </button>
                         </div>
                     </div>
 
                     <!-- zona de campo -->
-                    <div v-if="global.getCurrentFormationType() === 'FREE'">
+                    <div v-if="global.getCurrentFormationType() === 'FREE' && global.getCurrentStrategy().getUuid() != 'free_mode'">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Zona de campo</p>
                         <div class="space-y-2">
                             <!-- editar ou excluir zona de campo -->
