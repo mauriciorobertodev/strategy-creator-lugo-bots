@@ -1,9 +1,10 @@
 import { Vector2D } from "@mauricioroberto/math-world";
-import { Color, FieldZoneCreator } from "../types";
+import { Color, FieldZoneCreator, FieldZoneDefinition } from "../types";
 
 export default interface FieldZoneContract {
     getName(): string;
     getColor(): Color;
+    setColor(color: Color): void;
     getStartCol(): number;
     getStartRow(): number;
     getEndCol(): number;
@@ -18,4 +19,7 @@ export default interface FieldZoneContract {
     getCreatorData(): FieldZoneCreator;
     toJson(): string;
     getUuid(): string;
+    setDefinition(definition: FieldZoneDefinition): void;
+    getDefinition(): FieldZoneDefinition;
+    setName(name: string): void;
 }

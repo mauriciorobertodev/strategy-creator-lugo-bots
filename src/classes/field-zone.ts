@@ -1,6 +1,6 @@
 import { Vector2D } from "@mauricioroberto/math-world";
 
-import { Color, FieldZoneCreator } from "../types";
+import { Color, FieldZoneCreator, FieldZoneDefinition } from "../types";
 import { getRegionFromColAndRow } from "../helpers/field";
 import global from "../global";
 import FieldZoneContract from "../contracts/field-zone-contract";
@@ -107,5 +107,29 @@ export default class FieldZone implements FieldZoneContract {
             start_row: this.getStartRow(),
             end_row: this.getEndRow(),
         };
+    }
+
+    setDefinition(definition: FieldZoneDefinition): void {
+        this.start_col = Math.min(definition.startCol, definition.endCol);
+        this.end_col = Math.max(definition.startCol, definition.endCol);
+        this.start_row = Math.min(definition.startRow, definition.endRow);
+        this.end_row = Math.max(definition.startRow, definition.endRow);
+    }
+
+    getDefinition(): FieldZoneDefinition {
+        return {
+            startCol: this.start_col,
+            endCol: this.end_col,
+            startRow: this.start_row,
+            endRow: this.end_row,
+        };
+    }
+
+    setColor(color: Color): void {
+        this.color = color;
+    }
+
+    setName(name: string): void {
+        this.name = name;
     }
 }
