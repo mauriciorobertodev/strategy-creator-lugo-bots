@@ -56,4 +56,12 @@ export type GlobalStateLocalStorage = {
     side: Side;
     show_col_and_rows: boolean;
     block_goal_area: boolean;
+    show_zone_fields: boolean;
+};
+
+export type FieldZoneDefinition = {
+    startCol: number;
+    endCol: number;
+    startRow: number;
+    endRow: number;
 };
