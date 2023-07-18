@@ -4,6 +4,7 @@
     "version": "0.0.0",
     "homepage": "https://mauriciorobertodev.github.io/strategy-creator-lugo-bots/",
     "type": "module",
+    "license": "MIT",
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc && vite build",
