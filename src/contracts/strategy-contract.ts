@@ -15,7 +15,7 @@ export default interface StrategyContract {
     setRows(rows: number): void;
     setColsAndRows(cols: number, rows: number): void;
     toJson(): string;
-    getCreatorData(): StrategyCreator;
+    getCreatorData(uuid: boolean): StrategyCreator;
     getUuid(): string;
     newFormation(name: string, type: FormationType): void;
     addFormation(formation: FormationContract): void;

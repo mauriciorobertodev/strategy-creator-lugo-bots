@@ -95,14 +95,14 @@ export default class Strategy implements StrategyContract {
         return JSON.stringify(this.getCreatorData());
     }
 
-    public getCreatorData(): StrategyCreator {
+    public getCreatorData(uuid = true): StrategyCreator {
         return {
-            uuid: this.getUuid(),
+            uuid: uuid ? this.getUuid() : undefined,
             name: this.getName(),
             cols: this.getCols(),
             rows: this.getRows(),
             current_formation_uuid: this.current_formation_uuid,
-            formations: this.formations.map((formation) => formation.getCreatorData()),
+            formations: this.formations.map((formation) => formation.getCreatorData(uuid)),
         };
     }
 

@@ -94,12 +94,12 @@ export default class FieldZone implements FieldZoneContract {
     }
 
     public toJson(): string {
-        return JSON.stringify(this.getCreatorData());
+        return JSON.stringify(this.getCreatorData(true));
     }
 
-    public getCreatorData(): FieldZoneCreator {
+    public getCreatorData(uuid: boolean): FieldZoneCreator {
         return {
-            uuid: this.getUuid(),
+            uuid: uuid ? this.getUuid() : undefined,
             name: this.getName(),
             color: this.getColor(),
             start_col: this.getStartCol(),

@@ -81,15 +81,15 @@ export default class Formation implements FormationContract {
     }
 
     public toJson(): string {
-        return JSON.stringify(this.getCreatorData());
+        return JSON.stringify(this.getCreatorData(true));
     }
 
-    public getCreatorData(): FormationCreator {
+    public getCreatorData(uuid: boolean): FormationCreator {
         return {
-            uuid: this.getUuid(),
+            uuid: uuid ? this.getUuid() : undefined,
             name: this.getName(),
             type: this.getType(),
-            field_zone: this.hasFieldZone() ? this.getFieldZone().getCreatorData() : undefined,
+            field_zone: this.hasFieldZone() ? this.getFieldZone().getCreatorData(uuid) : undefined,
             team_positions: this.getTeamPositions(),
             block_goal_area: this.getBlockGoalArea(),
         };

@@ -16,7 +16,7 @@ export default interface FieldZoneContract {
     getTopRight(): Vector2D;
     getBottomLeft(): Vector2D;
     getBottomRight(): Vector2D;
-    getCreatorData(): FieldZoneCreator;
+    getCreatorData(uuid: boolean): FieldZoneCreator;
     toJson(): string;
     getUuid(): string;
     setDefinition(definition: FieldZoneDefinition): void;

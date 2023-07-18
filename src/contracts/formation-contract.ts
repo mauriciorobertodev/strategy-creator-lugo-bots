@@ -13,7 +13,7 @@ export default interface FormationContract {
     setName(name: string): void;
     getTeamPositions(): TeamPositions;
     toJson(): string;
-    getCreatorData(): FormationCreator;
+    getCreatorData(uuid: boolean): FormationCreator;
     setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void;
     getUuid(): string;
     setSelectingTheZone(selecting: boolean): void;
