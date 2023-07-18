@@ -36,7 +36,7 @@
   <span> · </span>
     <a href="https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/issues/">Reporte Bugs</a>
   <span> · </span>
-    <a href="[arquivo de licença](https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/exemplo.json)">Estratégia de Exemplo</a>
+    <a href="https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/blob/main/exemplo.json">Estratégia de Exemplo</a>
 
 </div>
 
@@ -111,7 +111,7 @@ Rode o modo de desenvolvimento
 
 Contribuições são sempre bem vindas!
 
-1. Faça o _fork_ do projeto (<https://github.com/seuUsuario/nomeDoRepositorio/fork>)
+1. Faça o _fork_ do projeto (<https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/fork>)
 2. Crie uma _branch_ para sua modificação (`git checkout -b meu-novo-recurso`)
 3. Faça o _commit_ (`git commit -am 'Adicionando um novo recurso...'`)
 4. _Push_ (`git push origin meu-novo-recurso`)
