@@ -237,7 +237,7 @@ export class GlobalState {
 
         global.getPlayers().forEach((player) => {
             const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
-            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            if (position.col != null && position.row != null) player.setColAndRow(position.col, position.row);
             else player.resetPosition();
         });
         global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
@@ -246,7 +246,7 @@ export class GlobalState {
     getLocalStorageData(): GlobalStateLocalStorage {
         return {
             current_strategy_uuid: this.state.current_strategy_uuid,
-            strategies: this.state.strategies.map((strategy) => strategy.getCreatorData()),
+            strategies: this.state.strategies.map((strategy) => strategy.getCreatorData(true)),
             side: this.getSide(),
             show_col_and_rows: this.showColsAndRows(),
             show_zone_fields: this.showFieldZones(),
@@ -310,7 +310,7 @@ export class GlobalState {
     updatePlayerPositionByCurrentFormation(): void {
         global.getPlayers().forEach((player) => {
             const position = global.getCurrentStrategy().getCurrentFormation().getTeamPositions()[player.getNumber()];
-            if (position.col && position.row) player.setColAndRow(position.col, position.row);
+            if (position.col != null && position.row != null) player.setColAndRow(position.col, position.row);
             else player.resetPosition();
         });
         global.getGoalkeeper().setPosition(global.isHomeSide() ? HOME_GOAL_CENTER : AWAY_GOAL_CENTER);
@@ -318,7 +318,7 @@ export class GlobalState {
     getTemporaryZone(): FieldZoneContract {
         if (!this.state.temporary_field_zone)
             this.state.temporary_field_zone = new FieldZone({
-                name: this.getCurrentStrategy().getCurrentFormation().getName(),
+                name: this.getCurrentStrategy().getCurrentFormation().hasFieldZone() ? this.getCurrentStrategy().getCurrentFormation().getFieldZone().getName() : this.getCurrentStrategy().getCurrentFormation().getName(),
                 color: { r: 255, g: 255, b: 255 },
                 start_col: -1,
                 end_col: -1,
@@ -332,18 +332,28 @@ export class GlobalState {
     saveTemporaryFieldZone() {
         if (isPermittedFieldZone(this.getTemporaryZone().getDefinition())) {
             this.getCurrentStrategy().getCurrentFormation().setFieldZone(this.getTemporaryZone());
+            this.getCurrentStrategy().getCurrentFormation().setSelectingTheZone(false);
             this.state.temporary_field_zone = undefined;
         }
     }
 
     editFieldZone(): void {
         if (!this.getCurrentStrategy().getCurrentFormation().hasFieldZone()) return;
-        this.state.temporary_field_zone = new FieldZone(this.getCurrentStrategy().getCurrentFormation().getFieldZone().getCreatorData());
+        this.state.temporary_field_zone = new FieldZone(this.getCurrentStrategy().getCurrentFormation().getFieldZone().getCreatorData(false));
         this.getCurrentStrategy().getCurrentFormation().setSelectingTheZone(true);
     }
 
     deleteCurrentFieldZone() {
         this.getCurrentStrategy().getCurrentFormation().deleteFieldZone();
+    }
+
+    addStrategy(strategy: StrategyContract) {
+        this.state.strategies.push(strategy);
+    }
+
+    cancelEditOrNewFieldZone() {
+        this.getCurrentStrategy().getCurrentFormation().setSelectingTheZone(false);
+        this.state.temporary_field_zone = undefined;
     }
 }
 
