@@ -44,7 +44,7 @@ export default class Strategy implements StrategyContract {
     }
 
     getFieldZones(): FieldZoneContract[] {
-        return this.formations.map((formation) => formation.getFieldZone());
+        return this.formations.filter((formation) => formation.hasFieldZone()).map((formation) => formation.getFieldZone());
     }
 
     getCurrentFormation(): FormationContract {
