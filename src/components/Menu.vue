@@ -6,7 +6,7 @@ import { updatePlayersByJsonFile, updateFreeModeByJsonFile } from "../helpers/js
 import { exportCommonFormation, exportFreeModeConfig, exportCurrentStrategy } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
-defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal"]);
+defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
 
 const exportCurrentPositions = () => {
     const playersToExport = exportCommonFormation();
@@ -64,23 +64,27 @@ const uploadFreeModeConfig = (e: any) => {
         </div>
         <Transition enter-active-class="duration-300" enter-from-class="translate-x-full opacity-0" enter-to-class="translate-x-0 opacity-100" leave-active-class="duration-300" leave-from-class="translate-x-0 opacity-100" leave-to-class="translate-x-full opacity-0">
             <div v-show="showMenu" class="fixed right-0 flex flex-col items-center justify-between h-screen gap-4 space-y-4 overflow-hidden transition-all bg-white trnasform pt-14 w-80">
-                <div class="w-full px-4 pb-4 space-y-4 overflow-y-auto">
+                <div v-if="!global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()" class="w-full px-4 pb-4 space-y-4 overflow-y-auto">
                     <!-- formações -->
                     <div v-if="!global.isFreeMode()" class="space-y-2">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Formações</p>
                         <template v-for="formation in global.getCurrentStrategy().getFormations()" v-bind:key="formation.getUuid()">
                             <div class="flex gap-2">
+                                <!-- botão de troca -->
                                 <button
                                     type="button"
                                     v-on:click="global.setCurrentFormation(formation.getUuid())"
                                     v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getUuid() === formation.getUuid(), 'button-ghost': global.getCurrentStrategy().getCurrentFormation().getUuid() != formation.getUuid() }"
-                                    class="!justify-between text-sm !h-10 uppercase"
+                                    class="!justify-between items-center text-sm !h-10 uppercase truncate"
                                 >
-                                    {{ formation.getName() }}
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg>
+                                    <p class="truncate">{{ formation.getName() }}</p>
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                        </svg>
+                                    </div>
                                 </button>
+                                <!-- botão de exclusão -->
                                 <button
                                     v-if="global.getCurrentStrategy().getFormations().length > 1"
                                     v-on:click="$emit('open-delete-formation-modal', formation.getUuid())"
@@ -97,6 +101,7 @@ const uploadFreeModeConfig = (e: any) => {
                                 </button>
                             </div>
                         </template>
+                        <!-- botão de criação -->
                         <button type="button" class="text-sm !h-10 uppercase button-secondary gap-2" v-on:click="$emit('open-new-formation-modal')">
                             nova formação
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -159,6 +164,15 @@ const uploadFreeModeConfig = (e: any) => {
                         </div>
                     </div>
 
+                    <!-- mostrar zonas de campo -->
+                    <div v-if="!global.isFreeMode()">
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Exibir zonas de campo</p>
+                        <div class="flex">
+                            <button v-on:click="global.setShowFieldZones(true)" v-bind:class="{ button: global.showFieldZones(), 'button-secondary': !global.showFieldZones() }" class="uppercase rounded-none rounded-l">SIM</button>
+                            <button v-on:click="global.setShowFieldZones(false)" v-bind:class="{ button: !global.showFieldZones(), 'button-secondary': global.showFieldZones() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                        </div>
+                    </div>
+
                     <!-- tipo de formação -->
                     <div v-if="global.isFreeMode()">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Tipo de formação</p>
@@ -176,6 +190,41 @@ const uploadFreeModeConfig = (e: any) => {
                         <div class="flex">
                             <button v-on:click="global.setBlockGoalArea(true)" v-bind:class="{ button: global.getBlockGoalArea(), 'button-secondary': !global.getBlockGoalArea() }" class="uppercase rounded-none rounded-l">SIM</button>
                             <button v-on:click="global.setBlockGoalArea(false)" v-bind:class="{ button: !global.getBlockGoalArea(), 'button-secondary': global.getBlockGoalArea() }" class="uppercase rounded-none rounded-r">NÃO</button>
+                        </div>
+                    </div>
+
+                    <!-- zona de campo -->
+                    <div v-if="global.getCurrentFormationType() === 'FREE'">
+                        <p class="mb-2 text-sm text-gray-500 uppercase">Zona de campo</p>
+                        <div class="space-y-2">
+                            <!-- editar ou excluir zona de campo -->
+                            <div v-if="global.getCurrentStrategy().getCurrentFormation().hasFieldZone()" class="flex gap-2">
+                                <!--  botão de edição -->
+                                <button v-on:click="global.editFieldZone()" class="gap-2 text-sm uppercase button-secondary">
+                                    Editar zona de campo
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                                    </svg>
+                                </button>
+
+                                <!-- botão de exclusão -->
+                                <button v-on:click="$emit('open-delete-field-zone')" type="button" class="flex items-center justify-center w-12 h-10 text-red-500 uppercase border border-red-200 rounded-md hover:border-red-500 hover:text-white hover:bg-red-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                            <!--  botão de criação -->
+                            <button v-if="!global.getCurrentStrategy().getCurrentFormation().hasFieldZone()" v-on:click="global.getCurrentStrategy().getCurrentFormation().setSelectingTheZone(true)" class="gap-2 text-sm uppercase button-secondary">
+                                Nova zona de campo
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
