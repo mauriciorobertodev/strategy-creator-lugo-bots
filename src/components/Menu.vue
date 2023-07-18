@@ -3,6 +3,7 @@ import global from "../global";
 import download from "downloadjs";
 import { updatePlayersByJsonFile } from "../helpers/json";
 import { FREE_MODE_UUID } from "../helpers/constants";
+import NewFieldZone from "./NewFieldZone.vue";
 
 import { exportCommonFormation, exportCurrentStrategy } from "../helpers/export";
 
@@ -11,12 +12,14 @@ defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", 
 
 const exportCurrentPositions = () => {
     const playersToExport = exportCommonFormation();
-    download(JSON.stringify(playersToExport), "positions.json", "text/plain");
+    const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(playersToExport));
+    download(data, "positions.json", "application/json;charset=utf-8");
 };
 
 const exportStrategy = () => {
     const strategyToExport = exportCurrentStrategy();
-    download(JSON.stringify(strategyToExport), "strategy.json", "text/plain");
+    const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(strategyToExport));
+    download(data, "strategy.json", "application/json;charset=utf-8");
 };
 
 const uploadFormation = (e: any) => {
@@ -248,23 +251,17 @@ const uploadFormation = (e: any) => {
 
                         <!-- criar ou selecionar estratégia -->
                         <button v-if="global.isFreeMode()" v-on:click="$emit('open-new-strategy-modal')" class="gap-2 uppercase button-secondary">
-                            Criar nova estratégia
+                            Nova estratégia
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
                         </button>
-                        <button v-if="global.isFreeMode()" class="gap-2 uppercase button-secondary">
-                            importar estratégia
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                            </svg>
-                        </button>
-                        <button v-if="!global.isFreeMode()" v-on:click="exportStrategy()" class="gap-2 uppercase button-secondary">
+                        <a href="#" v-if="!global.isFreeMode()" v-on:click="exportStrategy()" class="gap-2 uppercase button-secondary">
                             Exportar estratégia
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
-                        </button>
+                        </a>
                         <button v-on:click="$emit('open-change-strategy-modal')" class="gap-2 uppercase button-secondary">
                             Trocar de estratégia
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -286,4 +283,5 @@ const uploadFormation = (e: any) => {
             </div>
         </Transition>
     </div>
+    <NewFieldZone v-if="global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()" v-bind:show-me="showMenu" />
 </template>

@@ -9,7 +9,6 @@ import ChangeStrategyModal from "./ChangeStrategyModal.vue";
 import DeleteStrategyModal from "./DeleteStrategyModal.vue";
 import NewFormationModal from "./NewFormationModal.vue";
 import DeleteFormationModal from "./DeleteFormationModal.vue";
-import NewFieldZone from "./NewFieldZone.vue";
 import DeleteFieldZoneModal from "./DeleteFieldZoneModal.vue";
 
 const isVisibleMenu = ref(false);
@@ -66,7 +65,6 @@ const openDeleteStrategyModal = () => {
 };
 
 const toggleMenu = () => (isVisibleMenu.value = !isVisibleMenu.value);
-const closeMenu = () => (isVisibleMenu.value = false);
 const closeNewStrategyModal = () => (isVisibleNewStrategyModal.value = false);
 const closeChangeStrategyModal = () => (isVisibleChangeStrategyModal.value = false);
 const closeDeleteStrategyModal = () => (isVisibleDeleteStrategyModal.value = false);
@@ -92,7 +90,6 @@ const closeDeleteFieldZoneModal = () => (isVisibleDeleteFieldZoneModal.value = f
     <DeleteStrategyModal v-bind:showModal="isVisibleDeleteStrategyModal" v-on:close="closeDeleteStrategyModal()" />
     <NewFormationModal v-bind:showModal="isVisibleNewFormationModal" v-on:close="closeNewFormationModal()" />
     <DeleteFormationModal v-bind:showModal="isVisibleDeleteFormationModal" v-bind:formation_uuid="delete_formation_uuid" v-on:close="closeDeleteFormationModal()" />
-    <NewFieldZone v-bind:show-me="isVisibleMenu" v-on:close="closeMenu()" />
     <DeleteFieldZoneModal v-bind:show-modal="isVisibleDeleteFieldZoneModal" v-on:close="closeDeleteFieldZoneModal()" />
 </template>
 
