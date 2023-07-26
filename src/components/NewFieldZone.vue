@@ -60,6 +60,7 @@ function save() {
                     <p class="mb-2 text-sm text-gray-500 uppercase">Cor</p>
                     <input type="color" class="w-full h-20 border-none" v-model="field_zone_color" v-on:input="colorChangePick()" />
                     <input type="text" class="input" v-model="color_input" v-on:input="colorChangeInput()" v-maska data-maska="!#FFFFFF" data-maska-tokens="{ 'F': { 'pattern': '[0-9a-fA-F]' }}" />
+                    <a class="block mt-4 font-semibold text-blue-500 uppercase hover:bg-blue-500/10 hover:underline" href="https://tailwindcss.com/docs/customizing-colors" target="_blank" rel="noopener noreferrer">Cores do Tailwind CSS</a>
                 </div>
                 <div class="space-y-2">
                     <button type="submit" v-bind:disabled="!isPermittedFieldZone(global.getTemporaryZone().getDefinition()) || !field_zone_name" class="uppercase button">Salvar</button>
