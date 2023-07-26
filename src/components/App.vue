@@ -25,7 +25,7 @@ onMounted(() => {
     const WORLD = new MathWorld("world");
 
     WORLD.default();
-    WORLD.drawInformation(true);
+    WORLD.drawInformation(false);
     WORLD.setCameraMaxZoom(1000);
     WORLD.setCameraMinZoom(1);
     WORLD.drawAxis(false);
