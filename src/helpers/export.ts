@@ -63,3 +63,10 @@ export function exportFieldZonesOfStrategy(): FieldZonesExport {
         };
     });
 }
+export function exportFormationNamesOfStrategy(): string[] {
+    const formations = global.getCurrentStrategy().getFormations();
+
+    return formations.map((formation) => {
+        return formation.getName().toUpperCase().replace(" ", "_");
+    });
+}

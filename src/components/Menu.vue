@@ -5,7 +5,7 @@ import { updatePlayersByJsonFile } from "../helpers/json";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
-import { exportCommonFormation, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy } from "../helpers/export";
+import { exportCommonFormation, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -16,6 +16,11 @@ const exportFieldZones = () => {
     download(data, "field-zones.json", "application/json;charset=utf-8");
 };
 
+const exportFormationNames = () => {
+    const formationNamesOfStrategy = exportFormationNamesOfStrategy();
+    const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(formationNamesOfStrategy));
+    download(data, "names.json", "application/json;charset=utf-8");
+};
 const exportFormations = () => {
     const formationsOfStrategy = exportFormationsOfStrategy();
     const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(formationsOfStrategy));
@@ -283,6 +288,12 @@ const uploadFormation = (e: any) => {
                         <hr />
                         <button v-if="!global.isFreeMode()" v-on:click="exportFormations()" class="gap-2 uppercase button-secondary">
                             Exportar formações
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                        <button v-if="!global.isFreeMode()" v-on:click="exportFormationNames()" class="gap-2 uppercase button-secondary">
+                            Exportar nomes
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
