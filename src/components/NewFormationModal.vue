@@ -11,6 +11,7 @@ const formation_type = ref<FormationType>("FREE");
 
 const newFormation = () => {
     global.getCurrentStrategy().newFormation(formation_name.value, formation_type.value);
+    global.updatePlayerPositionByCurrentFormation();
     emit("close");
     formation_name.value = "";
     formation_type.value = "FREE";
