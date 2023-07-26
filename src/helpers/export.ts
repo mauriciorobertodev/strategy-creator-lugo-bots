@@ -1,5 +1,5 @@
 import global from "../global";
-import { FormationCommonExport, FormationFullExport, StrategyCreator } from "../types";
+import { FotmationWithoutGoalkeeperExport, FormationFullExport, StrategyCreator, FormationsExport, FieldZonesExport } from "../types";
 
 export function exportFullFormation(): FormationFullExport {
     const players = global.getPlayers();
@@ -18,7 +18,7 @@ export function exportFullFormation(): FormationFullExport {
     };
 }
 
-export function exportCommonFormation(): FormationCommonExport {
+export function exportCommonFormation(): FotmationWithoutGoalkeeperExport {
     const players = global.getPlayers();
     return {
         2: { col: players[0].getCol(), row: players[0].getRow() },
@@ -38,4 +38,28 @@ export function exportCurrentStrategy(): StrategyCreator {
     const data = global.getCurrentStrategy().getCreatorData(false);
     data.current_formation_uuid = undefined;
     return data;
+}
+
+export function exportFormationsOfStrategy(): FormationsExport {
+    const data: FormationsExport = {};
+    const formations = global.getCurrentStrategy().getFormations();
+
+    formations.forEach((formation) => {
+        data[formation.getName().toUpperCase().replace(" ", "_")] = formation.getTeamPositionsWithoutGoalkeeper();
+    });
+
+    return data;
+}
+export function exportFieldZonesOfStrategy(): FieldZonesExport {
+    const fieldZones = global.getCurrentStrategy().getFieldZones();
+
+    return fieldZones.map((fieldZone) => {
+        return {
+            start_col: fieldZone.getStartCol(),
+            end_col: fieldZone.getEndCol(),
+            start_row: fieldZone.getStartRow(),
+            end_row: fieldZone.getEndRow(),
+            name: fieldZone.getName().toUpperCase().replace(" ", "_"),
+        };
+    });
 }

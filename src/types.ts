@@ -15,11 +15,12 @@ export type FormationType = "FREE" | "INITIAL_POSITIONS";
 
 export type FormationFullExport = { [key in PlayerNumber]: PlayerPosition };
 
-export type FormationCommonExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
+export type FotmationWithoutGoalkeeperExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
 export type Color = { r: number; g: number; b: number };
 
 export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
+export type TeamPositionsWithoutGoalkeeper = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
 export type StrategyExport = StrategyCreator;
 
@@ -65,3 +66,7 @@ export type FieldZoneDefinition = {
     startRow: number;
     endRow: number;
 };
+
+export type FormationsExport = { [key: string]: FotmationWithoutGoalkeeperExport };
+
+export type FieldZonesExport = { start_col: number; end_col: number; start_row: number; end_row: number; name: string }[];

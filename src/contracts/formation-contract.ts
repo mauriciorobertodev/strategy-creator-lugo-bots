@@ -1,4 +1,4 @@
-import { FormationCreator, FormationType, PlayerNumber, PlayerPosition, TeamPositions } from "../types";
+import { FormationCreator, FormationType, PlayerNumber, PlayerPosition, TeamPositions, TeamPositionsWithoutGoalkeeper } from "../types";
 import FieldZoneContract from "./field-zone-contract";
 
 export default interface FormationContract {
@@ -12,6 +12,7 @@ export default interface FormationContract {
     getName(): string;
     setName(name: string): void;
     getTeamPositions(): TeamPositions;
+    getTeamPositionsWithoutGoalkeeper(): TeamPositionsWithoutGoalkeeper;
     toJson(): string;
     getCreatorData(uuid: boolean): FormationCreator;
     setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void;

@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import FieldZoneContract from "../contracts/field-zone-contract";
 import FormationContract from "../contracts/formation-contract";
 import { getDefaultInitialPositions } from "../helpers/players";
-import { FormationCreator, FormationType, PlayerNumber, PlayerPosition, TeamPositions } from "../types";
+import { FormationCreator, FormationType, PlayerNumber, PlayerPosition, TeamPositions, TeamPositionsWithoutGoalkeeper } from "../types";
 import FieldZone from "./field-zone";
 
 export default class Formation implements FormationContract {
@@ -70,6 +70,21 @@ export default class Formation implements FormationContract {
 
     getTeamPositions(): TeamPositions {
         return this.team_positions;
+    }
+
+    getTeamPositionsWithoutGoalkeeper(): TeamPositionsWithoutGoalkeeper {
+        return {
+            2: this.team_positions[2],
+            3: this.team_positions[3],
+            4: this.team_positions[4],
+            5: this.team_positions[5],
+            6: this.team_positions[6],
+            7: this.team_positions[7],
+            8: this.team_positions[8],
+            9: this.team_positions[9],
+            10: this.team_positions[10],
+            11: this.team_positions[11],
+        };
     }
 
     getUuid(): string {
