@@ -5,10 +5,22 @@ import { updatePlayersByJsonFile } from "../helpers/json";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
-import { exportCommonFormation, exportCurrentStrategy } from "../helpers/export";
+import { exportCommonFormation, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
+
+const exportFieldZones = () => {
+    const fieldZonesOfStrategy = exportFieldZonesOfStrategy();
+    const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(fieldZonesOfStrategy));
+    download(data, "field-zones.json", "application/json;charset=utf-8");
+};
+
+const exportFormations = () => {
+    const formationsOfStrategy = exportFormationsOfStrategy();
+    const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(formationsOfStrategy));
+    download(data, "formations.json", "application/json;charset=utf-8");
+};
 
 const exportCurrentPositions = () => {
     const playersToExport = exportCommonFormation();
@@ -266,6 +278,19 @@ const uploadFormation = (e: any) => {
                             Trocar de estratégia
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </button>
+                        <hr />
+                        <button v-if="!global.isFreeMode()" v-on:click="exportFormations()" class="gap-2 uppercase button-secondary">
+                            Exportar formações
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                        <button v-if="!global.isFreeMode()" v-on:click="exportFieldZones()" class="gap-2 uppercase button-secondary">
+                            Exportar zonas de campo
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
                         </button>
                         <button v-if="!global.isFreeMode()" v-on:click="$emit('open-delete-strategy-modal')" class="gap-2 uppercase button-red">
