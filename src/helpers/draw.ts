@@ -159,7 +159,7 @@ export function drawFieldZones(paint: Paint): void {
             const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
             const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
             paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
-            paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+            paint.text({ point: zone.getCenter(), text: global.getCurrentStrategy().getCurrentFormation().getName(), textSize: 200, textColor: "white" });
         }
     }
 
@@ -168,24 +168,25 @@ export function drawFieldZones(paint: Paint): void {
         const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
         const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
         paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
-        paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+        paint.text({ point: zone.getCenter(), text: global.getCurrentStrategy().getCurrentFormation().getName(), textSize: 200, textColor: "white" });
     }
 
     if (global.showFieldZones() || global.getCurrentStrategy().getCurrentFormation().isSelectingTheZone()) {
         global
             .getCurrentStrategy()
-            .getFieldZones()
-            .filter((zone) => {
+            .getFormationsWithFieldZones()
+            .filter((formation) => {
                 if (global.getCurrentStrategy().getCurrentFormation().hasFieldZone()) {
-                    if (zone.getUuid() === global.getCurrentStrategy().getCurrentFormation().getFieldZone().getUuid()) return false;
+                    if (formation.getFieldZone().getUuid() === global.getCurrentStrategy().getCurrentFormation().getFieldZone().getUuid()) return false;
                 }
                 return true;
             })
-            .forEach((zone) => {
+            .forEach((formation) => {
+                const zone = formation.getFieldZone();
                 const borderColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b})`;
                 const fillColor = `rgb(${zone.getColor().r}, ${zone.getColor().g}, ${zone.getColor().b}, 0.3)`;
                 paint.rect({ point: zone.getTopLeft(), width: zone.getWidth(), height: zone.getHeight(), lineWidth: 20, strokeColor: borderColor, fillColor });
-                paint.text({ point: zone.getCenter(), text: zone.getName(), textSize: 200, textColor: "white" });
+                paint.text({ point: zone.getCenter(), text: formation.getName(), textSize: 200, textColor: "white" });
             });
     }
 }
