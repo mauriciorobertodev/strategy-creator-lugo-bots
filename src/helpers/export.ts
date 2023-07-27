@@ -1,5 +1,6 @@
 import global from "../global";
 import { FotmationWithoutGoalkeeperExport, FormationFullExport, StrategyCreator, FormationsExport, FieldZonesExport } from "../types";
+import { safeString } from "./util";
 
 export function exportFullFormation(): FormationFullExport {
     const players = global.getPlayers();
@@ -45,21 +46,22 @@ export function exportFormationsOfStrategy(): FormationsExport {
     const formations = global.getCurrentStrategy().getFormations();
 
     formations.forEach((formation) => {
-        data[formation.getName().toUpperCase().replace(" ", "_")] = formation.getTeamPositionsWithoutGoalkeeper();
+        data[safeString(formation.getName()).toUpperCase()] = formation.getTeamPositionsWithoutGoalkeeper();
     });
 
     return data;
 }
 export function exportFieldZonesOfStrategy(): FieldZonesExport {
-    const fieldZones = global.getCurrentStrategy().getFieldZones();
+    const formations = global.getCurrentStrategy().getFormationsWithFieldZones();
 
-    return fieldZones.map((fieldZone) => {
+    return formations.map((formation) => {
+        const zone = formation.getFieldZone();
         return {
-            start_col: fieldZone.getStartCol(),
-            end_col: fieldZone.getEndCol(),
-            start_row: fieldZone.getStartRow(),
-            end_row: fieldZone.getEndRow(),
-            name: fieldZone.getName().toUpperCase().replace(" ", "_"),
+            start_col: zone.getStartCol(),
+            end_col: zone.getEndCol(),
+            start_row: zone.getStartRow(),
+            end_row: zone.getEndRow(),
+            id: safeString(formation.getName()).toUpperCase(),
         };
     });
 }
@@ -67,6 +69,7 @@ export function exportFormationNamesOfStrategy(): string[] {
     const formations = global.getCurrentStrategy().getFormations();
 
     return formations.map((formation) => {
-        return formation.getName().toUpperCase().replace(" ", "_");
+        console.log(safeString(formation.getName()).toUpperCase());
+        return safeString(formation.getName()).toUpperCase();
     });
 }
