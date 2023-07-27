@@ -318,7 +318,6 @@ export class GlobalState {
     getTemporaryZone(): FieldZoneContract {
         if (!this.state.temporary_field_zone)
             this.state.temporary_field_zone = new FieldZone({
-                name: this.getCurrentStrategy().getCurrentFormation().hasFieldZone() ? this.getCurrentStrategy().getCurrentFormation().getFieldZone().getName() : this.getCurrentStrategy().getCurrentFormation().getName(),
                 color: { r: 255, g: 255, b: 255 },
                 start_col: -1,
                 end_col: -1,
