@@ -26,7 +26,6 @@ export type StrategyExport = StrategyCreator;
 
 export type FieldZoneCreator = {
     uuid?: string;
-    name: string;
     color: Color;
     start_col: number;
     end_col: number;
@@ -69,4 +68,4 @@ export type FieldZoneDefinition = {
 
 export type FormationsExport = { [key: string]: FotmationWithoutGoalkeeperExport };
 
-export type FieldZonesExport = { start_col: number; end_col: number; start_row: number; end_row: number; name: string }[];
+export type FieldZonesExport = { start_col: number; end_col: number; start_row: number; end_row: number; id: string }[];

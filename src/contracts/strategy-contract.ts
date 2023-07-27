@@ -21,4 +21,5 @@ export default interface StrategyContract {
     addFormation(formation: FormationContract): void;
     setCurrentFormation(uuid: string): void;
     deleteFormation(uuid: string): void;
+    getFormationsWithFieldZones(): FormationContract[];
 }

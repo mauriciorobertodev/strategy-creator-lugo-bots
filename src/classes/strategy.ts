@@ -47,6 +47,10 @@ export default class Strategy implements StrategyContract {
         return this.formations.filter((formation) => formation.hasFieldZone()).map((formation) => formation.getFieldZone());
     }
 
+    getFormationsWithFieldZones(): FormationContract[] {
+        return this.getFormations().filter((formation) => formation.hasFieldZone());
+    }
+
     getCurrentFormation(): FormationContract {
         if (!this.getFormationsUuid().includes(this.current_formation_uuid)) this.current_formation_uuid = this.getFormationsUuid()[0];
         const formation = this.formations.find((formation) => formation.getUuid() === this.current_formation_uuid);

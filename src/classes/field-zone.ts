@@ -8,25 +8,19 @@ import { v4 } from "uuid";
 
 export default class FieldZone implements FieldZoneContract {
     private uuid: string;
-    private name: string;
     private color: Color;
     private start_col: number;
     private end_col: number;
     private start_row: number;
     private end_row: number;
 
-    constructor({ uuid, name, color, start_col, end_col, start_row, end_row }: FieldZoneCreator) {
+    constructor({ uuid, color, start_col, end_col, start_row, end_row }: FieldZoneCreator) {
         this.uuid = uuid ?? v4();
-        this.name = name;
         this.color = color;
         this.start_col = Math.min(start_col, end_col);
         this.end_col = Math.max(start_col, end_col);
         this.start_row = Math.min(start_row, end_row);
         this.end_row = Math.max(start_row, end_row);
-    }
-
-    public getName(): string {
-        return this.name;
     }
 
     public getColor(): Color {
@@ -100,7 +94,6 @@ export default class FieldZone implements FieldZoneContract {
     public getCreatorData(uuid: boolean): FieldZoneCreator {
         return {
             uuid: uuid ? this.getUuid() : undefined,
-            name: this.getName(),
             color: this.getColor(),
             start_col: this.getStartCol(),
             end_col: this.getEndCol(),
@@ -127,9 +120,5 @@ export default class FieldZone implements FieldZoneContract {
 
     setColor(color: Color): void {
         this.color = color;
-    }
-
-    setName(name: string): void {
-        this.name = name;
     }
 }
