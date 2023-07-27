@@ -9,9 +9,10 @@ import { createRouter, createWebHistory } from "vue-router";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: "/strategy-creator-lugo-bots/", component: Strategy },
-        { path: "/strategy-creator-lugo-bots/tutorial", component: Tutorial },
-        { path: "/:pathMatch(.*)*", component: Strategy },
+        { path: "/", redirect: { name: "Strategy" } },
+        { path: "/strategy-creator-lugo-bots/", name: "Strategy", component: Strategy },
+        { path: "/strategy-creator-lugo-bots/tutorial", name: "Tutorial", component: Tutorial },
+        { path: "/strategy-creator-lugo-bots/:pathMatch(.*)*", component: Strategy },
     ],
 });
 
