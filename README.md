@@ -1,13 +1,12 @@
 <div align="center">
   <h1>Criador de estratégias para Lugo Bots</h1>
-  
+
   <p>
     Ferramenta de criação de estratégias/formações para  <a href="https://beta.lugobots.dev/">
     Lugo Bots
     </a>
   </p>
-  
-  
+
 <!-- Badges -->
 <p>
 <img alt="PRs welcome!" src="https://img.shields.io/static/v1?label=PRs&message=WELCOME&style=for-the-badge&color=3b82f6&labelColor=222222" />
@@ -30,14 +29,17 @@
     <img src="https://img.shields.io/github/license/MauricioRobertoDev/strategy-creator-lugo-bots.svg?color=3b82f6&label=LICENSE&logo=3C424B&logoColor=3C424B&style=for-the-badge&labelColor=222222" alt="license" />
   </a>
 </p>
-   
+
+![Alt text](https://raw.githubusercontent.com/MauricioRobertoDev/strategy-creator-lugo-bots/main/src/assets/screenshot.png)
+
 <h4>
     <a href="https://mauriciorobertodev.github.io/strategy-creator-lugo-bots/">Demonstração</a>
   <span> · </span>
     <a href="https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/issues/">Reporte Bugs</a>
   <span> · </span>
     <a href="https://github.com/MauricioRobertoDev/strategy-creator-lugo-bots/blob/main/exemplo.json">Estratégia de Exemplo</a>
-
+  <span> · </span>
+    <a href="https://mauriciorobertodev.github.io/strategy-creator-lugo-bots/tutorial">Exemplo de Uso</a>
 </div>
 
 <br />
@@ -71,7 +73,7 @@ Esse projeto é para ajudar todos que estão criando um bot de <a href="https://
 
 ## :zap: Como usar
 
-Video aqui
+<a href="https://mauriciorobertodev.github.io/strategy-creator-lugo-bots/tutorial">Artigo explicando como eu uso a estratégia de zonas</a>
 
 <br/>
 
