@@ -7,7 +7,7 @@ import Strategy from "./pages/Strategy.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory("/strategy-creator-lugo-bots/"),
     routes: [
         { path: "/", redirect: { name: "Strategy" } },
         { path: "/strategy-creator-lugo-bots/", name: "Strategy", component: Strategy },
