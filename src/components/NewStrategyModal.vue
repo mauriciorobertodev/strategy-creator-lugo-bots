@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import global from "../global";
 import { FormationType } from "../types";
-import { importStrategyByJson } from "../helpers/json";
+import { importStrategy } from "../helpers/json";
 
 const emit = defineEmits(["close"]);
 defineProps({ showModal: Boolean });
@@ -40,7 +40,9 @@ const uploadStrategy = (e: any) => {
         return;
     }
 
-    importStrategyByJson(jsonFile, strategy_name.value);
+    importStrategy(jsonFile, strategy_name.value);
+    const input = document.querySelector<HTMLInputElement>("#upload_strategy");
+    if (input) input.value = "";
     emit("close");
 };
 </script>

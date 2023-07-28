@@ -1,7 +1,7 @@
 {
     "name": "strategy-creator-lugo-bots",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
     "homepage": "https://mauriciorobertodev.github.io/strategy-creator-lugo-bots/",
     "type": "module",
     "license": "MIT",

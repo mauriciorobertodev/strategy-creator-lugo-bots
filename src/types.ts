@@ -13,16 +13,11 @@ export type HoldedPlayer = { player: PlayerContract; region: RegionContract | nu
 
 export type FormationType = "FREE" | "INITIAL_POSITIONS";
 
-export type FormationFullExport = { [key in PlayerNumber]: PlayerPosition };
-
-export type FotmationWithoutGoalkeeperExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
-
 export type Color = { r: number; g: number; b: number };
 
 export type TeamPositions = { [key in PlayerNumber]: PlayerPosition };
-export type TeamPositionsWithoutGoalkeeper = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
-export type StrategyExport = StrategyCreator;
+export type TeamPositionsWithoutGoalkeeper = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
 
 export type FieldZoneCreator = {
     uuid?: string;
@@ -65,6 +60,14 @@ export type FieldZoneDefinition = {
     startRow: number;
     endRow: number;
 };
+
+export type ExportType = "STRATEGY" | "POSITIONS";
+
+export type TeamPositionsExport = { type: ExportType; data: TeamPositionsWithoutGoalkeeper };
+
+export type FotmationWithoutGoalkeeperExport = { [key in PlayerNumberWithoutGoalkeeper]: PlayerPosition };
+
+export type StrategyExport = { type: ExportType; data: StrategyCreator };
 
 export type FormationsExport = { [key: string]: FotmationWithoutGoalkeeperExport };
 

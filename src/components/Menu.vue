@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import global from "../global";
 import download from "downloadjs";
-import { updatePlayersByJsonFile } from "../helpers/json";
+import { importTeamPositions } from "../helpers/json";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
-import { exportCommonFormation, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/export";
+import { exportTeamPositions, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -28,7 +28,7 @@ const exportFormations = () => {
 };
 
 const exportCurrentPositions = () => {
-    const playersToExport = exportCommonFormation();
+    const playersToExport = exportTeamPositions();
     const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(playersToExport));
     download(data, "positions.json", "application/json;charset=utf-8");
 };
@@ -39,7 +39,7 @@ const exportStrategy = () => {
     download(data, "strategy.json", "application/json;charset=utf-8");
 };
 
-const uploadFormation = (e: any) => {
+const uploadTeamPositions = (e: any) => {
     const jsonFile = e.target.files[0] as File;
 
     if (jsonFile.type.toLowerCase() != "application/json") {
@@ -47,13 +47,15 @@ const uploadFormation = (e: any) => {
         return;
     }
 
-    updatePlayersByJsonFile(jsonFile);
+    importTeamPositions(jsonFile);
+    const input = document.querySelector<HTMLInputElement>("#upload_positions");
+    if (input) input.value = "";
 };
 </script>
 
 <template>
     <div>
-        <div class="fixed top-0 right-0 z-50 flex items-end justify-end w-full">
+        <div class="fixed top-0 right-0 z-50 flex items-end justify-end w-min">
             <div class="flex items-center justify-between h-12 bg-white min-w-[320px]">
                 <div class="flex items-center gap-4">
                     <p class="pl-4" v-text="global.getCurrentStrategy().getName()"></p>
@@ -191,7 +193,7 @@ const uploadFormation = (e: any) => {
                     </div>
 
                     <!-- bloquar área do gol -->
-                    <div v-if="global.getCurrentFormationType() != 'INITIAL_POSITIONS'">
+                    <div v-if="global.getCurrentStrategy().getCurrentFormation().getType() != 'INITIAL_POSITIONS'">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Bloquear área do gol</p>
                         <div class="flex">
                             <button
@@ -212,7 +214,7 @@ const uploadFormation = (e: any) => {
                     </div>
 
                     <!-- zona de campo -->
-                    <div v-if="global.getCurrentFormationType() === 'FREE' && global.getCurrentStrategy().getUuid() != FREE_MODE_UUID">
+                    <div v-if="global.getCurrentStrategy().getCurrentFormation().getType() === 'FREE' && global.getCurrentStrategy().getUuid() != FREE_MODE_UUID">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Zona de campo</p>
                         <div class="space-y-2">
                             <!-- editar ou excluir zona de campo -->
@@ -257,7 +259,7 @@ const uploadFormation = (e: any) => {
                             </svg>
                         </button>
                         <label for="upload_positions" class="gap-2 cursor-pointer button-secondary">
-                            <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="uploadFormation" />
+                            <input id="upload_positions" type="file" class="hidden" accept="application/json" v-on:change="uploadTeamPositions" />
                             Importar posições
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -280,7 +282,7 @@ const uploadFormation = (e: any) => {
                             </svg>
                         </a>
                         <button v-on:click="$emit('open-change-strategy-modal')" class="gap-2 uppercase button-secondary">
-                            Trocar de estratégia
+                            Alternar modo
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                             </svg>

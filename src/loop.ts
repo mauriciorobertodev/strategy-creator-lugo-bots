@@ -88,13 +88,13 @@ const loop = (world: MathWorld) => {
 
         // O PLAYER SEGURA ESTÁ EMCIMA DE UMA REGIÃO ENTÃO ELE DEVE FICA NO CENTRO DELA, E HERDAR SUA COLUNA E LINHA
         if (region && allowedRegion) {
-            player.setColAndRow(region.getCol(), region.getRow());
-            global.setPlayerPosition(player.getNumber(), { col: region.getCol(), row: region.getRow() });
-            player.setPosition(region.getCenter());
+            global.setPlayerColAndRow(player.getNumber(), { col: region.getCol(), row: region.getRow() });
         }
 
         // SE NÃO TIVER SÓ RESETAMOS A POSIÇÃO DELE PARA IR PARA A LINHA DE JOGADORES
-        if (!region || !allowedRegion) player.resetPosition();
+        if (!region || !allowedRegion) {
+            global.setPlayerColAndRow(player.getNumber(), { col: null, row: null });
+        }
 
         // POR FIM REMOVEMOS O PLAYER SENDO SEGURADO POIS O JOGADOR QUE ANTES ESTAVA AGORA JÁ NÃO ESTÁ MAIS SENDO SEGURADO
         global.resetHoldedPlayer();

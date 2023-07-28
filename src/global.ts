@@ -114,10 +114,6 @@ export class GlobalState {
         return this.state.player_under_mouse;
     }
 
-    getCurrentFormationType(): FormationType {
-        return this.getCurrentStrategy().getCurrentFormation().getType();
-    }
-
     getCurrentStrategy(): StrategyContract {
         const strategy = this.getStrategy(this.state.current_strategy_uuid);
         if (strategy) return strategy;
@@ -182,8 +178,18 @@ export class GlobalState {
         this.getCurrentStrategy().getCurrentFormation().setType(type);
     }
 
-    setPlayerPosition(number: PlayerNumber, position: PlayerPosition): void {
-        this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, position);
+    setPlayerColAndRow(number: PlayerNumber, colAndRow: PlayerPosition): void {
+        const player = this.getPlayer(number);
+
+        if (number == 1 || !player) return;
+
+        if (colAndRow.col === null || colAndRow.col < 0 || colAndRow.row == null || colAndRow.row < 0) {
+            this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, { col: null, row: null });
+            player.resetPosition();
+        } else {
+            player.setColAndRow(colAndRow.col, colAndRow.row);
+            this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, colAndRow);
+        }
     }
 
     // FUNÇÕES PARA COLUNAS E LINHAS
