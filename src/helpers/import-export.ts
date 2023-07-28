@@ -1,6 +1,7 @@
 import global from "../global";
-import { FormationsExport, FieldZonesExport, TeamPositionsExport, StrategyExport } from "../types";
+import { FormationsExport, FieldZonesExport, PlayerNumberWithoutGoalkeeper, TeamPositionsExport, StrategyExport } from "../types";
 import { safeString } from "./util";
+import Strategy from "../classes/strategy";
 
 export function exportTeamPositions(): TeamPositionsExport {
     const players = global.getPlayers();
@@ -37,6 +38,7 @@ export function exportFormationsOfStrategy(): FormationsExport {
 
     return data;
 }
+
 export function exportFieldZonesOfStrategy(): FieldZonesExport {
     const formations = global.getCurrentStrategy().getFormationsWithFieldZones();
 
@@ -51,6 +53,7 @@ export function exportFieldZonesOfStrategy(): FieldZonesExport {
         };
     });
 }
+
 export function exportFormationNamesOfStrategy(): string[] {
     const formations = global.getCurrentStrategy().getFormations();
 
@@ -58,4 +61,44 @@ export function exportFormationNamesOfStrategy(): string[] {
         console.log(safeString(formation.getName()).toUpperCase());
         return safeString(formation.getName()).toUpperCase();
     });
+}
+
+// import
+
+export function importTeamPositions(jsonFile: File) {
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => {
+        const json = JSON.parse(event.target.result) as TeamPositionsExport;
+
+        if (!json?.type || !json?.data || json.type != "POSITIONS") return;
+
+        const positions = json.data;
+
+        global.getPlayers().forEach((player) => {
+            if (player.getNumber() == 1 || !positions[player.getNumber() as PlayerNumberWithoutGoalkeeper]) return;
+            global.setPlayerColAndRow(player.getNumber(), positions[player.getNumber() as PlayerNumberWithoutGoalkeeper]);
+        });
+    };
+
+    reader.readAsText(jsonFile);
+}
+
+export function importStrategy(jsonFile: File, strategyName?: string) {
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => {
+        const json = JSON.parse(event.target.result) as StrategyExport;
+
+        if (!json?.type || !json?.data || json.type != "STRATEGY") return;
+
+        if (strategyName) json.data.name = strategyName;
+
+        const strategy = new Strategy(json.data);
+
+        global.addStrategy(strategy);
+        global.setCurrentStrategy(strategy.getUuid());
+    };
+
+    reader.readAsText(jsonFile);
 }

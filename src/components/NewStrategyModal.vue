@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import global from "../global";
 import { FormationType } from "../types";
-import { importStrategy } from "../helpers/json";
+import { importStrategy } from "../helpers/import-export";
 
 const emit = defineEmits(["close"]);
 defineProps({ showModal: Boolean });

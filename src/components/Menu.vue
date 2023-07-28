@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import global from "../global";
 import download from "downloadjs";
-import { importTeamPositions } from "../helpers/json";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
 import { exportTeamPositions, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/export";
+import { importTeamPositions } from "../helpers/import-export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -21,6 +21,7 @@ const exportFormationNames = () => {
     const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(formationNamesOfStrategy));
     download(data, "names.json", "application/json;charset=utf-8");
 };
+
 const exportFormations = () => {
     const formationsOfStrategy = exportFormationsOfStrategy();
     const data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(formationsOfStrategy));
