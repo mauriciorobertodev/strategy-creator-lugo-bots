@@ -1,253 +1,256 @@
 {
-    "name": "Exemplo",
-    "cols": 16,
-    "rows": 12,
-    "formations": [
-        {
-            "name": "INITIAL POSITIONS",
-            "type": "INITIAL_POSITIONS",
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 5, "row": 10 },
-                "3": { "col": 3, "row": 7 },
-                "4": { "col": 3, "row": 4 },
-                "5": { "col": 5, "row": 1 },
-                "6": { "col": 5, "row": 8 },
-                "7": { "col": 5, "row": 3 },
-                "8": { "col": 7, "row": 10 },
-                "9": { "col": 6, "row": 6 },
-                "10": { "col": 6, "row": 5 },
-                "11": { "col": 7, "row": 1 }
+    "type": "STRATEGY",
+    "data": {
+        "name": "Exemplo",
+        "cols": 16,
+        "rows": 12,
+        "formations": [
+            {
+                "name": "INITIAL POSITIONS",
+                "type": "INITIAL_POSITIONS",
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 5, "row": 10 },
+                    "3": { "col": 3, "row": 7 },
+                    "4": { "col": 3, "row": 4 },
+                    "5": { "col": 5, "row": 1 },
+                    "6": { "col": 5, "row": 8 },
+                    "7": { "col": 5, "row": 3 },
+                    "8": { "col": 7, "row": 10 },
+                    "9": { "col": 6, "row": 6 },
+                    "10": { "col": 6, "row": 5 },
+                    "11": { "col": 7, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "LEFT_DEFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "LEFT_DEFENSIVE", "color": { "r": 191, "g": 219, "b": 254 }, "start_col": 0, "end_col": 3, "start_row": 8, "end_row": 11 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 0, "row": 10 },
-                "3": { "col": 1, "row": 7 },
-                "4": { "col": 1, "row": 4 },
-                "5": { "col": 2, "row": 1 },
-                "6": { "col": 3, "row": 7 },
-                "7": { "col": 3, "row": 4 },
-                "8": { "col": 3, "row": 10 },
-                "9": { "col": 5, "row": 8 },
-                "10": { "col": 6, "row": 4 },
-                "11": { "col": 4, "row": 1 }
+            {
+                "name": "LEFT_DEFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "LEFT_DEFENSIVE", "color": { "r": 191, "g": 219, "b": 254 }, "start_col": 0, "end_col": 3, "start_row": 8, "end_row": 11 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 0, "row": 10 },
+                    "3": { "col": 1, "row": 7 },
+                    "4": { "col": 1, "row": 4 },
+                    "5": { "col": 2, "row": 1 },
+                    "6": { "col": 3, "row": 7 },
+                    "7": { "col": 3, "row": 4 },
+                    "8": { "col": 3, "row": 10 },
+                    "9": { "col": 5, "row": 8 },
+                    "10": { "col": 6, "row": 4 },
+                    "11": { "col": 4, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "CENTER_DEFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "CENTER_DEFENSIVE", "color": { "r": 167, "g": 243, "b": 208 }, "start_col": 0, "end_col": 3, "start_row": 4, "end_row": 7 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 1, "row": 10 },
-                "3": { "col": 1, "row": 7 },
-                "4": { "col": 1, "row": 4 },
-                "5": { "col": 1, "row": 1 },
-                "6": { "col": 3, "row": 7 },
-                "7": { "col": 3, "row": 4 },
-                "8": { "col": 4, "row": 10 },
-                "9": { "col": 6, "row": 8 },
-                "10": { "col": 6, "row": 3 },
-                "11": { "col": 4, "row": 1 }
+            {
+                "name": "CENTER_DEFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "CENTER_DEFENSIVE", "color": { "r": 167, "g": 243, "b": 208 }, "start_col": 0, "end_col": 3, "start_row": 4, "end_row": 7 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 1, "row": 10 },
+                    "3": { "col": 1, "row": 7 },
+                    "4": { "col": 1, "row": 4 },
+                    "5": { "col": 1, "row": 1 },
+                    "6": { "col": 3, "row": 7 },
+                    "7": { "col": 3, "row": 4 },
+                    "8": { "col": 4, "row": 10 },
+                    "9": { "col": 6, "row": 8 },
+                    "10": { "col": 6, "row": 3 },
+                    "11": { "col": 4, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "RIGHT_DEFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "RIGHT_DEFENSIVE", "color": { "r": 199, "g": 210, "b": 254 }, "start_col": 0, "end_col": 3, "start_row": 0, "end_row": 3 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 2, "row": 10 },
-                "3": { "col": 1, "row": 7 },
-                "4": { "col": 1, "row": 4 },
-                "5": { "col": 0, "row": 1 },
-                "6": { "col": 3, "row": 7 },
-                "7": { "col": 3, "row": 4 },
-                "8": { "col": 4, "row": 10 },
-                "9": { "col": 6, "row": 7 },
-                "10": { "col": 5, "row": 3 },
-                "11": { "col": 3, "row": 1 }
+            {
+                "name": "RIGHT_DEFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "RIGHT_DEFENSIVE", "color": { "r": 199, "g": 210, "b": 254 }, "start_col": 0, "end_col": 3, "start_row": 0, "end_row": 3 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 2, "row": 10 },
+                    "3": { "col": 1, "row": 7 },
+                    "4": { "col": 1, "row": 4 },
+                    "5": { "col": 0, "row": 1 },
+                    "6": { "col": 3, "row": 7 },
+                    "7": { "col": 3, "row": 4 },
+                    "8": { "col": 4, "row": 10 },
+                    "9": { "col": 6, "row": 7 },
+                    "10": { "col": 5, "row": 3 },
+                    "11": { "col": 3, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "LEFT_DEFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "LEFT_DEFENSIVE_MIDFIELD", "color": { "r": 147, "g": 197, "b": 253 }, "start_col": 4, "end_col": 7, "start_row": 8, "end_row": 11 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 3, "row": 10 },
-                "3": { "col": 2, "row": 7 },
-                "4": { "col": 2, "row": 4 },
-                "5": { "col": 3, "row": 1 },
-                "6": { "col": 5, "row": 7 },
-                "7": { "col": 5, "row": 4 },
-                "8": { "col": 6, "row": 10 },
-                "9": { "col": 8, "row": 7 },
-                "10": { "col": 8, "row": 4 },
-                "11": { "col": 6, "row": 1 }
+            {
+                "name": "LEFT_DEFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "LEFT_DEFENSIVE_MIDFIELD", "color": { "r": 147, "g": 197, "b": 253 }, "start_col": 4, "end_col": 7, "start_row": 8, "end_row": 11 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 3, "row": 10 },
+                    "3": { "col": 2, "row": 7 },
+                    "4": { "col": 2, "row": 4 },
+                    "5": { "col": 3, "row": 1 },
+                    "6": { "col": 5, "row": 7 },
+                    "7": { "col": 5, "row": 4 },
+                    "8": { "col": 6, "row": 10 },
+                    "9": { "col": 8, "row": 7 },
+                    "10": { "col": 8, "row": 4 },
+                    "11": { "col": 6, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "CENTER_DEFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "CENTER_DEFENSIVE_MIDFIELD", "color": { "r": 110, "g": 231, "b": 183 }, "start_col": 4, "end_col": 7, "start_row": 4, "end_row": 7 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 3, "row": 10 },
-                "3": { "col": 2, "row": 7 },
-                "4": { "col": 2, "row": 4 },
-                "5": { "col": 3, "row": 1 },
-                "6": { "col": 5, "row": 8 },
-                "7": { "col": 5, "row": 3 },
-                "8": { "col": 6, "row": 10 },
-                "9": { "col": 8, "row": 7 },
-                "10": { "col": 8, "row": 4 },
-                "11": { "col": 6, "row": 1 }
+            {
+                "name": "CENTER_DEFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "CENTER_DEFENSIVE_MIDFIELD", "color": { "r": 110, "g": 231, "b": 183 }, "start_col": 4, "end_col": 7, "start_row": 4, "end_row": 7 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 3, "row": 10 },
+                    "3": { "col": 2, "row": 7 },
+                    "4": { "col": 2, "row": 4 },
+                    "5": { "col": 3, "row": 1 },
+                    "6": { "col": 5, "row": 8 },
+                    "7": { "col": 5, "row": 3 },
+                    "8": { "col": 6, "row": 10 },
+                    "9": { "col": 8, "row": 7 },
+                    "10": { "col": 8, "row": 4 },
+                    "11": { "col": 6, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "RIGHT_DEFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "RIGHT_DEFENSIVE_MIDFIELD", "color": { "r": 196, "g": 181, "b": 253 }, "start_col": 4, "end_col": 7, "start_row": 0, "end_row": 3 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 3, "row": 10 },
-                "3": { "col": 2, "row": 7 },
-                "4": { "col": 2, "row": 4 },
-                "5": { "col": 3, "row": 1 },
-                "6": { "col": 5, "row": 7 },
-                "7": { "col": 5, "row": 4 },
-                "8": { "col": 6, "row": 10 },
-                "9": { "col": 8, "row": 7 },
-                "10": { "col": 8, "row": 4 },
-                "11": { "col": 6, "row": 1 }
+            {
+                "name": "RIGHT_DEFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "RIGHT_DEFENSIVE_MIDFIELD", "color": { "r": 196, "g": 181, "b": 253 }, "start_col": 4, "end_col": 7, "start_row": 0, "end_row": 3 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 3, "row": 10 },
+                    "3": { "col": 2, "row": 7 },
+                    "4": { "col": 2, "row": 4 },
+                    "5": { "col": 3, "row": 1 },
+                    "6": { "col": 5, "row": 7 },
+                    "7": { "col": 5, "row": 4 },
+                    "8": { "col": 6, "row": 10 },
+                    "9": { "col": 8, "row": 7 },
+                    "10": { "col": 8, "row": 4 },
+                    "11": { "col": 6, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "LEFT_OFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "LEFT_OFENSIVE_MIDFIELD", "color": { "r": 96, "g": 165, "b": 250 }, "start_col": 8, "end_col": 11, "start_row": 8, "end_row": 11 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 6, "row": 10 },
-                "3": { "col": 6, "row": 7 },
-                "4": { "col": 6, "row": 4 },
-                "5": { "col": 7, "row": 1 },
-                "6": { "col": 8, "row": 8 },
-                "7": { "col": 9, "row": 3 },
-                "8": { "col": 10, "row": 10 },
-                "9": { "col": 10, "row": 7 },
-                "10": { "col": 10, "row": 5 },
-                "11": { "col": 11, "row": 1 }
+            {
+                "name": "LEFT_OFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "LEFT_OFENSIVE_MIDFIELD", "color": { "r": 96, "g": 165, "b": 250 }, "start_col": 8, "end_col": 11, "start_row": 8, "end_row": 11 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 6, "row": 10 },
+                    "3": { "col": 6, "row": 7 },
+                    "4": { "col": 6, "row": 4 },
+                    "5": { "col": 7, "row": 1 },
+                    "6": { "col": 8, "row": 8 },
+                    "7": { "col": 9, "row": 3 },
+                    "8": { "col": 10, "row": 10 },
+                    "9": { "col": 10, "row": 7 },
+                    "10": { "col": 10, "row": 5 },
+                    "11": { "col": 11, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "CENTER_OFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "CENTER_OFENSIVE_MIDFIELD", "color": { "r": 74, "g": 222, "b": 128 }, "start_col": 8, "end_col": 11, "start_row": 4, "end_row": 7 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 6, "row": 10 },
-                "3": { "col": 6, "row": 7 },
-                "4": { "col": 6, "row": 4 },
-                "5": { "col": 6, "row": 1 },
-                "6": { "col": 8, "row": 8 },
-                "7": { "col": 8, "row": 3 },
-                "8": { "col": 10, "row": 10 },
-                "9": { "col": 9, "row": 6 },
-                "10": { "col": 9, "row": 5 },
-                "11": { "col": 10, "row": 1 }
+            {
+                "name": "CENTER_OFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "CENTER_OFENSIVE_MIDFIELD", "color": { "r": 74, "g": 222, "b": 128 }, "start_col": 8, "end_col": 11, "start_row": 4, "end_row": 7 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 6, "row": 10 },
+                    "3": { "col": 6, "row": 7 },
+                    "4": { "col": 6, "row": 4 },
+                    "5": { "col": 6, "row": 1 },
+                    "6": { "col": 8, "row": 8 },
+                    "7": { "col": 8, "row": 3 },
+                    "8": { "col": 10, "row": 10 },
+                    "9": { "col": 9, "row": 6 },
+                    "10": { "col": 9, "row": 5 },
+                    "11": { "col": 10, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "RIGHT_OFENSIVE_MIDFIELD",
-            "type": "FREE",
-            "field_zone": { "name": "RIGHT_OFENSIVE_MIDFIELD", "color": { "r": 167, "g": 139, "b": 250 }, "start_col": 8, "end_col": 11, "start_row": 0, "end_row": 3 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 7, "row": 10 },
-                "3": { "col": 6, "row": 7 },
-                "4": { "col": 6, "row": 4 },
-                "5": { "col": 6, "row": 1 },
-                "6": { "col": 9, "row": 8 },
-                "7": { "col": 8, "row": 3 },
-                "8": { "col": 11, "row": 10 },
-                "9": { "col": 10, "row": 6 },
-                "10": { "col": 10, "row": 4 },
-                "11": { "col": 10, "row": 1 }
+            {
+                "name": "RIGHT_OFENSIVE_MIDFIELD",
+                "type": "FREE",
+                "field_zone": { "name": "RIGHT_OFENSIVE_MIDFIELD", "color": { "r": 167, "g": 139, "b": 250 }, "start_col": 8, "end_col": 11, "start_row": 0, "end_row": 3 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 7, "row": 10 },
+                    "3": { "col": 6, "row": 7 },
+                    "4": { "col": 6, "row": 4 },
+                    "5": { "col": 6, "row": 1 },
+                    "6": { "col": 9, "row": 8 },
+                    "7": { "col": 8, "row": 3 },
+                    "8": { "col": 11, "row": 10 },
+                    "9": { "col": 10, "row": 6 },
+                    "10": { "col": 10, "row": 4 },
+                    "11": { "col": 10, "row": 1 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "LEFT_OFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "LEFT_OFENSIVE", "color": { "r": 59, "g": 130, "b": 246 }, "start_col": 12, "end_col": 15, "start_row": 8, "end_row": 11 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 11, "row": 10 },
-                "3": { "col": 10, "row": 7 },
-                "4": { "col": 10, "row": 4 },
-                "5": { "col": 12, "row": 1 },
-                "6": { "col": 12, "row": 8 },
-                "7": { "col": 12, "row": 4 },
-                "8": { "col": 14, "row": 9 },
-                "9": { "col": 14, "row": 6 },
-                "10": { "col": 14, "row": 5 },
-                "11": { "col": 14, "row": 3 }
+            {
+                "name": "LEFT_OFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "LEFT_OFENSIVE", "color": { "r": 59, "g": 130, "b": 246 }, "start_col": 12, "end_col": 15, "start_row": 8, "end_row": 11 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 11, "row": 10 },
+                    "3": { "col": 10, "row": 7 },
+                    "4": { "col": 10, "row": 4 },
+                    "5": { "col": 12, "row": 1 },
+                    "6": { "col": 12, "row": 8 },
+                    "7": { "col": 12, "row": 4 },
+                    "8": { "col": 14, "row": 9 },
+                    "9": { "col": 14, "row": 6 },
+                    "10": { "col": 14, "row": 5 },
+                    "11": { "col": 14, "row": 3 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "CENTER_OFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "CENTER_OFENSIVE", "color": { "r": 34, "g": 197, "b": 94 }, "start_col": 12, "end_col": 15, "start_row": 4, "end_row": 7 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 11, "row": 10 },
-                "3": { "col": 10, "row": 7 },
-                "4": { "col": 10, "row": 4 },
-                "5": { "col": 11, "row": 1 },
-                "6": { "col": 12, "row": 8 },
-                "7": { "col": 12, "row": 3 },
-                "8": { "col": 14, "row": 9 },
-                "9": { "col": 14, "row": 6 },
-                "10": { "col": 14, "row": 5 },
-                "11": { "col": 14, "row": 2 }
+            {
+                "name": "CENTER_OFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "CENTER_OFENSIVE", "color": { "r": 34, "g": 197, "b": 94 }, "start_col": 12, "end_col": 15, "start_row": 4, "end_row": 7 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 11, "row": 10 },
+                    "3": { "col": 10, "row": 7 },
+                    "4": { "col": 10, "row": 4 },
+                    "5": { "col": 11, "row": 1 },
+                    "6": { "col": 12, "row": 8 },
+                    "7": { "col": 12, "row": 3 },
+                    "8": { "col": 14, "row": 9 },
+                    "9": { "col": 14, "row": 6 },
+                    "10": { "col": 14, "row": 5 },
+                    "11": { "col": 14, "row": 2 }
+                },
+                "block_goal_area": false
             },
-            "block_goal_area": false
-        },
-        {
-            "name": "RIGHT_OFENSIVE",
-            "type": "FREE",
-            "field_zone": { "name": "RIGHT_OFENSIVE", "color": { "r": 139, "g": 92, "b": 246 }, "start_col": 12, "end_col": 15, "start_row": 0, "end_row": 3 },
-            "team_positions": {
-                "1": { "col": 0, "row": 0 },
-                "2": { "col": 12, "row": 10 },
-                "3": { "col": 10, "row": 7 },
-                "4": { "col": 10, "row": 4 },
-                "5": { "col": 11, "row": 1 },
-                "6": { "col": 12, "row": 7 },
-                "7": { "col": 12, "row": 3 },
-                "8": { "col": 14, "row": 8 },
-                "9": { "col": 14, "row": 6 },
-                "10": { "col": 14, "row": 5 },
-                "11": { "col": 14, "row": 2 }
-            },
-            "block_goal_area": false
-        }
-    ]
+            {
+                "name": "RIGHT_OFENSIVE",
+                "type": "FREE",
+                "field_zone": { "name": "RIGHT_OFENSIVE", "color": { "r": 139, "g": 92, "b": 246 }, "start_col": 12, "end_col": 15, "start_row": 0, "end_row": 3 },
+                "team_positions": {
+                    "1": { "col": 0, "row": 0 },
+                    "2": { "col": 12, "row": 10 },
+                    "3": { "col": 10, "row": 7 },
+                    "4": { "col": 10, "row": 4 },
+                    "5": { "col": 11, "row": 1 },
+                    "6": { "col": 12, "row": 7 },
+                    "7": { "col": 12, "row": 3 },
+                    "8": { "col": 14, "row": 8 },
+                    "9": { "col": 14, "row": 6 },
+                    "10": { "col": 14, "row": 5 },
+                    "11": { "col": 14, "row": 2 }
+                },
+                "block_goal_area": false
+            }
+        ]
+    }
 }
