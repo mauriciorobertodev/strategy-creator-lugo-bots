@@ -76,17 +76,6 @@ export class GlobalState {
     }
 
     // GETTERS
-    getCols(): number {
-        return this.getCurrentStrategy().getCols();
-    }
-
-    getRows(): number {
-        return this.getCurrentStrategy().getRows();
-    }
-
-    getSide(): Side {
-        return this.state.side;
-    }
 
     getRegionWidth(): number {
         return this.getCurrentStrategy().getRegionWidth();
@@ -138,20 +127,6 @@ export class GlobalState {
     }
 
     // SETTERS
-    setCols(cols: number): void {
-        this.getCurrentStrategy().setCols(cols);
-        this.updatePlayersPositionByColAndRow();
-    }
-
-    setRows(rows: number): void {
-        this.getCurrentStrategy().setRows(rows);
-        this.updatePlayersPositionByColAndRow();
-    }
-
-    setColsAndRows(cols: number, rows: number): void {
-        this.getCurrentStrategy().setColsAndRows(cols, rows);
-        this.updatePlayersPositionByColAndRow();
-    }
 
     setShowFieldZones(show: boolean): void {
         this.state.show_zone_fields = show;
@@ -174,10 +149,6 @@ export class GlobalState {
         this.state.show_col_and_rows = show;
     }
 
-    setCurrentFormationType(type: FormationType): void {
-        this.getCurrentStrategy().getCurrentFormation().setType(type);
-    }
-
     setPlayerColAndRow(number: PlayerNumber, colAndRow: PlayerPosition): void {
         const player = this.getPlayer(number);
 
@@ -194,21 +165,27 @@ export class GlobalState {
 
     // FUNÇÕES PARA COLUNAS E LINHAS
     incrementCol(): void {
-        this.setCols(this.getCols() + 1);
+        this.getCurrentStrategy().setCols(this.getCurrentStrategy().getCols() + 1);
+        this.updatePlayersPositionByColAndRow();
     }
 
     decrementCol(): void {
-        if (this.getCols() <= 0) return;
-        this.setCols(this.getCols() - 1);
+        if (this.getCurrentStrategy().getCols() <= 0) return;
+
+        this.getCurrentStrategy().setCols(this.getCurrentStrategy().getCols() - 1);
+        this.updatePlayersPositionByColAndRow();
     }
 
     incrementRow(): void {
-        this.setRows(this.getRows() + 1);
+        this.getCurrentStrategy().setRows(this.getCurrentStrategy().getRows() + 1);
+        this.updatePlayersPositionByColAndRow();
     }
 
     decrementRow(): void {
-        if (this.getRows() <= 0) return;
-        this.setRows(this.getRows() - 1);
+        if (this.getCurrentStrategy().getRows() <= 0) return;
+
+        this.getCurrentStrategy().setRows(this.getCurrentStrategy().getRows() - 1);
+        this.updatePlayersPositionByColAndRow();
     }
 
     resetHoldedPlayer(): void {
@@ -253,7 +230,7 @@ export class GlobalState {
         return {
             current_strategy_uuid: this.state.current_strategy_uuid,
             strategies: this.state.strategies.map((strategy) => strategy.getCreatorData(true)),
-            side: this.getSide(),
+            side: this.state.side,
             show_col_and_rows: this.showColsAndRows(),
             show_zone_fields: this.showFieldZones(),
         };

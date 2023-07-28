@@ -79,8 +79,8 @@ export function drawField(paint: Paint): void {
 }
 
 export function drawRegions(paint: Paint): void {
-    for (let col = 0; col < global.getCols(); col++) {
-        for (let row = 0; row < global.getRows(); row++) {
+    for (let col = 0; col < global.getCurrentStrategy().getCols(); col++) {
+        for (let row = 0; row < global.getCurrentStrategy().getRows(); row++) {
             const x = global.isHomeSide() ? col * global.getRegionWidth() : FIELD_WIDTH - (col + 1) * global.getRegionWidth();
             const y = global.isHomeSide() ? row * global.getRegionHeight() : FIELD_HEIGHT - (row + 1) * global.getRegionHeight();
 

@@ -7,8 +7,8 @@ import { importStrategy } from "../helpers/json";
 const emit = defineEmits(["close"]);
 defineProps({ showModal: Boolean });
 
-const strategy_cols = ref(global.getCols());
-const strategy_rows = ref(global.getRows());
+const strategy_cols = ref(global.getCurrentStrategy().getCols());
+const strategy_rows = ref(global.getCurrentStrategy().getRows());
 const strategy_name = ref("");
 const formation_name = ref("");
 const formation_type = ref<FormationType>("INITIAL_POSITIONS");

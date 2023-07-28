@@ -127,7 +127,7 @@ const uploadTeamPositions = (e: any) => {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                                 </svg>
                             </button>
-                            <p v-text="global.getCols()" class="flex items-center justify-center flex-grow w-full h-10 border-t border-b border-gray-100"></p>
+                            <p v-text="global.getCurrentStrategy().getCols()" class="flex items-center justify-center flex-grow w-full h-10 border-t border-b border-gray-100"></p>
                             <button v-on:click="global.incrementCol()" class="rounded-none rounded-r button-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -145,7 +145,7 @@ const uploadTeamPositions = (e: any) => {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                                 </svg>
                             </button>
-                            <p v-text="global.getRows()" class="flex items-center justify-center flex-grow w-full h-10 border-t border-b border-gray-100"></p>
+                            <p v-text="global.getCurrentStrategy().getRows()" class="flex items-center justify-center flex-grow w-full h-10 border-t border-b border-gray-100"></p>
                             <button v-on:click="global.incrementRow()" class="rounded-none rounded-r button-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -185,8 +185,12 @@ const uploadTeamPositions = (e: any) => {
                     <div v-if="global.isFreeMode()">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Tipo de formação</p>
                         <div class="flex">
-                            <button v-on:click="global.setCurrentFormationType('FREE')" v-bind:class="{ button: global.currentFormationTypeIs('FREE'), 'button-secondary': !global.currentFormationTypeIs('FREE') }" class="uppercase rounded-none rounded-l">LIVRE</button>
-                            <button v-on:click="global.setCurrentFormationType('INITIAL_POSITIONS')" v-bind:class="{ button: global.currentFormationTypeIs('INITIAL_POSITIONS'), 'button-secondary': !global.currentFormationTypeIs('INITIAL_POSITIONS') }" class="uppercase rounded-none rounded-r">
+                            <button v-on:click="global.getCurrentStrategy().getCurrentFormation().setType('FREE')" v-bind:class="{ button: global.currentFormationTypeIs('FREE'), 'button-secondary': !global.currentFormationTypeIs('FREE') }" class="uppercase rounded-none rounded-l">LIVRE</button>
+                            <button
+                                v-on:click="global.getCurrentStrategy().getCurrentFormation().setType('INITIAL_POSITIONS')"
+                                v-bind:class="{ button: global.currentFormationTypeIs('INITIAL_POSITIONS'), 'button-secondary': !global.currentFormationTypeIs('INITIAL_POSITIONS') }"
+                                class="uppercase rounded-none rounded-r"
+                            >
                                 INICIAL
                             </button>
                         </div>

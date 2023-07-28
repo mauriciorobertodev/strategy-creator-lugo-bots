@@ -8,8 +8,8 @@ import FieldZoneContract from "../contracts/field-zone-contract";
 import { FieldZoneDefinition } from "../types";
 
 export function getRegionFromColAndRow(col: number, row: number): RegionContract | null {
-    if (col > global.getCols() - 1 || col < 0) return null;
-    if (row > global.getRows() - 1 || row < 0) return null;
+    if (col > global.getCurrentStrategy().getCols() - 1 || col < 0) return null;
+    if (row > global.getCurrentStrategy().getRows() - 1 || row < 0) return null;
 
     return new Region(col, row);
 }
@@ -21,8 +21,8 @@ export function getRegionFromPoint(point: Vector2D): Region | null {
     const col = global.isHomeSide() ? Math.floor(x / global.getRegionWidth()) : Math.floor((FIELD_WIDTH - x) / global.getRegionWidth());
     const row = global.isHomeSide() ? Math.floor(y / global.getRegionHeight()) : Math.floor((FIELD_HEIGHT - y) / global.getRegionHeight());
 
-    if (col > global.getCols() - 1 || col < 0) return null;
-    if (row > global.getRows() - 1 || row < 0) return null;
+    if (col > global.getCurrentStrategy().getCols() - 1 || col < 0) return null;
+    if (row > global.getCurrentStrategy().getRows() - 1 || row < 0) return null;
 
     return new Region(col, row);
 }
@@ -81,7 +81,7 @@ export function isPermittedFieldZone(definition: FieldZoneDefinition): boolean {
     const end_row = Math.max(definition.startRow, definition.endRow);
 
     if (start_col < 0 || start_row < 0 || end_col < 0 || end_row < 0) return false;
-    if (start_col > global.getCols() || start_row > global.getRows() || end_col > global.getCols() || end_row > global.getRows()) return false;
+    if (start_col > global.getCurrentStrategy().getCols() || start_row > global.getCurrentStrategy().getRows() || end_col > global.getCurrentStrategy().getCols() || end_row > global.getCurrentStrategy().getRows()) return false;
 
     const result = global
         .getCurrentStrategy()
