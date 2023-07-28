@@ -4,7 +4,7 @@ import download from "downloadjs";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
-import { exportTeamPositions, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/export";
+import { exportTeamPositions, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/import-export";
 import { importTeamPositions } from "../helpers/import-export";
 
 defineProps({ showMenu: Boolean });
