@@ -58,7 +58,6 @@ export function exportFormationNamesOfStrategy(): string[] {
     const formations = global.getCurrentStrategy().getFormations();
 
     return formations.map((formation) => {
-        console.log(safeString(formation.getName()).toUpperCase());
         return safeString(formation.getName()).toUpperCase();
     });
 }
