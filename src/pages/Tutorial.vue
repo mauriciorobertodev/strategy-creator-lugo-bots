@@ -11,9 +11,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <article class="pt-32 mx-auto prose max-w-7xl">
-        <div class="fixed top-0 left-0 w-2 h-screen bg-blue-500"></div>
-        <h1 class="text-5xl font-bold text-gray-700">Tutorial / Exemplo de uso</h1>
+    <article class="px-4 pt-20 mx-auto prose lg:pt-32 max-w-7xl xl:px-0">
+        <div class="fixed top-0 left-0 hidden w-2 h-screen bg-blue-500 xl:block"></div>
+        <a href="/" class="block pb-4">Criador de estratégia</a>
+        <h1 class="text-4xl font-bold text-gray-700 lg:text-5xl">Tutorial / Exemplo de uso</h1>
 
         <p>Aqui vou explicar passo a passo como eu estou usando as informações que o projeto me da para usar no meu bot. Eu uso a linguagem typescript, mas acredito que você é capaz de entender a dinâmica e implementar na sua linguagem de preferência.</p>
         <p>Você pode desenvolver uma forma usando arquivos json se quiser neste exemplo eu não vou usar arquivos json apenas os dados contidos neles.</p>
@@ -258,7 +259,7 @@ onMounted(() => {
     }
    '
         />
-        <p>Você pode ver a implementação desteprojeto de exemplo no <a href="https://github.com/MauricioRobertoDev/noobzin-bot" target="_blank" rel="noopener noreferrer">github</a>.</p>
+        <p>Você pode ver a implementação deste projeto de exemplo no <a href="https://github.com/MauricioRobertoDev/noobzin-bot" target="_blank" rel="noopener noreferrer">github</a>.</p>
         <div class="relative flex flex-col items-center justify-center gap-4 pt-20 pb-20">
             <a target="_blank" rel="noopener noreferrer" href="https://github.com/MauricioRobertoDev">
                 <img class="w-12 h-12 my-0" src="./../assets/mauricio.svg" alt="" srcset="" />
