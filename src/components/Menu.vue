@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import global from "../global";
 import download from "downloadjs";
+import global from "../global";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
-import { exportTeamPositions, exportCurrentStrategy, exportFormationsOfStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy } from "../helpers/import-export";
-import { importTeamPositions } from "../helpers/import-export";
+import { exportCurrentStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy, exportFormationsOfStrategy, exportTeamPositions, importTeamPositions } from "../helpers/import-export";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -311,7 +310,7 @@ const uploadTeamPositions = (e: any) => {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                             </svg>
                         </button>
-                        <a href="/strategy-creator-lugo-bots/tutorial" target="_blank" class="gap-2 uppercase button-green">
+                        <a href="/tutorial" target="_blank" class="gap-2 uppercase button-green">
                             Exemplo de uso
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />

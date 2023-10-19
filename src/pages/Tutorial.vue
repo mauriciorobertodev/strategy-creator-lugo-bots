@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CodeBlock from "../components/CodeBlock.vue";
 import hljs from "highlight.js/lib/common";
 import { onMounted } from "vue";
+import CodeBlock from "../components/CodeBlock.vue";
 
 import "highlight.js/styles/base16/material-palenight.css";
 
@@ -20,7 +20,7 @@ onMounted(() => {
         <p>Você pode desenvolver uma forma usando arquivos json se quiser neste exemplo eu não vou usar arquivos json apenas os dados contidos neles.</p>
 
         <h2>1. Definindo as colunas e linhas</h2>
-        <p>Vá até o arquivo <code>setttings.ts</code>do seu bot e altere as colunas e linhas para a quantidade que você escolheu em sua estratégia. Nesse exemplo estou usando 16x12 como mostra abaixo.</p>
+        <p>Vá até o arquivo <code>settings.ts</code>do seu bot e altere as colunas e linhas para a quantidade que você escolheu em sua estratégia. Nesse exemplo estou usando 16x12 como mostra abaixo.</p>
         <CodeBlock
             language="typescript"
             code="
@@ -35,7 +35,7 @@ onMounted(() => {
         <h2>2. Definindo os tipos</h2>
         <p>Como disse anteriormente vou usar typescript eu gosto de tipagem, então vou começar definindo tipos que eu vou utilizar.</p>
         <p>
-            Você pode usar a opção <code class="uppercase">Exportar nomes</code> na sua estratégia para pegar todos os nomes das formações. Asuse do <code>CTRL + D</code> para formatar os nomes no tipo como abaixo.
+            Você pode usar a opção <code class="uppercase">Exportar nomes</code> na sua estratégia para pegar todos os nomes das formações. Abuse do <code>CTRL + D</code> para formatar os nomes no tipo como abaixo.
             <span class="font-semibold">Lembre-se também de remover o nome da primeira formação, você entenderá mais a frente.</span>
         </p>
         <CodeBlock
@@ -193,7 +193,7 @@ onMounted(() => {
         return expectedRegion.getCenter();
     }
 
-    // Retorna a zona de campo a qual esse ponto espeficico faz parte
+    // Retorna a zona de campo a qual esse ponto específico faz parte
     export function getFieldZoneFromPoint(point: Lugo.Point, mapper: Mapper): FieldZone {
         return getFieldZoneByRegion(mapper.getRegionFromPoint(point));
     }

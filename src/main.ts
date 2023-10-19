@@ -1,13 +1,13 @@
 import { createApp } from "vue";
 import "./assets/style.css";
 import App from "./components/App.vue";
-import Tutorial from "./pages/Tutorial.vue";
 import Strategy from "./pages/Strategy.vue";
+import Tutorial from "./pages/Tutorial.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-    history: createWebHistory("/strategy-creator-lugo-bots/"),
+    history: createWebHistory(),
     routes: [
         { path: "", redirect: { name: "Strategy" } },
         { path: "/", name: "Strategy", component: Strategy },
