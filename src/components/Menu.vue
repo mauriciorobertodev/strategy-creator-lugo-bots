@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import download from "downloadjs";
+import { DropdownMenu, Editable } from "radix-vue/namespaced";
 import global from "../global";
 import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
 import { exportCurrentStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy, exportFormationsOfStrategy, exportTeamPositions, importTeamPositions } from "../helpers/import-export";
-import { DropdownMenuRoot, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuTrigger, DropdownMenuSeparator, EditableRoot, EditableArea, EditablePreview, EditableInput, EditableEditTrigger } from "radix-vue";
+import { delayMethod } from "../helpers/util";
 import FormationContract from "../contracts/formation-contract";
 
 defineProps({ showMenu: Boolean });
@@ -54,10 +56,10 @@ const uploadTeamPositions = (e: any) => {
     if (input) input.value = "";
 };
 
+const tempValue = ref("");
+
 const renameFormation = (formation: FormationContract, name: string) => {
-    if (name.trim() === "") {
-        return;
-    };
+    if (name.trim() === "") return;   
 
     formation.setName(name);
 };
@@ -87,12 +89,14 @@ const renameFormation = (formation: FormationContract, name: string) => {
                     <div v-if="!global.isFreeMode()" class="space-y-2">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Formações</p>
                         <template v-for="formation in global.getCurrentStrategy().getFormations()" v-bind:key="formation.getUuid()">
-                            <EditableRoot
-                                v-slot="{ isEditing }"
-                                :default-value="formation.getName()"
+                            <Editable.Root
+                                v-slot="{ isEditing, edit }"
+                                :model-value="formation.getName()"
                                 activation-mode="none"
                                 placeholder=""
-                                @submit="renameFormation(formation, $event)"
+                                @submit="renameFormation(formation, tempValue)"
+                                @update:model-value="tempValue = $event"
+                                submit-mode="both"
                                 as-child
                             >
                                 <div class="flex gap-2">
@@ -103,10 +107,10 @@ const renameFormation = (formation: FormationContract, name: string) => {
                                         v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getUuid() === formation.getUuid(), 'button-ghost': global.getCurrentStrategy().getCurrentFormation().getUuid() != formation.getUuid() }"
                                         class="!justify-between items-center text-sm !h-10 uppercase truncate"
                                     >
-                                        <EditableArea>
-                                            <EditablePreview />
-                                            <EditableInput class="w-full bg-transparent outline-none uppercase" />
-                                        </EditableArea>
+                                        <Editable.Area>
+                                            <Editable.Preview class="p-1" />
+                                            <Editable.Input class="w-full bg-transparent rounded p-1 uppercase" />
+                                        </Editable.Area>
                                         <div>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -114,8 +118,8 @@ const renameFormation = (formation: FormationContract, name: string) => {
                                         </div>
                                     </button>
                                     <!-- botão de exclusão -->
-                                    <DropdownMenuRoot>
-                                        <DropdownMenuTrigger as-child>
+                                    <DropdownMenu.Root>
+                                        <DropdownMenu.Trigger as-child>
                                             <button
                                                 type="button"
                                                 class="flex items-center justify-center w-12 h-10 text-gray-500 uppercase border border-gray-200 rounded-md hover:border-gray-500 hover:text-white hover:bg-gray-500"
@@ -128,43 +132,43 @@ const renameFormation = (formation: FormationContract, name: string) => {
                                                     />
                                                 </svg>
                                             </button>
-                                        </DropdownMenuTrigger>
+                                        </DropdownMenu.Trigger>
     
-                                        <DropdownMenuPortal>
-                                            <DropdownMenuContent
+                                        <DropdownMenu.Portal>
+                                            <DropdownMenu.Content
                                                 align="end"
                                                 class="bg-white min-w-1 border border-gray-200 shadow-lg rounded-md p-1 space-y-1"
                                                 :side-offset="5"
                                             >
-                                                <EditableEditTrigger as-child v-if="!isEditing">
-                                                    <DropdownMenuItem
-                                                        class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
-                                                    >
-                                                        Renomear
-                                                    </DropdownMenuItem>
-                                                </EditableEditTrigger>
-                                                <DropdownMenuItem
-                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                <DropdownMenu.Item
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white"
+                                                    @select="delayMethod(edit)"
+                                                >
+                                                    Renomear
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white"
                                                 >
                                                     Copiar formação
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white"
                                                 >
                                                     Colar formação
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator class="h-[1px] bg-gray-200 m-2" />
-                                                <DropdownMenuItem
-                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
-                                                    @click="$emit('open-delete-formation-modal', formation.getUuid())"
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Separator class="h-[1px] bg-gray-200 m-2" />
+                                                <DropdownMenu.Item
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                                                    @select="$emit('open-delete-formation-modal', formation.getUuid())"
+                                                    :disabled="global.getCurrentStrategy().getFormations().length === 1"
                                                 >
                                                     Excluir
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenuPortal>
-                                    </DropdownMenuRoot>
+                                                </DropdownMenu.Item>
+                                            </DropdownMenu.Content>
+                                        </DropdownMenu.Portal>
+                                    </DropdownMenu.Root>
                                 </div>
-                            </EditableRoot>
+                            </Editable.Root>
                         </template>
                         <!-- botão de criação -->
                         <button type="button" class="text-sm !h-10 uppercase button-secondary gap-2" v-on:click="$emit('open-new-formation-modal')">
