@@ -5,6 +5,8 @@ import { FREE_MODE_UUID } from "../helpers/constants";
 import NewFieldZone from "./NewFieldZone.vue";
 
 import { exportCurrentStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy, exportFormationsOfStrategy, exportTeamPositions, importTeamPositions } from "../helpers/import-export";
+import { DropdownMenuRoot, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuTrigger, DropdownMenuSeparator, EditableRoot, EditableArea, EditablePreview, EditableInput, EditableEditTrigger } from "radix-vue";
+import FormationContract from "../contracts/formation-contract";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
@@ -51,6 +53,14 @@ const uploadTeamPositions = (e: any) => {
     const input = document.querySelector<HTMLInputElement>("#upload_positions");
     if (input) input.value = "";
 };
+
+const renameFormation = (formation: FormationContract, name: string) => {
+    if (name.trim() === "") {
+        return;
+    };
+
+    formation.setName(name);
+};
 </script>
 
 <template>
@@ -77,37 +87,84 @@ const uploadTeamPositions = (e: any) => {
                     <div v-if="!global.isFreeMode()" class="space-y-2">
                         <p class="mb-2 text-sm text-gray-500 uppercase">Formações</p>
                         <template v-for="formation in global.getCurrentStrategy().getFormations()" v-bind:key="formation.getUuid()">
-                            <div class="flex gap-2">
-                                <!-- botão de troca -->
-                                <button
-                                    type="button"
-                                    v-on:click="global.setCurrentFormation(formation.getUuid())"
-                                    v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getUuid() === formation.getUuid(), 'button-ghost': global.getCurrentStrategy().getCurrentFormation().getUuid() != formation.getUuid() }"
-                                    class="!justify-between items-center text-sm !h-10 uppercase truncate"
-                                >
-                                    <p class="truncate">{{ formation.getName() }}</p>
-                                    <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                        </svg>
-                                    </div>
-                                </button>
-                                <!-- botão de exclusão -->
-                                <button
-                                    v-if="global.getCurrentStrategy().getFormations().length > 1"
-                                    v-on:click="$emit('open-delete-formation-modal', formation.getUuid())"
-                                    type="button"
-                                    class="flex items-center justify-center w-12 h-10 text-red-500 uppercase border border-red-200 rounded-md hover:border-red-500 hover:text-white hover:bg-red-500"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
+                            <EditableRoot
+                                v-slot="{ isEditing }"
+                                :default-value="formation.getName()"
+                                activation-mode="none"
+                                placeholder=""
+                                @submit="renameFormation(formation, $event)"
+                                as-child
+                            >
+                                <div class="flex gap-2">
+                                    <!-- botão de troca -->
+                                    <button
+                                        type="button"
+                                        v-on:click="global.setCurrentFormation(formation.getUuid())"
+                                        v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getUuid() === formation.getUuid(), 'button-ghost': global.getCurrentStrategy().getCurrentFormation().getUuid() != formation.getUuid() }"
+                                        class="!justify-between items-center text-sm !h-10 uppercase truncate"
+                                    >
+                                        <EditableArea>
+                                            <EditablePreview />
+                                            <EditableInput class="w-full bg-transparent outline-none uppercase" />
+                                        </EditableArea>
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    <!-- botão de exclusão -->
+                                    <DropdownMenuRoot>
+                                        <DropdownMenuTrigger as-child>
+                                            <button
+                                                type="button"
+                                                class="flex items-center justify-center w-12 h-10 text-gray-500 uppercase border border-gray-200 rounded-md hover:border-gray-500 hover:text-white hover:bg-gray-500"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </DropdownMenuTrigger>
+    
+                                        <DropdownMenuPortal>
+                                            <DropdownMenuContent
+                                                align="end"
+                                                class="bg-white min-w-1 border border-gray-200 shadow-lg rounded-md p-1 space-y-1"
+                                                :side-offset="5"
+                                            >
+                                                <EditableEditTrigger as-child v-if="!isEditing">
+                                                    <DropdownMenuItem
+                                                        class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                    >
+                                                        Renomear
+                                                    </DropdownMenuItem>
+                                                </EditableEditTrigger>
+                                                <DropdownMenuItem
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                >
+                                                    Copiar formação
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                >
+                                                    Colar formação
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator class="h-[1px] bg-gray-200 m-2" />
+                                                <DropdownMenuItem
+                                                    class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none focus:bg-blue-500 focus:text-white"
+                                                    @click="$emit('open-delete-formation-modal', formation.getUuid())"
+                                                >
+                                                    Excluir
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenuPortal>
+                                    </DropdownMenuRoot>
+                                </div>
+                            </EditableRoot>
                         </template>
                         <!-- botão de criação -->
                         <button type="button" class="text-sm !h-10 uppercase button-secondary gap-2" v-on:click="$emit('open-new-formation-modal')">
