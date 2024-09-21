@@ -90,7 +90,7 @@ const renameFormation = (formation: FormationContract, name: string) => {
                         <p class="mb-2 text-sm text-gray-500 uppercase">Formações</p>
                         <template v-for="formation in global.getCurrentStrategy().getFormations()" v-bind:key="formation.getUuid()">
                             <Editable.Root
-                                v-slot="{ isEditing, edit }"
+                                v-slot="{ edit }"
                                 :model-value="formation.getName()"
                                 activation-mode="none"
                                 placeholder=""
