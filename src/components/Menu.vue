@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import download from "downloadjs";
 import { DropdownMenu, Editable } from "radix-vue/namespaced";
 import global from "../global";
@@ -9,9 +9,13 @@ import NewFieldZone from "./NewFieldZone.vue";
 import { exportCurrentStrategy, exportFieldZonesOfStrategy, exportFormationNamesOfStrategy, exportFormationsOfStrategy, exportTeamPositions, importTeamPositions } from "../helpers/import-export";
 import { delayMethod } from "../helpers/util";
 import FormationContract from "../contracts/formation-contract";
+import { PlayerNumberWithoutGoalkeeper, TeamPositionsExport } from "../types";
 
 defineProps({ showMenu: Boolean });
 defineEmits(["toggle", "open-new-strategy-modal", "open-change-strategy-modal", "open-delete-strategy-modal", "open-new-formation-modal", "open-delete-formation-modal", "open-delete-field-zone"]);
+
+const tempValue = ref("");
+const canPasteFormation = ref(false);
 
 const exportFieldZones = () => {
     const fieldZonesOfStrategy = exportFieldZonesOfStrategy();
@@ -56,13 +60,65 @@ const uploadTeamPositions = (e: any) => {
     if (input) input.value = "";
 };
 
-const tempValue = ref("");
-
 const renameFormation = (formation: FormationContract, name: string) => {
     if (name.trim() === "") return;   
 
     formation.setName(name);
 };
+
+const copyFormation = async (formation: FormationContract) => {
+    const content = {
+        type: "POSITIONS",
+        data: formation.getTeamPositionsWithoutGoalkeeper(),
+    }
+    await navigator.clipboard.writeText(JSON.stringify(content));
+    checkClipboard();
+};
+
+const checkClipboard = async () => {
+    try {
+        const text = await navigator.clipboard.readText();
+        const json: TeamPositionsExport = JSON.parse(text);
+    
+        if (!json?.type || !json?.data || json.type != "POSITIONS") {
+            canPasteFormation.value = false;
+            return;
+        }
+    
+        canPasteFormation.value = true;
+    } catch (error) {
+        canPasteFormation.value = false;
+    }
+};
+
+const pasteFormation = async (formation: FormationContract) => {
+    try {
+        const text = await navigator.clipboard.readText();
+        const json: TeamPositionsExport = JSON.parse(text);
+    
+        if (!json?.type || !json?.data || json.type != "POSITIONS") return;
+    
+        const positions = json.data;
+    
+        global.getPlayers().forEach((player) => {
+            if (player.getNumber() == 1 || !positions[player.getNumber() as PlayerNumberWithoutGoalkeeper]) return;
+            global.setPlayerColAndRow(player.getNumber(), positions[player.getNumber() as PlayerNumberWithoutGoalkeeper], formation);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(() => {
+    checkClipboard();
+    window.addEventListener("focus", checkClipboard);
+    window.addEventListener("copy", checkClipboard);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("focus", checkClipboard);
+    window.addEventListener("copy", checkClipboard);
+});
 </script>
 
 <template>
@@ -144,13 +200,14 @@ const renameFormation = (formation: FormationContract, name: string) => {
                                                 </DropdownMenu.Item>
                                                 <DropdownMenu.Item
                                                     class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                                    disabled
+                                                    @select="copyFormation(formation)"
                                                 >
                                                     Copiar formação
                                                 </DropdownMenu.Item>
                                                 <DropdownMenu.Item
                                                     class="group text-sm leading-none text-gray-700 rounded flex items-center py-1.5 px-2 relative select-none outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                                    disabled
+                                                    :disabled="!canPasteFormation"
+                                                    @select="pasteFormation(formation)"
                                                 >
                                                     Colar formação
                                                 </DropdownMenu.Item>
