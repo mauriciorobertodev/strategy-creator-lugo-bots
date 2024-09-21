@@ -107,7 +107,7 @@ const renameFormation = (formation: FormationContract, name: string) => {
                                         v-bind:class="{ button: global.getCurrentStrategy().getCurrentFormation().getUuid() === formation.getUuid(), 'button-ghost': global.getCurrentStrategy().getCurrentFormation().getUuid() != formation.getUuid() }"
                                         class="!justify-between items-center text-sm !h-10 uppercase truncate"
                                     >
-                                        <Editable.Area>
+                                        <Editable.Area class="truncate">
                                             <Editable.Preview class="p-1" />
                                             <Editable.Input class="w-full bg-transparent rounded p-1 uppercase" />
                                         </Editable.Area>
