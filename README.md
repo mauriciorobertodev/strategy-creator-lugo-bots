@@ -66,6 +66,7 @@ Esse projeto é para ajudar todos que estão criando um bot de <a href="https://
 -   Opção de criar/definir uma zona para cada formação LIVRE.
 -   Opção de editar a zona sem conflitos.
 -   Opção de visualizar todas as zonas ao mesmo tempo.
+-   Opção de renomear, copiar e editar uma formação. Feito por [@Vinicius-Marques6](https://github.com/Vinicius-Marques6)
 
 <br>
 
