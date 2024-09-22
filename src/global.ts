@@ -9,6 +9,7 @@ import Formation from "./classes/formation";
 import FieldZoneContract from "./contracts/field-zone-contract";
 import FieldZone from "./classes/field-zone";
 import { isPermittedFieldZone } from "./helpers/field";
+import FormationContract from "./contracts/formation-contract";
 
 export type State = {
     current_strategy_uuid: string;
@@ -149,17 +150,21 @@ export class GlobalState {
         this.state.show_col_and_rows = show;
     }
 
-    setPlayerColAndRow(number: PlayerNumber, colAndRow: PlayerPosition): void {
+    setPlayerColAndRow(number: PlayerNumber, colAndRow: PlayerPosition, formation?: FormationContract): void {
+        if (!formation) {
+            formation = this.getCurrentStrategy().getCurrentFormation();
+        }
+
         const player = this.getPlayer(number);
 
         if (number == 1 || !player) return;
 
         if (colAndRow.col === null || colAndRow.col < 0 || colAndRow.row == null || colAndRow.row < 0) {
-            this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, { col: null, row: null });
+            formation.setPlayerPosition(number, { col: null, row: null });
             player.resetPosition();
         } else {
             player.setColAndRow(colAndRow.col, colAndRow.row);
-            this.getCurrentStrategy().getCurrentFormation().setPlayerPosition(number, colAndRow);
+            formation.setPlayerPosition(number, colAndRow);
         }
     }
 

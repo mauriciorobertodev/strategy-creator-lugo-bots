@@ -4,3 +4,9 @@ export function safeString(string: string): string {
     string = string.replace(/[^a-zA-Z0-9_]/, "");
     return string;
 }
+
+export function delayMethod(method: Function, delay: number = 10): void {
+    setTimeout(() => {
+        method();
+    }, delay);
+}
